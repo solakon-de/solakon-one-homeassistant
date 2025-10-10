@@ -1,0 +1,45 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Configure Solakon ONE",
+        "description": "Set up your Solakon ONE device for integration with Home Assistant.",
+        "data": {
+          "host": "Host",
+          "port": "Port",
+          "name": "Device Name",
+          "slave_id": "Modbus Slave ID",
+          "scan_interval": "Update Interval (seconds)"
+        },
+        "data_description": {
+          "host": "IP address of your Solakon ONE device",
+          "port": "Modbus TCP port (usually 502)",
+          "name": "Friendly name for your device",
+          "slave_id": "Modbus slave address (1-247)",
+          "scan_interval": "How often to poll the device (10-300 seconds)"
+        }
+      }
+    },
+    "error": {
+      "cannot_connect": "Failed to connect to the device",
+      "unknown": "Unexpected error occurred"
+    },
+    "abort": {
+      "already_configured": "Device is already configured"
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Configure Options",
+        "description": "Adjust settings for your Solakon ONE device.",
+        "data": {
+          "scan_interval": "Update Interval (seconds)"
+        },
+        "data_description": {
+          "scan_interval": "How often to poll the device for updates (10-300 seconds)"
+        }
+      }
+    }
+  }
+}
