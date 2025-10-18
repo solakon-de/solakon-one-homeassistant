@@ -67,6 +67,24 @@ REGISTERS = {
     "battery1_power": {"address": 39230, "count": 2, "type": "i32", "scale": 1, "unit": "W"},
     "battery_combined_power": {"address": 39237, "count": 2, "type": "i32", "scale": 1, "unit": "W"},
     "battery_soc": {"address": 39424, "count": 1, "type": "i16", "scale": 1, "unit": "%"},
+
+    # Remote Control Registers (Read/Write)
+    "remote_control": {"address": 46001, "count": 1, "type": "u16", "scale": 1, "rw": True},
+    "remote_timeout_set": {"address": 46002, "count": 1, "type": "u16", "scale": 1, "unit": "s", "rw": True},
+    "remote_active_power": {"address": 46003, "count": 2, "type": "i32", "scale": 1, "unit": "W", "rw": True},
+    "remote_reactive_power": {"address": 46005, "count": 2, "type": "i32", "scale": 1, "unit": "Var", "rw": True},
+    "remote_timeout_countdown": {"address": 46007, "count": 1, "type": "u16", "scale": 1, "unit": "s"},
+
+    # Control Registers (Read/Write)
+    "eps_output": {"address": 46613, "count": 1, "type": "u16", "scale": 1, "rw": True},
+    # "export_power_limit": {"address": 46616, "count": 2, "type": "i32", "scale": 1, "unit": "W", "rw": True},
+    # "import_power_limit": {"address": 46501, "count": 2, "type": "i32", "scale": 1, "unit": "W", "rw": True},
+    # "export_peak_limit": {"address": 46504, "count": 2, "type": "i32", "scale": 1, "unit": "W", "rw": True},
+    "minimum_soc": {"address": 46609, "count": 1, "type": "u16", "scale": 1, "unit": "%", "rw": True},
+    "maximum_soc": {"address": 46610, "count": 1, "type": "u16", "scale": 1, "unit": "%", "rw": True},
+    "minimum_soc_ongrid": {"address": 46611, "count": 1, "type": "u16", "scale": 1, "unit": "%", "rw": True},
+    # "work_mode": {"address": 49203, "count": 1, "type": "u16", "scale": 1, "rw": True},
+    "network_status": {"address": 49240, "count": 1, "type": "u16", "scale": 1},
 }
 
 # Sensor definitions for Home Assistant
@@ -227,5 +245,224 @@ SENSOR_DEFINITIONS = {
         "state_class": "measurement",
         "unit": "Hz",
         "icon": "mdi:sine-wave",
+    },
+
+    # Control Status Sensors (showing current values of controllable parameters)
+    "eps_output": {
+        "name": "EPS Output Mode",
+        "icon": "mdi:power-standby",
+    },
+    # "export_power_limit": {
+    #     "name": "Export Power Limit",
+    #     "device_class": "power",
+    #     "state_class": "measurement",
+    #     "unit": "W",
+    #     "icon": "mdi:transmission-tower-export",
+    # },
+    # "import_power_limit": {
+    #     "name": "Import Power Limit",
+    #     "device_class": "power",
+    #     "state_class": "measurement",
+    #     "unit": "W",
+    #     "icon": "mdi:transmission-tower-import",
+    # },
+    # "export_peak_limit": {
+    #     "name": "Export Peak Limit",
+    #     "device_class": "power",
+    #     "state_class": "measurement",
+    #     "unit": "W",
+    #     "icon": "mdi:transmission-tower-export",
+    # },
+    "minimum_soc": {
+        "name": "Minimum State of Charge",
+        "device_class": "battery",
+        "state_class": "measurement",
+        "unit": "%",
+        "icon": "mdi:battery-low",
+    },
+    "maximum_soc": {
+        "name": "Maximum State of Charge",
+        "device_class": "battery",
+        "state_class": "measurement",
+        "unit": "%",
+        "icon": "mdi:battery-high",
+    },
+    "minimum_soc_ongrid": {
+        "name": "Minimum SoC OnGrid",
+        "device_class": "battery",
+        "state_class": "measurement",
+        "unit": "%",
+        "icon": "mdi:battery-low",
+    },
+    # "work_mode": {
+    #     "name": "Work Mode",
+    #     "icon": "mdi:cog",
+    # },
+    "network_status": {
+        "name": "Network Status",
+        "icon": "mdi:network",
+    },
+
+    # Remote Control Status Sensors
+    "remote_control": {
+        "name": "Remote Control Status",
+        "icon": "mdi:remote",
+    },
+    "remote_timeout_set": {
+        "name": "Remote Timeout Setting",
+        "device_class": "duration",
+        "state_class": "measurement",
+        "unit": "s",
+        "icon": "mdi:timer",
+    },
+    "remote_active_power": {
+        "name": "Remote Active Power Command",
+        "device_class": "power",
+        "state_class": "measurement",
+        "unit": "W",
+        "icon": "mdi:flash",
+    },
+    "remote_reactive_power": {
+        "name": "Remote Reactive Power Command",
+        "device_class": "reactive_power",
+        "state_class": "measurement",
+        "unit": "Var",
+        "icon": "mdi:flash-outline",
+    },
+    "remote_timeout_countdown": {
+        "name": "Remote Timeout Countdown",
+        "device_class": "duration",
+        "state_class": "measurement",
+        "unit": "s",
+        "icon": "mdi:timer-sand",
+    },
+}
+
+# Select entity definitions for Home Assistant
+SELECT_DEFINITIONS = {
+    "eps_output": {
+        "name": "EPS Output Control",
+        "icon": "mdi:power-standby",
+        "options": {
+            0: "Disable",
+            2: "EPS Mode",
+            3: "UPS Mode",
+        },
+    },
+    # "work_mode": {
+    #     "name": "Work Mode Control",
+    #     "icon": "mdi:cog",
+    #     "options": {
+    #         1: "Self Use",
+    #         2: "Feedin Priority",
+    #         3: "Backup",
+    #         4: "Peak Shaving",
+    #         6: "Force Charge",
+    #         7: "Force Discharge",
+    #     },
+    # },
+    "remote_control_mode": {
+        "name": "Remote Control Mode",
+        "icon": "mdi:remote",
+        "options": {
+            0: "Disabled",
+            1: "INV Discharge (PV Priority)",
+            3: "INV Charge (PV Priority)",
+            5: "Battery Discharge",
+            7: "Battery Charge",
+            9: "Grid Discharge",
+            11: "Grid Charge",
+            13: "INV Discharge (AC First)",
+            15: "INV Charge (AC First)",
+        },
+    },
+}
+
+# Number entity definitions for Home Assistant
+NUMBER_DEFINITIONS = {
+    # "export_power_limit": {
+    #     "name": "Export Power Limit Control",
+    #     "icon": "mdi:transmission-tower-export",
+    #     "min": 0,
+    #     "max": 100000,  # 100kW max, will be adjusted based on inverter Pmax
+    #     "step": 100,
+    #     "unit": "W",
+    #     "device_class": "power",
+    #     "mode": "box",
+    # },
+    # "import_power_limit": {
+    #     "name": "Import Power Limit Control",
+    #     "icon": "mdi:transmission-tower-import",
+    #     "min": 0,
+    #     "max": 100000,  # 100kW max
+    #     "step": 100,
+    #     "unit": "W",
+    #     "device_class": "power",
+    #     "mode": "box",
+    # },
+    # "export_peak_limit": {
+    #     "name": "Export Peak Limit Control",
+    #     "icon": "mdi:transmission-tower-export",
+    #     "min": 0,
+    #     "max": 100000,  # 100kW max
+    #     "step": 100,
+    #     "unit": "W",
+    #     "device_class": "power",
+    #     "mode": "box",
+    # },
+    "minimum_soc": {
+        "name": "Minimum SoC Control",
+        "icon": "mdi:battery-low",
+        "min": 0,
+        "max": 100,
+        "step": 1,
+        "unit": "%",
+        "mode": "slider",
+    },
+    "maximum_soc": {
+        "name": "Maximum SoC Control",
+        "icon": "mdi:battery-high",
+        "min": 0,
+        "max": 100,
+        "step": 1,
+        "unit": "%",
+        "mode": "slider",
+    },
+    "minimum_soc_ongrid": {
+        "name": "Minimum SoC OnGrid Control",
+        "icon": "mdi:battery-low",
+        "min": 0,
+        "max": 100,
+        "step": 1,
+        "unit": "%",
+        "mode": "slider",
+    },
+    "remote_active_power": {
+        "name": "Remote Active Power Control",
+        "icon": "mdi:flash",
+        "min": -100000,  # -100kW (charging/import)
+        "max": 100000,   # +100kW (discharging/export)
+        "step": 100,
+        "unit": "W",
+        "device_class": "power",
+        "mode": "box",
+    },
+    "remote_reactive_power": {
+        "name": "Remote Reactive Power Control",
+        "icon": "mdi:flash-outline",
+        "min": -100000,
+        "max": 100000,
+        "step": 100,
+        "unit": "Var",
+        "mode": "box",
+    },
+    "remote_timeout_set": {
+        "name": "Remote Timeout Control",
+        "icon": "mdi:timer",
+        "min": 0,
+        "max": 3600,  # 1 hour max
+        "step": 10,
+        "unit": "s",
+        "mode": "box",
     },
 }

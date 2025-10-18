@@ -2,21 +2,61 @@
 
 A complete Home Assistant custom integration for Solakon ONE devices using Modbus TCP communication.
 
-> ⚠️ **IMPORTANT**: This is a Home Assistant **Integration**, not an Add-on. 
+> ⚠️ **IMPORTANT**: This is a Home Assistant **Integration**, not an Add-on.
 > - Do NOT add this as an Add-on repository
 > - Install it through HACS as an Integration (see instructions below)
 
+## Changelog
+
+### Latest Version
+**New Features:**
+- ✨ **Device Control Entities**: Control your Solakon ONE device directly from Home Assistant
+  - EPS Output Mode control (Disable/EPS/UPS)
+  - Remote Control Mode with 9 operating modes
+  - Battery SoC limits (Minimum/Maximum/OnGrid)
+  - Remote Active/Reactive Power control
+  - Remote timeout settings
+- 📊 **New Sensors**: Added control status sensors to monitor current device settings
+  - EPS Output Mode status
+  - Battery SoC limit settings
+  - Remote control status and commands
+  - Network status
+- 🔧 **Improved Energy Dashboard Integration**: Comprehensive documentation for battery integration workaround
+- 📖 **Documentation Updates**: Accurate Energy Dashboard integration guide with step-by-step battery setup
+
+**Bug Fixes:**
+- Fixed misleading documentation about Grid Import/Export sensors (not currently supported)
+- Corrected Energy Dashboard integration instructions
+
+### Previous Versions
+- Initial release with basic monitoring capabilities
+
 ## Features
 
+### Monitoring
 - Real-time monitoring of all inverter parameters
 - PV string monitoring (voltage, current, power)
-- Battery management (SOC, SOH, power, temperature)
-- Grid import/export tracking
-- Energy statistics (daily, monthly, yearly)
+- Battery management (SOC, power, voltage, current, temperature)
+- Energy statistics (total and daily generation)
 - Temperature monitoring
 - Alarm and status monitoring
-- Configurable update intervals
+- Power factor and grid frequency monitoring
+
+### Device Control
+- **EPS Output Control**: Switch between Disable, EPS Mode, and UPS Mode
+- **Remote Control Mode**: 9 different operating modes including:
+  - INV Discharge/Charge (PV Priority or AC First)
+  - Battery Discharge/Charge
+  - Grid Discharge/Charge
+- **Battery SoC Management**: Set minimum and maximum state of charge limits
+- **Remote Power Control**: Set active and reactive power commands
+- **Timeout Management**: Configure remote control timeout settings
+
+### Integration
 - Full UI configuration support
+- Configurable update intervals
+- Energy Dashboard compatible (solar production works out-of-the-box)
+- Battery integration via helper sensors
 
 ## Monitored Sensors
 
@@ -41,15 +81,21 @@ A complete Home Assistant custom integration for Solakon ONE devices using Modbu
 - Battery Power
 - Battery Voltage
 - Battery Current
-- **Note:** Battery SOC (State of Charge) and SOH (State of Health) sensors will be available in a future update
+- Battery State of Charge (SOC)
 
 ### System Information
 - Internal Temperature
-- Heatsink Temperature
 - Power Factor
 - Grid Frequency
-- System Status
-- Alarms
+- Network Status
+
+### Control Status Sensors
+These sensors display the current values of controllable parameters:
+- EPS Output Mode (current mode: Disable/EPS/UPS)
+- Minimum/Maximum/OnGrid SoC Settings
+- Remote Control Status
+- Remote Active/Reactive Power Commands
+- Remote Timeout Settings
 
 ## Installation
 
@@ -100,6 +146,46 @@ A complete Home Assistant custom integration for Solakon ONE devices using Modbu
 - Modbus TCP must be enabled on the device
 - Default Modbus TCP port is 502
 - Device must be accessible from Home Assistant
+
+## Device Control
+
+The integration provides control entities to manage your Solakon ONE device directly from Home Assistant.
+
+### Select Entities
+
+**EPS Output Control**
+- Switch between operating modes:
+  - `Disable`: EPS output disabled
+  - `EPS Mode`: Emergency Power Supply mode
+  - `UPS Mode`: Uninterruptible Power Supply mode
+
+**Remote Control Mode**
+- Control device operation with 9 modes:
+  - `Disabled`: Remote control off
+  - `INV Discharge (PV Priority)`: Inverter discharge with PV priority
+  - `INV Charge (PV Priority)`: Inverter charge with PV priority
+  - `Battery Discharge`: Direct battery discharge
+  - `Battery Charge`: Direct battery charge
+  - `Grid Discharge`: Grid-powered discharge
+  - `Grid Charge`: Grid-powered charge
+  - `INV Discharge (AC First)`: Inverter discharge with AC priority
+  - `INV Charge (AC First)`: Inverter charge with AC priority
+
+### Number Entities
+
+**Battery SoC Management**
+- `Minimum SoC Control`: Set minimum battery state of charge (0-100%)
+- `Maximum SoC Control`: Set maximum battery state of charge (0-100%)
+- `Minimum SoC OnGrid Control`: Set minimum SoC when grid-connected (0-100%)
+
+**Remote Power Control**
+- `Remote Active Power Control`: Set active power command (-100kW to +100kW)
+  - Negative values = charging/import
+  - Positive values = discharging/export
+- `Remote Reactive Power Control`: Set reactive power command (-100kVAR to +100kVAR)
+- `Remote Timeout Control`: Set timeout for remote control commands (0-3600 seconds)
+
+> ⚠️ **Warning**: Modifying these settings can affect your system's operation. Make sure you understand what each setting does before changing it. Some settings may require the device to be in specific modes to take effect.
 
 ## Troubleshooting
 
@@ -208,16 +294,59 @@ automation:
           message: "Battery is discharging at high rate!"
 ```
 
+### Control Battery SoC Based on Time
+```yaml
+automation:
+  - alias: "Set Battery Limits for Night"
+    trigger:
+      - platform: time
+        at: "22:00:00"
+    action:
+      - service: number.set_value
+        target:
+          entity_id: number.solakon_one_minimum_soc_control
+        data:
+          value: 20
+      - service: number.set_value
+        target:
+          entity_id: number.solakon_one_maximum_soc_control
+        data:
+          value: 100
+```
 
-## Services
+### Switch to EPS Mode on Grid Failure
+```yaml
+automation:
+  - alias: "Enable EPS Mode on Grid Loss"
+    trigger:
+      - platform: state
+        entity_id: sensor.solakon_one_network_status
+        to: "0"  # Adjust based on your grid status values
+    action:
+      - service: select.select_option
+        target:
+          entity_id: select.solakon_one_eps_output_control
+        data:
+          option: "EPS Mode"
+```
 
-**Note:** Service functionality is currently under development and will be available in a future update. The following services are planned:
+## Device Control via Entities
 
-- `solakon_one.refresh_data`: Manually refresh all sensor data (coming soon)
-- `solakon_one.set_battery_charge_limit`: Set max battery charge % (coming soon)
-- `solakon_one.set_battery_discharge_limit`: Set min battery discharge % (coming soon)
-- `solakon_one.set_work_mode`: Change inverter operation mode (coming soon)
-- `solakon_one.set_time_of_use`: Configure TOU schedules (coming soon)
+Device control is implemented using Home Assistant entities (Select and Number entities). Use these entities in your dashboards and automations:
+
+**Available Control Entities:**
+- `select.solakon_one_eps_output_control`: EPS/UPS mode selection
+- `select.solakon_one_remote_control_mode`: Remote control mode selection
+- `number.solakon_one_minimum_soc_control`: Minimum battery SoC
+- `number.solakon_one_maximum_soc_control`: Maximum battery SoC
+- `number.solakon_one_minimum_soc_ongrid_control`: Minimum SoC when grid-connected
+- `number.solakon_one_remote_active_power_control`: Active power command
+- `number.solakon_one_remote_reactive_power_control`: Reactive power command
+- `number.solakon_one_remote_timeout_control`: Remote control timeout
+
+**Future Services (Planned):**
+- `solakon_one.refresh_data`: Manually refresh all sensor data
+- `solakon_one.set_time_of_use`: Configure TOU schedules
 
 ## Support
 

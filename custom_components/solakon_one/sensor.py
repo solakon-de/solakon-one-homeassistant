@@ -18,6 +18,7 @@ from homeassistant.const import (
     UnitOfFrequency,
     UnitOfPower,
     UnitOfTemperature,
+    UnitOfTime,
 )
 from homeassistant.core import HomeAssistant, callback
 from homeassistant.helpers.device_registry import DeviceInfo
@@ -101,6 +102,10 @@ class SolakonSensor(CoordinatorEntity, SensorEntity):
                 self._attr_device_class = SensorDeviceClass.BATTERY
             elif device_class == "power_factor":
                 self._attr_device_class = SensorDeviceClass.POWER_FACTOR
+            elif device_class == "reactive_power":
+                self._attr_device_class = SensorDeviceClass.REACTIVE_POWER
+            elif device_class == "duration":
+                self._attr_device_class = SensorDeviceClass.DURATION
         
         # Set state class
         if "state_class" in definition:
@@ -130,6 +135,10 @@ class SolakonSensor(CoordinatorEntity, SensorEntity):
             self._attr_native_unit_of_measurement = PERCENTAGE
         elif unit == "kVar":
             self._attr_native_unit_of_measurement = "kVar"
+        elif unit == "Var":
+            self._attr_native_unit_of_measurement = "Var"
+        elif unit == "s":
+            self._attr_native_unit_of_measurement = UnitOfTime.SECONDS
         elif unit:
             self._attr_native_unit_of_measurement = unit
 
@@ -195,6 +204,7 @@ class SolakonSensor(CoordinatorEntity, SensorEntity):
         
         # For all other sensors return the static icon defined in const.py
         return self._definition.get("icon")
+
 
     @property
     def available(self) -> bool:
