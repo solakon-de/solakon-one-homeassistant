@@ -175,6 +175,28 @@ class SolakonSensor(CoordinatorEntity, SensorEntity):
         self.async_write_ha_state()
 
     @property
+    def icon(self) -> str | None:
+        """Return the icon to use in the frontend."""
+        # battery soc sensor
+        if self._sensor_key == "battery_soc":
+            try:
+                soc = int(self.native_value)
+            except (ValueError, TypeError):
+                return "mdi:battery-unknown"
+
+            if soc > 90:
+                return "mdi:battery"
+            
+            rounded_soc = (soc + 5) // 10 * 10
+            if rounded_soc == 0:
+                return "mdi:battery-outline"
+            
+            return f"mdi:battery-{rounded_soc}"
+        
+        # For all other sensors return the static icon defined in const.py
+        return self._definition.get("icon")
+
+    @property
     def available(self) -> bool:
         """Return if entity is available."""
         return self.coordinator.last_update_success and self._attr_native_value is not None
