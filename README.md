@@ -36,9 +36,6 @@ A complete Home Assistant custom integration for Solakon ONE devices using Modbu
 ### Energy Statistics
 - Total Energy Generated
 - Daily Energy Generation
-- Monthly/Yearly Generation
-- Battery Charge/Discharge Today
-- Grid Import/Export (Today & Total)
 
 ### Battery Information
 - Battery Power
@@ -132,14 +129,68 @@ A complete Home Assistant custom integration for Solakon ONE devices using Modbu
 
 ## Energy Dashboard Integration
 
-To add Solakon ONE data to your Energy Dashboard:
+### Solar Production (Works Out-of-the-Box)
+
+To add solar production to your Energy Dashboard:
 
 1. Go to Settings → Dashboards → Energy
-2. Configure:
-   - **Solar production**: Select "Solakon ONE Daily Energy"
-   - **Grid consumption**: Select "Solakon ONE Grid Import Today"
-   - **Return to grid**: Select "Solakon ONE Grid Export Today"
-   - **Battery**: Select battery charge/discharge sensors
+2. Under **Solar production**, select "Solakon ONE Daily Energy"
+
+### Battery Integration (Requires Setup)
+
+The battery sensors need to be configured as helpers before they can be used in the Energy Dashboard. Follow these steps:
+
+#### 1. Create Template Sensors for Battery Power Split
+
+Go to Settings → Devices & Services → Helpers → Create Helper → Template → Template a sensor
+
+Create two template sensors with the following settings:
+
+**Battery Discharge Power:**
+- Name: `Battery Discharge Power`
+- State template: `{{ max(0, 0 - states('sensor.solakon_one_battery_power') | float(default=0)) }}`
+- Unit of measurement: `W`
+- Device class: `Power`
+- State class: `Measurement`
+
+**Battery Charge Power:**
+- Name: `Battery Charge Power`
+- State template: `{{ max(0, states('sensor.solakon_one_battery_power') | float(default=0)) }}`
+- Unit of measurement: `W`
+- Device class: `Power`
+- State class: `Measurement`
+
+#### 2. Create Riemann Sum Integral Sensors
+
+Go to Settings → Devices & Services → Helpers → Create Helper → Integration - Riemann sum integral sensor
+
+Create two integral sensors:
+
+**Battery Discharge Energy:**
+- Input sensor: `Battery Discharge Power` (from step 1)
+- Name: `Battery Discharge Energy`
+- Integration method: `Left Riemann sum`
+- Precision: `2`
+- Metric prefix: `k` (kilo)
+
+**Battery Charge Energy:**
+- Input sensor: `Battery Charge Power` (from step 1)
+- Name: `Battery Charge Energy`
+- Integration method: `Left Riemann sum`
+- Precision: `2`
+- Metric prefix: `k` (kilo)
+
+#### 3. Add to Energy Dashboard
+
+1. Go to Settings → Dashboards → Energy
+2. Under **Battery systems**, click "Add battery system"
+3. Configure:
+   - **Energy going in to the battery**: Select "Battery Charge Energy"
+   - **Energy going out of the battery**: Select "Battery Discharge Energy"
+
+### Grid Import/Export (Not Currently Supported)
+
+Grid import and export sensors are not currently available in this integration. These values would need to be derived from the available power sensors or added in a future update if the Modbus registers support them.
 
 ## Automation Examples
 
