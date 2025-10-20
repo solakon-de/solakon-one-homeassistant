@@ -41,6 +41,17 @@ async def async_setup_entry(
                     device_info,
                 )
             )
+        # Special handling for force_mode (virtual entity)
+        elif key == "force_mode":
+            entities.append(
+                ForceModeSelect(
+                    coordinator,
+                    hub,
+                    config_entry,
+                    definition,
+                    device_info,
+                )
+            )
         # Only create select entities for registers that exist and have rw flag
         elif key in REGISTERS and REGISTERS[key].get("rw", False):
             entities.append(
@@ -294,6 +305,127 @@ class RemoteControlModeSelect(CoordinatorEntity, SelectEntity):
             await self.coordinator.async_request_refresh()
         else:
             _LOGGER.error(f"Failed to set remote_control_mode to '{option}'")
+
+    @property
+    def available(self) -> bool:
+        """Return if entity is available."""
+        return self.coordinator.last_update_success
+
+
+class ForceModeSelect(CoordinatorEntity, SelectEntity):
+    """Special select entity for Force Mode (Force Charge/Discharge).
+
+    This entity provides a simplified interface for force charging/discharging
+    by controlling register 46001 (remote_control) with predefined values.
+    """
+
+    def __init__(
+        self,
+        coordinator,
+        hub,
+        config_entry: ConfigEntry,
+        definition: dict,
+        device_info: dict,
+    ) -> None:
+        """Initialize the force mode select entity."""
+        super().__init__(coordinator)
+        self._hub = hub
+        self._config_entry = config_entry
+        self._device_info = device_info
+        self._definition = definition
+
+        # Set unique ID and entity ID
+        self._attr_unique_id = f"{config_entry.entry_id}_force_mode"
+        self.entity_id = "select.solakon_one_force_mode"
+
+        # Set basic attributes
+        self._attr_name = definition["name"]
+        self._attr_icon = definition.get("icon")
+
+        # Set up options (mapping from mode value to text)
+        self._options_map = definition["options"]  # {0: "Disabled", 1: "Force Discharge", 3: "Force Charge"}
+        self._reverse_options_map = {v: k for k, v in self._options_map.items()}
+        self._attr_options = list(self._options_map.values())
+
+    @property
+    def device_info(self) -> DeviceInfo:
+        """Return device information."""
+        return DeviceInfo(
+            identifiers={(DOMAIN, self._config_entry.entry_id)},
+            name=self._config_entry.data.get("name", "Solakon ONE"),
+            manufacturer=self._device_info.get("manufacturer", "Solakon"),
+            model=self._device_info.get("model", "One"),
+            sw_version=self._device_info.get("version"),
+            serial_number=self._device_info.get("serial_number"),
+        )
+
+    @callback
+    def _handle_coordinator_update(self) -> None:
+        """Handle updated data from the coordinator."""
+        if self.coordinator.data and "remote_control" in self.coordinator.data:
+            raw_value = self.coordinator.data["remote_control"]
+
+            if isinstance(raw_value, (int, float)):
+                register_value = int(raw_value)
+
+                # Check if the value matches one of our force modes
+                # Force modes: 0 (disabled), 1 (force discharge), 3 (force charge)
+                mode_value = register_value & 0b1111  # Lower 4 bits
+
+                if mode_value in self._options_map:
+                    self._attr_current_option = self._options_map[mode_value]
+                    _LOGGER.debug(
+                        f"Force mode: register={register_value:#06x}, "
+                        f"mode={mode_value}, option='{self._attr_current_option}'"
+                    )
+                else:
+                    # Not a force mode (could be other remote control mode)
+                    self._attr_current_option = self._options_map[0]  # Default to "Disabled"
+                    _LOGGER.debug(
+                        f"Force mode: register={register_value:#06x} not a force mode, showing as Disabled"
+                    )
+            else:
+                _LOGGER.warning(
+                    f"Invalid value type for remote_control: {type(raw_value)}"
+                )
+                self._attr_current_option = None
+        else:
+            self._attr_current_option = None
+
+        self.async_write_ha_state()
+
+    async def async_select_option(self, option: str) -> None:
+        """Change the selected option."""
+        if option not in self._reverse_options_map:
+            _LOGGER.error(
+                f"Invalid option '{option}' for force_mode. "
+                f"Valid options: {list(self._reverse_options_map.keys())}"
+            )
+            return
+
+        # Get the mode value (0, 1, or 3)
+        mode_value = self._reverse_options_map[option]
+
+        # Get the register address for remote_control
+        address = REGISTERS["remote_control"]["address"]
+
+        _LOGGER.info(
+            f"Setting force_mode to '{option}' "
+            f"(register value={mode_value:#06x}) at address {address}"
+        )
+
+        # Write the value to the register
+        success = await self._hub.async_write_register(address, mode_value)
+
+        if success:
+            _LOGGER.info(f"Successfully set force_mode to '{option}'")
+            # Update the state immediately (optimistic update)
+            self._attr_current_option = option
+            self.async_write_ha_state()
+            # Request coordinator to refresh data to confirm the change
+            await self.coordinator.async_request_refresh()
+        else:
+            _LOGGER.error(f"Failed to set force_mode to '{option}'")
 
     @property
     def available(self) -> bool:

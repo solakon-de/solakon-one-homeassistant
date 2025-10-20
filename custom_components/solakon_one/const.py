@@ -376,6 +376,15 @@ SELECT_DEFINITIONS = {
             15: "INV Charge (AC First)",
         },
     },
+    "force_mode": {
+        "name": "Force Mode",
+        "icon": "mdi:battery-arrow-up-down",
+        "options": {
+            0: "Disabled",
+            1: "Force Discharge",
+            3: "Force Charge",
+        },
+    },
 }
 
 # Number entity definitions for Home Assistant
@@ -463,6 +472,25 @@ NUMBER_DEFINITIONS = {
         "max": 3600,  # 1 hour max
         "step": 10,
         "unit": "s",
+        "mode": "box",
+    },
+    "force_duration": {
+        "name": "Force Mode Duration",
+        "icon": "mdi:timer-outline",
+        "min": 0,
+        "max": 1092,  # 65535 seconds = ~1092 minutes
+        "step": 1,
+        "unit": "min",
+        "mode": "slider",
+    },
+    "force_power": {
+        "name": "Force Mode Power",
+        "icon": "mdi:flash",
+        "min": 0,
+        "max": 1200,  # Will be validated based on mode (1200W charge, 800W discharge)
+        "step": 10,
+        "unit": "W",
+        "device_class": "power",
         "mode": "box",
     },
 }
