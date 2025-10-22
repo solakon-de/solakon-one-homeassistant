@@ -234,14 +234,14 @@ Create two template sensors with the following settings:
 
 **Battery Discharge Power:**
 - Name: `Battery Discharge Power`
-- State template: `{{ max(0, 0 - states('sensor.solakon_one_battery_power') | float(default=0)) }}`
+- State template: `{{ max(0, 0 - states('sensor.solakon_one_battery_combined_power') | float(default=0)) }}`
 - Unit of measurement: `W`
 - Device class: `Power`
 - State class: `Measurement`
 
 **Battery Charge Power:**
 - Name: `Battery Charge Power`
-- State template: `{{ max(0, states('sensor.solakon_one_battery_power') | float(default=0)) }}`
+- State template: `{{ max(0, states('sensor.solakon_one_battery_combined_power') | float(default=0)) }}`
 - Unit of measurement: `W`
 - Device class: `Power`
 - State class: `Measurement`
@@ -286,7 +286,7 @@ automation:
   - alias: "Battery Discharging Alert"
     trigger:
       - platform: numeric_state
-        entity_id: sensor.solakon_one_battery_power
+        entity_id: sensor.solakon_one_battery_combined_power
         below: -5000  # Alert when discharging more than 5kW
     action:
       - service: notify.mobile_app
