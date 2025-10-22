@@ -50,7 +50,7 @@ REGISTERS = {
     "inverter_s_current": {"address": 39128, "count": 2, "type": "i32", "scale": 1000, "unit": "A"},
     "inverter_t_current": {"address": 39130, "count": 2, "type": "i32", "scale": 1000, "unit": "A"},
     "active_power": {"address": 39134, "count": 2, "type": "i32", "scale": 1000, "unit": "kW"},
-    "reactive_power": {"address": 39136, "count": 2, "type": "i32", "scale": 1000, "unit": "kVar"},
+    "reactive_power": {"address": 39136, "count": 2, "type": "i32", "scale": 1000, "unit": "kvar"},
     "power_factor": {"address": 39138, "count": 1, "type": "i16", "scale": 1000},
     "grid_frequency": {"address": 39139, "count": 1, "type": "i16", "scale": 100, "unit": "Hz"},
     
@@ -72,7 +72,7 @@ REGISTERS = {
     "remote_control": {"address": 46001, "count": 1, "type": "u16", "scale": 1, "rw": True},
     "remote_timeout_set": {"address": 46002, "count": 1, "type": "u16", "scale": 1, "unit": "s", "rw": True},
     "remote_active_power": {"address": 46003, "count": 2, "type": "i32", "scale": 1, "unit": "W", "rw": True},
-    "remote_reactive_power": {"address": 46005, "count": 2, "type": "i32", "scale": 1, "unit": "Var", "rw": True},
+    "remote_reactive_power": {"address": 46005, "count": 2, "type": "i32", "scale": 1, "unit": "var", "rw": True},
     "remote_timeout_countdown": {"address": 46007, "count": 1, "type": "u16", "scale": 1, "unit": "s"},
 
     # Control Registers (Read/Write)
@@ -108,7 +108,7 @@ SENSOR_DEFINITIONS = {
         "name": "Reactive Power",
         "device_class": "reactive_power",
         "state_class": "measurement",
-        "unit": "kVar",
+        "unit": "kvar",
         "icon": "mdi:flash-outline",
     },
     "battery_combined_power": {
@@ -326,7 +326,7 @@ SENSOR_DEFINITIONS = {
         "name": "Remote Reactive Power Command",
         "device_class": "reactive_power",
         "state_class": "measurement",
-        "unit": "Var",
+        "unit": "var",
         "icon": "mdi:flash-outline",
     },
     "remote_timeout_countdown": {
@@ -462,7 +462,7 @@ NUMBER_DEFINITIONS = {
         "min": -100000,
         "max": 100000,
         "step": 100,
-        "unit": "Var",
+        "unit": "var",
         "mode": "box",
     },
     "remote_timeout_set": {

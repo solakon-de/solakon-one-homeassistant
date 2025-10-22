@@ -133,10 +133,10 @@ class SolakonSensor(CoordinatorEntity, SensorEntity):
             self._attr_native_unit_of_measurement = UnitOfTemperature.CELSIUS
         elif unit == "%":
             self._attr_native_unit_of_measurement = PERCENTAGE
-        elif unit == "kVar":
-            self._attr_native_unit_of_measurement = "kVar"
-        elif unit == "Var":
-            self._attr_native_unit_of_measurement = "Var"
+        elif unit == "kvar":
+            self._attr_native_unit_of_measurement = "kvar"
+        elif unit == "var":
+            self._attr_native_unit_of_measurement = "var"
         elif unit == "s":
             self._attr_native_unit_of_measurement = UnitOfTime.SECONDS
         elif unit:
