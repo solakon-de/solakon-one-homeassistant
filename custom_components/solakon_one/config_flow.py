@@ -27,7 +27,7 @@ STEP_USER_DATA_SCHEMA = vol.Schema(
             vol.Coerce(int), vol.Range(min=1, max=247)
         ),
         vol.Optional(CONF_SCAN_INTERVAL, default=DEFAULT_SCAN_INTERVAL): vol.All(
-            vol.Coerce(int), vol.Range(min=10, max=300)
+            vol.Coerce(int), vol.Range(min=1, max=300)
         ),
     }
 )
