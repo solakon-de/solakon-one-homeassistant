@@ -22,14 +22,15 @@ REGISTERS = {
     
     # Protocol & Device Info (Table 3-5)
     "protocol_version": {"address": 39000, "count": 2, "type": "u32"},
-    "rated_power": {"address": 39053, "count": 2, "type": "i32", "scale": 1000, "unit": "kW"},
-    "max_active_power": {"address": 39055, "count": 2, "type": "i32", "scale": 1000, "unit": "kW"},
+    "rated_power": {"address": 39053, "count": 2, "type": "i32", "scale": 1, "unit": "W"},
+    "max_active_power": {"address": 39055, "count": 2, "type": "i32", "scale": 1, "unit": "W"},
     
     # Status
     "status_1": {"address": 39063, "count": 1, "type": "bitfield16"},
     "alarm_1": {"address": 39067, "count": 1, "type": "bitfield16"},
     "alarm_2": {"address": 39068, "count": 1, "type": "bitfield16"},
     "alarm_3": {"address": 39069, "count": 1, "type": "bitfield16"},
+    "GRID_STANDARD_CODE": {"address": 49079, "count": 1, "type": 'u16'},
     
     # PV Input
     "pv1_voltage": {"address": 39070, "count": 1, "type": "i16", "scale": 10, "unit": "V"},
@@ -67,6 +68,8 @@ REGISTERS = {
     "battery1_power": {"address": 39230, "count": 2, "type": "i32", "scale": 1, "unit": "W"},
     "battery_combined_power": {"address": 39237, "count": 2, "type": "i32", "scale": 1, "unit": "W"},
     "battery_soc": {"address": 39424, "count": 1, "type": "i16", "scale": 1, "unit": "%"},
+    "battery_max_charge_current": {"address": 46607, "count": 1, "type": 'i16', "scale": 10, "unit": 'A', "rw": True},
+    "battery_max_discharge_current": {"address": 46608, "count": 1, "type": 'i16', "scale": 10, "unit": 'A', "rw": True},
 
     # Remote Control Registers (Read/Write)
     "remote_control": {"address": 46001, "count": 1, "type": "u16", "scale": 1, "rw": True},
@@ -246,6 +249,10 @@ SENSOR_DEFINITIONS = {
         "unit": "Hz",
         "icon": "mdi:sine-wave",
     },
+    "GRID_STANDARD_CODE": {
+       "name": "Grid Standart Code",
+        "device_class": "sensor",
+    },
 
     # Control Status Sensors (showing current values of controllable parameters)
     "eps_output": {
@@ -293,6 +300,20 @@ SENSOR_DEFINITIONS = {
         "state_class": "measurement",
         "unit": "%",
         "icon": "mdi:battery-low",
+    },
+    "battery_max_charge_current": {
+    "name": "Maximum Charge Current",
+        "device_class": "battery",
+        "state_class": "number",
+        "unit": "A",
+        "icon": "mdi:battery-charging",
+    },
+    "battery_max_discharge_current":{
+    "name": "Maximum Discharge Current",
+        "device_class": "battery",
+        "state_class": "number",
+        "unit": "A",
+        "icon": "mdi:battery-charging",
     },
     # "work_mode": {
     #     "name": "Work Mode",
@@ -445,6 +466,24 @@ NUMBER_DEFINITIONS = {
         "step": 1,
         "unit": "%",
         "mode": "slider",
+    },
+    "battery_max_charge_current": {
+        "name": "Maximmum Charge Current",
+        "icon": "mdi:battery-charging",
+        "min": 0,
+        "max": 40,
+        "step": 1,
+        "unit": "A",
+        "mode": "box",
+    },
+    "battery_max_discharge_current":{
+        "name": "Maximum Discharge Current",
+        "icon": "mdi:battery-charging",
+        "min": 0,
+        "max": 40,
+        "step": 1,
+        "unit": "A",
+        "mode": "box",
     },
     "remote_active_power": {
         "name": "Remote Active Power Control",
