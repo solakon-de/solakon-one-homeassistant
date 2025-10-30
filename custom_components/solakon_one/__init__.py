@@ -34,7 +34,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     if not await hub.async_test_connection():
         raise ConfigEntryNotReady("Cannot connect to Solakon ONE device")
 
-    coordinator = SolakonDataCoordinator(hass, hub)
+    coordinator = SolakonDataCoordinator(hass, hub, entry)
     await coordinator.async_config_entry_first_refresh()
 
     hass.data.setdefault(DOMAIN, {})
@@ -69,13 +69,14 @@ async def async_reload_entry(hass: HomeAssistant, entry: ConfigEntry) -> None:
 class SolakonDataCoordinator(DataUpdateCoordinator):
     """Class to manage fetching data from Solakon ONE."""
 
-    def __init__(self, hass: HomeAssistant, hub: SolakonModbusHub) -> None:
+    def __init__(self, hass: HomeAssistant, hub: SolakonModbusHub, config_entry: ConfigEntry) -> None:
         """Initialize coordinator."""
         super().__init__(
             hass,
             _LOGGER,
             name="Solakon ONE",
             update_interval=timedelta(seconds=hub.scan_interval),
+            config_entry=config_entry,
         )
         self.hub = hub
 
