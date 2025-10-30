@@ -120,7 +120,7 @@ class OptionsFlowHandler(config_entries.OptionsFlow):
                         default=self.config_entry.data.get(
                             CONF_SCAN_INTERVAL, DEFAULT_SCAN_INTERVAL
                         ),
-                    ): vol.All(vol.Coerce(int), vol.Range(min=10, max=300)),
+                    ): vol.All(vol.Coerce(int), vol.Range(min=1, max=300)),
                 }
             ),
         )

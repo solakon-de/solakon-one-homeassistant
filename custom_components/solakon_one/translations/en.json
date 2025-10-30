@@ -37,7 +37,7 @@
           "scan_interval": "Update Interval (seconds)"
         },
         "data_description": {
-          "scan_interval": "How often to poll the device for updates (10-300 seconds)"
+          "scan_interval": "How often to poll the device for updates (1-300 seconds)"
         }
       }
     }
