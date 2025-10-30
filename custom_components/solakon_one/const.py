@@ -35,12 +35,16 @@ REGISTERS = {
     # PV Input
     "pv1_voltage": {"address": 39070, "count": 1, "type": "i16", "scale": 10, "unit": "V"},
     "pv1_current": {"address": 39071, "count": 1, "type": "i16", "scale": 100, "unit": "A"},
+    "pv1_power": {"address": 39279, "count": 2, "type": "i32", "scale": 1, "unit": "W"},
     "pv2_voltage": {"address": 39072, "count": 1, "type": "i16", "scale": 10, "unit": "V"},
     "pv2_current": {"address": 39073, "count": 1, "type": "i16", "scale": 100, "unit": "A"},
+    "pv2_power": {"address": 39281, "count": 2, "type": "i32", "scale": 1, "unit": "W"},
     "pv3_voltage": {"address": 39074, "count": 1, "type": "i16", "scale": 10, "unit": "V"},
     "pv3_current": {"address": 39075, "count": 1, "type": "i16", "scale": 100, "unit": "A"},
+    "pv3_power": {"address": 39283, "count": 2, "type": "i32", "scale": 1, "unit": "W"},
     "pv4_voltage": {"address": 39076, "count": 1, "type": "i16", "scale": 10, "unit": "V"},
     "pv4_current": {"address": 39077, "count": 1, "type": "i16", "scale": 100, "unit": "A"},
+    "pv4_power": {"address": 39285, "count": 2, "type": "i32", "scale": 1, "unit": "W"},
     "total_pv_power": {"address": 39118, "count": 2, "type": "i32", "scale": 1, "unit": "W"},
     
     # Grid Information
@@ -93,6 +97,34 @@ REGISTERS = {
 # Sensor definitions for Home Assistant
 SENSOR_DEFINITIONS = {
     # Power sensors
+    "pv1_power": {
+        "name": "PV1 Power",
+        "device_class": "power",
+        "state_class": "measurement",
+        "unit": "W",
+        "icon": "mdi:solar-power",
+    },
+    "pv2_power": {
+        "name": "PV2 Power",
+        "device_class": "power",
+        "state_class": "measurement",
+        "unit": "W",
+        "icon": "mdi:solar-power",
+    },
+    "pv3_power": {
+        "name": "PV3 Power",
+        "device_class": "power",
+        "state_class": "measurement",
+        "unit": "W",
+        "icon": "mdi:solar-power",
+    },
+    "pv4_power": {
+        "name": "PV4 Power",
+        "device_class": "power",
+        "state_class": "measurement",
+        "unit": "W",
+        "icon": "mdi:solar-power",
+    },
     "total_pv_power": {
         "name": "PV Power",
         "device_class": "power",

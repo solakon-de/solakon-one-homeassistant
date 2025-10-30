@@ -138,7 +138,7 @@ These sensors display the current values of controllable parameters:
    - **Port**: Modbus TCP port (default: 502)
    - **Device Name**: Friendly name for your device
    - **Modbus Slave ID**: Usually 1 (range: 1-247)
-   - **Update Interval**: How often to poll (10-300 seconds)
+   - **Update Interval**: How often to poll (1-300 seconds)
 
 ### Network Requirements
 
