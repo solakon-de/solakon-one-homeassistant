@@ -335,14 +335,14 @@ SENSOR_DEFINITIONS = {
     },
     "battery_max_charge_current": {
     "name": "Maximum Charge Current",
-        "device_class": "battery",
+        "device_class": "current",
         "state_class": "number",
         "unit": "A",
         "icon": "mdi:battery-charging",
     },
     "battery_max_discharge_current":{
     "name": "Maximum Discharge Current",
-        "device_class": "battery",
+        "device_class": "current",
         "state_class": "number",
         "unit": "A",
         "icon": "mdi:battery-charging",
