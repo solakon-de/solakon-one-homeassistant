@@ -35,7 +35,10 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
         raise ConfigEntryNotReady("Cannot connect to Solakon ONE device")
 
     coordinator = SolakonDataCoordinator(hass, hub)
-    await coordinator.async_config_entry_first_refresh()
+    # Coordinator isn't tied to a config entry object, so call a regular refresh
+    # rather than async_config_entry_first_refresh which is only supported
+    # for coordinators that are created with a config entry.
+    await coordinator.async_refresh()
 
     hass.data.setdefault(DOMAIN, {})
     hass.data[DOMAIN][entry.entry_id] = {
