@@ -282,7 +282,7 @@ SENSOR_DEFINITIONS = {
         "icon": "mdi:sine-wave",
     },
     "GRID_STANDARD_CODE": {
-       "name": "Grid Standart Code",
+       "name": "Grid Standard Code",
         "device_class": "sensor",
     },
 
@@ -500,7 +500,7 @@ NUMBER_DEFINITIONS = {
         "mode": "slider",
     },
     "battery_max_charge_current": {
-        "name": "Maximmum Charge Current",
+        "name": "Maximum Charge Current",
         "icon": "mdi:battery-charging",
         "min": 0,
         "max": 40,
