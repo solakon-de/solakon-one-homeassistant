@@ -40,24 +40,24 @@ REGISTERS = {
     "model_name": {"address": 30000, "count": 16, "type": "string"},
     "serial_number": {"address": 30016, "count": 16, "type": "string"},
     "mfg_id": {"address": 30032, "count": 16, "type": "string"},
-    
+
     # Version Information (Table 3-2)
     "master_version": {"address": 36001, "count": 1, "type": "u16"},
     "slave_version": {"address": 36002, "count": 1, "type": "u16"},
     "manager_version": {"address": 36003, "count": 1, "type": "u16"},
-    
+
     # Protocol & Device Info (Table 3-5)
     "protocol_version": {"address": 39000, "count": 2, "type": "u32"},
     "rated_power": {"address": 39053, "count": 2, "type": "i32", "scale": 1, "unit": "W"},
     "max_active_power": {"address": 39055, "count": 2, "type": "i32", "scale": 1, "unit": "W"},
-    
+
     # Status
     "status_1": {"address": 39063, "count": 1, "type": "bitfield16"},
     "alarm_1": {"address": 39067, "count": 1, "type": "bitfield16"},
     "alarm_2": {"address": 39068, "count": 1, "type": "bitfield16"},
     "alarm_3": {"address": 39069, "count": 1, "type": "bitfield16"},
     "GRID_STANDARD_CODE": {"address": 49079, "count": 1, "type": 'u16'},
-    
+
     # PV Input
     "pv1_voltage": {"address": 39070, "count": 1, "type": "i16", "scale": 10, "unit": "V"},
     "pv1_current": {"address": 39071, "count": 1, "type": "i16", "scale": 100, "unit": "A"},
@@ -72,7 +72,12 @@ REGISTERS = {
     "pv4_current": {"address": 39077, "count": 1, "type": "i16", "scale": 100, "unit": "A"},
     "pv4_power": {"address": 39285, "count": 2, "type": "i32", "scale": 1, "unit": "W"},
     "total_pv_power": {"address": 39118, "count": 2, "type": "i32", "scale": 1, "unit": "W"},
-    
+
+    # EPS Information
+    "eps_voltage": {"address": 31010, "count": 1, "type": "i16", "scale": 10, "unit": "V"},
+    "eps_current": {"address": 31011, "count": 1, "type": "i16", "scale": 10, "unit": "A"},
+    "eps_power": {"address": 31047, "count": 2, "type": "i32", "scale": 1, "unit": "W"},
+
     # Grid Information
     "grid_r_voltage": {"address": 39123, "count": 1, "type": "i16", "scale": 10, "unit": "V"},
     "grid_s_voltage": {"address": 39124, "count": 1, "type": "i16", "scale": 10, "unit": "V"},
@@ -84,14 +89,14 @@ REGISTERS = {
     "reactive_power": {"address": 39136, "count": 2, "type": "i32", "scale": 1000, "unit": "kvar"},
     "power_factor": {"address": 39138, "count": 1, "type": "i16", "scale": 1000},
     "grid_frequency": {"address": 39139, "count": 1, "type": "i16", "scale": 100, "unit": "Hz"},
-    
+
     # Temperature
     "internal_temp": {"address": 39141, "count": 1, "type": "i16", "scale": 10, "unit": "°C"},
-    
+
     # Energy Statistics
     "cumulative_generation": {"address": 39149, "count": 2, "type": "u32", "scale": 100, "unit": "kWh"},
     "daily_generation": {"address": 39151, "count": 2, "type": "u32", "scale": 100, "unit": "kWh"},
-    
+
     # Battery Information
     "battery1_voltage": {"address": 39227, "count": 1, "type": "i16", "scale": 10, "unit": "V"},
     "battery1_current": {"address": 39228, "count": 2, "type": "i32", "scale": 1000, "unit": "A"},
@@ -186,7 +191,14 @@ SENSOR_DEFINITIONS = {
         "unit": "%",
         "icon": "mdi:battery",
     },
-    
+    "eps_power": {
+        "name": "EPS Power",
+        "device_class": "power",
+        "state_class": "measurement",
+        "unit": "W",
+        "icon": "mdi:solar-power",
+    },
+
     # Voltage sensors
     "pv1_voltage": {
         "name": "PV1 Voltage",
@@ -230,7 +242,14 @@ SENSOR_DEFINITIONS = {
         "unit": "V",
         "icon": "mdi:battery",
     },
-    
+    "eps_voltage": {
+        "name": "EPS Voltage",
+        "device_class": "voltage",
+        "state_class": "measurement",
+        "unit": "V",
+        "icon": "mdi:flash",
+    },
+
     # Current sensors
     "pv1_current": {
         "name": "PV1 Current",
@@ -267,7 +286,14 @@ SENSOR_DEFINITIONS = {
         "unit": "A",
         "icon": "mdi:current-dc",
     },
-    
+    "eps_current": {
+        "name": "EPS Current",
+        "device_class": "current",
+        "state_class": "measurement",
+        "unit": "A",
+        "icon": "mdi:current-dc",
+    },
+
     # Energy sensors
     "cumulative_generation": {
         "name": "Total Energy",
@@ -283,7 +309,7 @@ SENSOR_DEFINITIONS = {
         "unit": "kWh",
         "icon": "mdi:solar-panel",
     },
-    
+
     # Temperature sensors
     "internal_temp": {
         "name": "Internal Temperature",
@@ -292,7 +318,7 @@ SENSOR_DEFINITIONS = {
         "unit": "°C",
         "icon": "mdi:thermometer",
     },
-    
+
     # Other sensors
     "power_factor": {
         "name": "Power Factor",
@@ -308,7 +334,7 @@ SENSOR_DEFINITIONS = {
         "icon": "mdi:sine-wave",
     },
     "GRID_STANDARD_CODE": {
-       "name": "Grid Standart Code",
+       "name": "Grid Standard Code",
         "device_class": "sensor",
     },
 
@@ -380,6 +406,7 @@ SENSOR_DEFINITIONS = {
     "network_status": {
         "name": "Network Status",
         "icon": "mdi:network",
+        "category": "diagnostic",
     },
 
     # Remote Control Status Sensors
@@ -506,6 +533,7 @@ NUMBER_DEFINITIONS = {
         "step": 1,
         "unit": "%",
         "mode": "slider",
+        "category": "config",
     },
     "maximum_soc": {
         "name": "Maximum SoC Control",
@@ -515,6 +543,7 @@ NUMBER_DEFINITIONS = {
         "step": 1,
         "unit": "%",
         "mode": "slider",
+        "category": "config",
     },
     "minimum_soc_ongrid": {
         "name": "Minimum SoC OnGrid Control",
@@ -524,15 +553,17 @@ NUMBER_DEFINITIONS = {
         "step": 1,
         "unit": "%",
         "mode": "slider",
+        "category": "config",
     },
     "battery_max_charge_current": {
-        "name": "Maximmum Charge Current",
+        "name": "Maximum Charge Current",
         "icon": "mdi:battery-charging",
         "min": 0,
         "max": 40,
         "step": 1,
         "unit": "A",
         "mode": "box",
+        "category": "config",
     },
     "battery_max_discharge_current":{
         "name": "Maximum Discharge Current",
@@ -542,6 +573,7 @@ NUMBER_DEFINITIONS = {
         "step": 1,
         "unit": "A",
         "mode": "box",
+        "category": "config",
     },
     "remote_active_power": {
         "name": "Remote Active Power Control",
