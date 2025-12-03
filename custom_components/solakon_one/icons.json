@@ -84,6 +84,9 @@
           "100": "mdi:battery"
         }
       },
+      "eps_power": {
+        "icon": "mdi:solar-power"
+      },
       "pv1_voltage": {
         "default": "mdi:flash"
       },
@@ -102,6 +105,9 @@
       "battery1_voltage": {
         "default": "mdi:battery"
       },
+      "eps_voltage": {
+        "icon": "mdi:flash"
+      },
       "pv1_current": {
         "default": "mdi:current-dc"
       },
@@ -116,6 +122,9 @@
       },
       "battery1_current": {
         "default": "mdi:current-dc"
+      },
+      "eps_current": {
+        "icon": "mdi:current-dc"
       },
       "cumulative_generation": {
         "default": "mdi:solar-panel"
