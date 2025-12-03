@@ -1,12 +1,59 @@
 """Constants for the Solakon ONE integration."""
 from typing import Final
 
+from homeassistant.components.sensor import (
+    SensorDeviceClass,
+    SensorStateClass,
+)
+from homeassistant.const import (
+    PERCENTAGE,
+    UnitOfElectricCurrent,
+    UnitOfElectricPotential,
+    UnitOfEnergy,
+    UnitOfFrequency,
+    UnitOfPower,
+    UnitOfTemperature,
+    UnitOfTime,
+)
+
 DOMAIN: Final = "solakon_one"
 DEFAULT_NAME: Final = "Solakon ONE"
 DEFAULT_PORT: Final = 502
 DEFAULT_SLAVE_ID: Final = 1
 DEFAULT_SCAN_INTERVAL: Final = 30
 SCAN_INTERVAL: Final = 30
+
+DEVICE_CLASS_MAPPING = {
+    "power": SensorDeviceClass.POWER,
+    "energy": SensorDeviceClass.ENERGY,
+    "voltage": SensorDeviceClass.VOLTAGE,
+    "current": SensorDeviceClass.CURRENT,
+    "temperature": SensorDeviceClass.TEMPERATURE,
+    "frequency": SensorDeviceClass.FREQUENCY,
+    "battery": SensorDeviceClass.BATTERY,
+    "power_factor": SensorDeviceClass.POWER_FACTOR,
+    "reactive_power": SensorDeviceClass.REACTIVE_POWER,
+    "duration": SensorDeviceClass.DURATION,
+}
+
+STATE_CLASS_MAPPING = {
+    "measurement": SensorStateClass.MEASUREMENT,
+    "total_increasing": SensorStateClass.TOTAL_INCREASING,
+}
+
+UOM_MAPPING = {
+    "kW": UnitOfPower.KILO_WATT,
+    "W": UnitOfPower.WATT,
+    "kWh": UnitOfEnergy.KILO_WATT_HOUR,
+    "V": UnitOfElectricPotential.VOLT,
+    "A": UnitOfElectricCurrent.AMPERE,
+    "Hz": UnitOfFrequency.HERTZ,
+    "°C": UnitOfTemperature.CELSIUS,
+    "%": PERCENTAGE,
+    "kvar": "kvar",
+    "var": "var",
+    "s": UnitOfTime.SECONDS,
+}
 
 # Register definitions
 REGISTERS = {
