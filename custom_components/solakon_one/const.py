@@ -1,12 +1,38 @@
 """Constants for the Solakon ONE integration."""
 from typing import Final
 
+from homeassistant.const import (
+    PERCENTAGE,
+    UnitOfElectricCurrent,
+    UnitOfElectricPotential,
+    UnitOfEnergy,
+    UnitOfFrequency,
+    UnitOfPower,
+    UnitOfTemperature,
+    UnitOfTime,
+)
+
 DOMAIN: Final = "solakon_one"
 DEFAULT_NAME: Final = "Solakon ONE"
 DEFAULT_PORT: Final = 502
 DEFAULT_SLAVE_ID: Final = 1
 DEFAULT_SCAN_INTERVAL: Final = 30
 SCAN_INTERVAL: Final = 30
+
+UOM_MAPPING = {
+    "kW": UnitOfPower.KILO_WATT,
+    "W": UnitOfPower.WATT,
+    "kWh": UnitOfEnergy.KILO_WATT_HOUR,
+    "V": UnitOfElectricPotential.VOLT,
+    "A": UnitOfElectricCurrent.AMPERE,
+    "Hz": UnitOfFrequency.HERTZ,
+    "°C": UnitOfTemperature.CELSIUS,
+    "%": PERCENTAGE,
+    "kvar": "kvar",
+    "var": "var",
+    "s": UnitOfTime.SECONDS,
+}
+
 
 # Register definitions
 REGISTERS = {

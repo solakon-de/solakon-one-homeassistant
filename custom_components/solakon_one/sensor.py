@@ -10,25 +10,32 @@ from homeassistant.components.sensor import (
     SensorStateClass,
 )
 from homeassistant.config_entries import ConfigEntry
-from homeassistant.const import (
-    EntityCategory,
-    PERCENTAGE,
-    UnitOfElectricCurrent,
-    UnitOfElectricPotential,
-    UnitOfEnergy,
-    UnitOfFrequency,
-    UnitOfPower,
-    UnitOfTemperature,
-    UnitOfTime,
-)
+from homeassistant.const import EntityCategory
 from homeassistant.core import HomeAssistant, callback
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
-from .const import DOMAIN, SENSOR_DEFINITIONS
+from .const import DOMAIN, SENSOR_DEFINITIONS, UOM_MAPPING
 from .entity import SolakonEntity
 
 _LOGGER = logging.getLogger(__name__)
 
+DEVICE_CLASS_MAPPING = {
+    "power": SensorDeviceClass.POWER,
+    "energy": SensorDeviceClass.ENERGY,
+    "voltage": SensorDeviceClass.VOLTAGE,
+    "current": SensorDeviceClass.CURRENT,
+    "temperature": SensorDeviceClass.TEMPERATURE,
+    "frequency": SensorDeviceClass.FREQUENCY,
+    "battery": SensorDeviceClass.BATTERY,
+    "power_factor": SensorDeviceClass.POWER_FACTOR,
+    "reactive_power": SensorDeviceClass.REACTIVE_POWER,
+    "duration": SensorDeviceClass.DURATION,
+}
+
+STATE_CLASS_MAPPING = {
+    "measurement": SensorStateClass.MEASUREMENT,
+    "total_increasing": SensorStateClass.TOTAL_INCREASING,
+}
 
 async def async_setup_entry(
     hass: HomeAssistant,
@@ -83,61 +90,17 @@ class SolakonSensor(SolakonEntity, SensorEntity):
         # Set device class
         if "device_class" in definition:
             device_class = definition["device_class"]
-            if device_class == "power":
-                self._attr_device_class = SensorDeviceClass.POWER
-            elif device_class == "energy":
-                self._attr_device_class = SensorDeviceClass.ENERGY
-            elif device_class == "voltage":
-                self._attr_device_class = SensorDeviceClass.VOLTAGE
-            elif device_class == "current":
-                self._attr_device_class = SensorDeviceClass.CURRENT
-            elif device_class == "temperature":
-                self._attr_device_class = SensorDeviceClass.TEMPERATURE
-            elif device_class == "frequency":
-                self._attr_device_class = SensorDeviceClass.FREQUENCY
-            elif device_class == "battery":
-                self._attr_device_class = SensorDeviceClass.BATTERY
-            elif device_class == "power_factor":
-                self._attr_device_class = SensorDeviceClass.POWER_FACTOR
-            elif device_class == "reactive_power":
-                self._attr_device_class = SensorDeviceClass.REACTIVE_POWER
-            elif device_class == "duration":
-                self._attr_device_class = SensorDeviceClass.DURATION
-        
+            self._attr_device_class = DEVICE_CLASS_MAPPING.get(device_class) if device_class in DEVICE_CLASS_MAPPING else None
+
         # Set state class
         if "state_class" in definition:
             state_class = definition["state_class"]
-            if state_class == "measurement":
-                self._attr_state_class = SensorStateClass.MEASUREMENT
-            elif state_class == "total_increasing":
-                self._attr_state_class = SensorStateClass.TOTAL_INCREASING
+            self._attr_state_class = STATE_CLASS_MAPPING.get(state_class) if state_class in STATE_CLASS_MAPPING else None
         
         # Set unit of measurement
-        unit = definition.get("unit")
-        if unit == "kW":
-            self._attr_native_unit_of_measurement = UnitOfPower.KILO_WATT
-        elif unit == "W":
-            self._attr_native_unit_of_measurement = UnitOfPower.WATT
-        elif unit == "kWh":
-            self._attr_native_unit_of_measurement = UnitOfEnergy.KILO_WATT_HOUR
-        elif unit == "V":
-            self._attr_native_unit_of_measurement = UnitOfElectricPotential.VOLT
-        elif unit == "A":
-            self._attr_native_unit_of_measurement = UnitOfElectricCurrent.AMPERE
-        elif unit == "Hz":
-            self._attr_native_unit_of_measurement = UnitOfFrequency.HERTZ
-        elif unit == "°C":
-            self._attr_native_unit_of_measurement = UnitOfTemperature.CELSIUS
-        elif unit == "%":
-            self._attr_native_unit_of_measurement = PERCENTAGE
-        elif unit == "kvar":
-            self._attr_native_unit_of_measurement = "kvar"
-        elif unit == "var":
-            self._attr_native_unit_of_measurement = "var"
-        elif unit == "s":
-            self._attr_native_unit_of_measurement = UnitOfTime.SECONDS
-        elif unit:
-            self._attr_native_unit_of_measurement = unit
+        if "unit" in definition:
+            unit = definition["unit"]
+            self._attr_native_unit_of_measurement = UOM_MAPPING.get(unit) if unit in UOM_MAPPING else unit
 
     @callback
     def _handle_coordinator_update(self) -> None:
