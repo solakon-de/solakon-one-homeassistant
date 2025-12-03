@@ -11,6 +11,7 @@ from homeassistant.components.sensor import (
 )
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import (
+    EntityCategory,
     PERCENTAGE,
     UnitOfElectricCurrent,
     UnitOfElectricPotential,
@@ -73,6 +74,12 @@ class SolakonSensor(SolakonEntity, SensorEntity):
         # Set entity ID
         self.entity_id = f"sensor.solakon_one_{sensor_key}"
         
+        category = definition.get("entity_category", None)
+        if category == "diagnostic":
+            self._attr_entity_category = EntityCategory.DIAGNOSTIC
+        elif category == "config":
+            self._attr_entity_category = EntityCategory.CONFIG
+
         # Set device class
         if "device_class" in definition:
             device_class = definition["device_class"]

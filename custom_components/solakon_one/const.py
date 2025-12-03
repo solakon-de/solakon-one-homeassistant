@@ -354,6 +354,7 @@ SENSOR_DEFINITIONS = {
     "network_status": {
         "name": "Network Status",
         "icon": "mdi:network",
+        "category": "diagnostic",
     },
 
     # Remote Control Status Sensors
@@ -480,6 +481,7 @@ NUMBER_DEFINITIONS = {
         "step": 1,
         "unit": "%",
         "mode": "slider",
+        "category": "config",
     },
     "maximum_soc": {
         "name": "Maximum SoC Control",
@@ -489,6 +491,7 @@ NUMBER_DEFINITIONS = {
         "step": 1,
         "unit": "%",
         "mode": "slider",
+        "category": "config",
     },
     "minimum_soc_ongrid": {
         "name": "Minimum SoC OnGrid Control",
@@ -498,6 +501,7 @@ NUMBER_DEFINITIONS = {
         "step": 1,
         "unit": "%",
         "mode": "slider",
+        "category": "config",
     },
     "battery_max_charge_current": {
         "name": "Maximmum Charge Current",
@@ -507,6 +511,7 @@ NUMBER_DEFINITIONS = {
         "step": 1,
         "unit": "A",
         "mode": "box",
+        "category": "config",
     },
     "battery_max_discharge_current":{
         "name": "Maximum Discharge Current",
@@ -516,6 +521,7 @@ NUMBER_DEFINITIONS = {
         "step": 1,
         "unit": "A",
         "mode": "box",
+        "category": "config",
     },
     "remote_active_power": {
         "name": "Remote Active Power Control",
