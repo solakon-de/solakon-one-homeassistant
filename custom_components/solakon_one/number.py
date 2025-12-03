@@ -5,7 +5,7 @@ import logging
 
 from homeassistant.components.number import NumberEntity, NumberMode, NumberDeviceClass
 from homeassistant.config_entries import ConfigEntry
-from homeassistant.const import UnitOfPower
+from homeassistant.const import EntityCategory, UnitOfPower
 from homeassistant.core import HomeAssistant, callback
 from homeassistant.helpers.device_registry import DeviceInfo
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
@@ -97,6 +97,12 @@ class SolakonNumber(CoordinatorEntity, NumberEntity):
         # Set basic attributes
         self._attr_name = definition["name"]
         self._attr_icon = definition.get("icon")
+
+        category = definition.get("entity_category", None)
+        if category == "diagnostic":
+            self._attr_entity_category = EntityCategory.DIAGNOSTIC
+        elif category == "config":
+            self._attr_entity_category = EntityCategory.CONFIG
 
         # Set number attributes
         self._attr_native_min_value = definition.get("min", 0)
