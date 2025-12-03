@@ -27,9 +27,6 @@ class SolakonEntity(CoordinatorEntity, Entity):
         self._attr_unique_id = f"{config_entry.entry_id}_{key}"
         self._attr_translation_key = key
 
-        # Set basic attributes
-        self._attr_name = definition["name"]
-
         self._attr_device_info = DeviceInfo(
             identifiers={(DOMAIN, self._config_entry.entry_id)},
             name=self._config_entry.data.get("name", "Solakon ONE"),
