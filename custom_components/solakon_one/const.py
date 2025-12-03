@@ -133,63 +133,54 @@ SENSOR_DEFINITIONS = {
         "device_class": "power",
         "state_class": "measurement",
         "unit": "W",
-        "icon": "mdi:solar-power",
     },
     "pv2_power": {
         "name": "PV2 Power",
         "device_class": "power",
         "state_class": "measurement",
         "unit": "W",
-        "icon": "mdi:solar-power",
     },
     "pv3_power": {
         "name": "PV3 Power",
         "device_class": "power",
         "state_class": "measurement",
         "unit": "W",
-        "icon": "mdi:solar-power",
     },
     "pv4_power": {
         "name": "PV4 Power",
         "device_class": "power",
         "state_class": "measurement",
         "unit": "W",
-        "icon": "mdi:solar-power",
     },
     "total_pv_power": {
         "name": "PV Power",
         "device_class": "power",
         "state_class": "measurement",
         "unit": "W",
-        "icon": "mdi:solar-power",
     },
     "active_power": {
         "name": "Active Power",
         "device_class": "power",
         "state_class": "measurement",
         "unit": "W",
-        "icon": "mdi:flash",
     },
     "reactive_power": {
         "name": "Reactive Power",
         "device_class": "reactive_power",
         "state_class": "measurement",
         "unit": "kvar",
-        "icon": "mdi:flash-outline",
     },
     "battery_combined_power": {
         "name": "Battery Power",
         "device_class": "power",
         "state_class": "measurement",
         "unit": "W",
-        "icon": "mdi:battery-charging",
     },
     "battery_soc": {
         "name": "Battery State of Charge",
         "device_class": "battery",
         "state_class": "measurement",
         "unit": "%",
-        "icon": "mdi:battery",
     },
     "eps_power": {
         "name": "EPS Power",
@@ -205,42 +196,36 @@ SENSOR_DEFINITIONS = {
         "device_class": "voltage",
         "state_class": "measurement",
         "unit": "V",
-        "icon": "mdi:flash",
     },
     "pv2_voltage": {
         "name": "PV2 Voltage",
         "device_class": "voltage",
         "state_class": "measurement",
         "unit": "V",
-        "icon": "mdi:flash",
     },
     "pv3_voltage": {
         "name": "PV3 Voltage",
         "device_class": "voltage",
         "state_class": "measurement",
         "unit": "V",
-        "icon": "mdi:flash",
     },
     "pv4_voltage": {
         "name": "PV4 Voltage",
         "device_class": "voltage",
         "state_class": "measurement",
         "unit": "V",
-        "icon": "mdi:flash",
     },
     "grid_r_voltage": {
         "name": "Grid R Voltage",
         "device_class": "voltage",
         "state_class": "measurement",
         "unit": "V",
-        "icon": "mdi:sine-wave",
     },
     "battery1_voltage": {
         "name": "Battery Voltage",
         "device_class": "voltage",
         "state_class": "measurement",
         "unit": "V",
-        "icon": "mdi:battery",
     },
     "eps_voltage": {
         "name": "EPS Voltage",
@@ -256,35 +241,30 @@ SENSOR_DEFINITIONS = {
         "device_class": "current",
         "state_class": "measurement",
         "unit": "A",
-        "icon": "mdi:current-dc",
     },
     "pv2_current": {
         "name": "PV2 Current",
         "device_class": "current",
         "state_class": "measurement",
         "unit": "A",
-        "icon": "mdi:current-dc",
     },
     "pv3_current": {
         "name": "PV3 Current",
         "device_class": "current",
         "state_class": "measurement",
         "unit": "A",
-        "icon": "mdi:current-dc",
     },
     "pv4_current": {
         "name": "PV4 Current",
         "device_class": "current",
         "state_class": "measurement",
         "unit": "A",
-        "icon": "mdi:current-dc",
     },
     "battery1_current": {
         "name": "Battery Current",
         "device_class": "current",
         "state_class": "measurement",
         "unit": "A",
-        "icon": "mdi:current-dc",
     },
     "eps_current": {
         "name": "EPS Current",
@@ -300,14 +280,12 @@ SENSOR_DEFINITIONS = {
         "device_class": "energy",
         "state_class": "total_increasing",
         "unit": "kWh",
-        "icon": "mdi:solar-panel",
     },
     "daily_generation": {
         "name": "Daily Energy",
         "device_class": "energy",
         "state_class": "total_increasing",
         "unit": "kWh",
-        "icon": "mdi:solar-panel",
     },
 
     # Temperature sensors
@@ -316,7 +294,6 @@ SENSOR_DEFINITIONS = {
         "device_class": "temperature",
         "state_class": "measurement",
         "unit": "°C",
-        "icon": "mdi:thermometer",
     },
 
     # Other sensors
@@ -324,14 +301,12 @@ SENSOR_DEFINITIONS = {
         "name": "Power Factor",
         "device_class": "power_factor",
         "state_class": "measurement",
-        "icon": "mdi:angle-acute",
     },
     "grid_frequency": {
         "name": "Grid Frequency",
         "device_class": "frequency",
         "state_class": "measurement",
         "unit": "Hz",
-        "icon": "mdi:sine-wave",
     },
     "GRID_STANDARD_CODE": {
        "name": "Grid Standard Code",
@@ -341,7 +316,6 @@ SENSOR_DEFINITIONS = {
     # Control Status Sensors (showing current values of controllable parameters)
     "eps_output": {
         "name": "EPS Output Mode",
-        "icon": "mdi:power-standby",
     },
     # "export_power_limit": {
     #     "name": "Export Power Limit",
@@ -369,35 +343,30 @@ SENSOR_DEFINITIONS = {
         "device_class": "battery",
         "state_class": "measurement",
         "unit": "%",
-        "icon": "mdi:battery-low",
     },
     "maximum_soc": {
         "name": "Maximum State of Charge",
         "device_class": "battery",
         "state_class": "measurement",
         "unit": "%",
-        "icon": "mdi:battery-high",
     },
     "minimum_soc_ongrid": {
         "name": "Minimum SoC OnGrid",
         "device_class": "battery",
         "state_class": "measurement",
         "unit": "%",
-        "icon": "mdi:battery-low",
     },
     "battery_max_charge_current": {
-    "name": "Maximum Charge Current",
+        "name": "Maximum Charge Current",
         "device_class": "current",
         "state_class": "number",
         "unit": "A",
-        "icon": "mdi:battery-charging",
     },
     "battery_max_discharge_current":{
-    "name": "Maximum Discharge Current",
+        "name": "Maximum Discharge Current",
         "device_class": "current",
         "state_class": "number",
         "unit": "A",
-        "icon": "mdi:battery-charging",
     },
     # "work_mode": {
     #     "name": "Work Mode",
@@ -405,42 +374,36 @@ SENSOR_DEFINITIONS = {
     # },
     "network_status": {
         "name": "Network Status",
-        "icon": "mdi:network",
         "category": "diagnostic",
     },
 
     # Remote Control Status Sensors
     "remote_control": {
         "name": "Remote Control Status",
-        "icon": "mdi:remote",
     },
     "remote_timeout_set": {
         "name": "Remote Timeout Setting",
         "device_class": "duration",
         "state_class": "measurement",
         "unit": "s",
-        "icon": "mdi:timer",
     },
     "remote_active_power": {
         "name": "Remote Active Power Command",
         "device_class": "power",
         "state_class": "measurement",
         "unit": "W",
-        "icon": "mdi:flash",
     },
     "remote_reactive_power": {
         "name": "Remote Reactive Power Command",
         "device_class": "reactive_power",
         "state_class": "measurement",
         "unit": "var",
-        "icon": "mdi:flash-outline",
     },
     "remote_timeout_countdown": {
         "name": "Remote Timeout Countdown",
         "device_class": "duration",
         "state_class": "measurement",
         "unit": "s",
-        "icon": "mdi:timer-sand",
     },
 }
 
@@ -448,7 +411,6 @@ SENSOR_DEFINITIONS = {
 SELECT_DEFINITIONS = {
     "eps_output": {
         "name": "EPS Output Control",
-        "icon": "mdi:power-standby",
         "options": {
             0: "Disable",
             2: "EPS Mode",
@@ -469,7 +431,6 @@ SELECT_DEFINITIONS = {
     # },
     "remote_control_mode": {
         "name": "Remote Control Mode",
-        "icon": "mdi:remote",
         "options": {
             0: "Disabled",
             1: "INV Discharge (PV Priority)",
@@ -484,7 +445,6 @@ SELECT_DEFINITIONS = {
     },
     "force_mode": {
         "name": "Force Mode",
-        "icon": "mdi:battery-arrow-up-down",
         "options": {
             0: "Disabled",
             1: "Force Discharge",
@@ -527,7 +487,6 @@ NUMBER_DEFINITIONS = {
     # },
     "minimum_soc": {
         "name": "Minimum SoC Control",
-        "icon": "mdi:battery-low",
         "min": 0,
         "max": 100,
         "step": 1,
@@ -537,7 +496,6 @@ NUMBER_DEFINITIONS = {
     },
     "maximum_soc": {
         "name": "Maximum SoC Control",
-        "icon": "mdi:battery-high",
         "min": 0,
         "max": 100,
         "step": 1,
@@ -547,7 +505,6 @@ NUMBER_DEFINITIONS = {
     },
     "minimum_soc_ongrid": {
         "name": "Minimum SoC OnGrid Control",
-        "icon": "mdi:battery-low",
         "min": 0,
         "max": 100,
         "step": 1,
@@ -557,7 +514,6 @@ NUMBER_DEFINITIONS = {
     },
     "battery_max_charge_current": {
         "name": "Maximum Charge Current",
-        "icon": "mdi:battery-charging",
         "min": 0,
         "max": 40,
         "step": 1,
@@ -567,7 +523,6 @@ NUMBER_DEFINITIONS = {
     },
     "battery_max_discharge_current":{
         "name": "Maximum Discharge Current",
-        "icon": "mdi:battery-charging",
         "min": 0,
         "max": 40,
         "step": 1,
@@ -577,7 +532,6 @@ NUMBER_DEFINITIONS = {
     },
     "remote_active_power": {
         "name": "Remote Active Power Control",
-        "icon": "mdi:flash",
         "min": -100000,  # -100kW (charging/import)
         "max": 100000,   # +100kW (discharging/export)
         "step": 100,
@@ -587,7 +541,6 @@ NUMBER_DEFINITIONS = {
     },
     "remote_reactive_power": {
         "name": "Remote Reactive Power Control",
-        "icon": "mdi:flash-outline",
         "min": -100000,
         "max": 100000,
         "step": 100,
@@ -596,7 +549,6 @@ NUMBER_DEFINITIONS = {
     },
     "remote_timeout_set": {
         "name": "Remote Timeout Control",
-        "icon": "mdi:timer",
         "min": 0,
         "max": 3600,  # 1 hour max
         "step": 10,
@@ -605,7 +557,6 @@ NUMBER_DEFINITIONS = {
     },
     "force_duration": {
         "name": "Force Mode Duration",
-        "icon": "mdi:timer-outline",
         "min": 0,
         "max": 1092,  # 65535 seconds = ~1092 minutes
         "step": 1,
@@ -614,7 +565,6 @@ NUMBER_DEFINITIONS = {
     },
     "force_power": {
         "name": "Force Mode Power",
-        "icon": "mdi:flash",
         "min": 0,
         "max": 1200,  # Will be validated based on mode (1200W charge, 800W discharge)
         "step": 10,
