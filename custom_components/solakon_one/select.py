@@ -6,11 +6,10 @@ import logging
 from homeassistant.components.select import SelectEntity
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant, callback
-from homeassistant.helpers.device_registry import DeviceInfo
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
-from homeassistant.helpers.update_coordinator import CoordinatorEntity
 
 from .const import DOMAIN, SELECT_DEFINITIONS, REGISTERS
+from .entity import SolakonEntity
 from .remote_control import mode_to_register_value, register_value_to_mode, RemoteControlMode
 
 _LOGGER = logging.getLogger(__name__)
@@ -69,7 +68,7 @@ async def async_setup_entry(
         async_add_entities(entities, True)
 
 
-class SolakonSelect(CoordinatorEntity, SelectEntity):
+class SolakonSelect(SolakonEntity, SelectEntity):
     """Representation of a Solakon ONE select entity."""
 
     def __init__(
@@ -82,38 +81,19 @@ class SolakonSelect(CoordinatorEntity, SelectEntity):
         device_info: dict,
     ) -> None:
         """Initialize the select entity."""
-        super().__init__(coordinator)
+        super().__init__(coordinator, config_entry, device_info, definition, select_key)
         self._hub = hub
         self._select_key = select_key
-        self._definition = definition
-        self._config_entry = config_entry
-        self._device_info = device_info
         self._register_config = REGISTERS[select_key]
 
-        # Set unique ID and entity ID
-        self._attr_unique_id = f"{config_entry.entry_id}_{select_key}"
-        self._attr_translation_key = select_key
+        # Set entity ID
         self.entity_id = f"select.solakon_one_{select_key}"
-
-        # Set basic attributes
-        self._attr_name = definition["name"]
+        self._attr_translation_key = select_key
 
         # Set up options (mapping from numeric value to text)
         self._options_map = definition["options"]  # e.g., {0: "Disable", 2: "EPS Mode"}
         self._reverse_options_map = {v: k for k, v in self._options_map.items()}  # e.g., {"Disable": 0}
         self._attr_options = list(self._options_map.values())  # ["Disable", "EPS Mode"]
-
-    @property
-    def device_info(self) -> DeviceInfo:
-        """Return device information."""
-        return DeviceInfo(
-            identifiers={(DOMAIN, self._config_entry.entry_id)},
-            name=self._config_entry.data.get("name", "Solakon ONE"),
-            manufacturer=self._device_info.get("manufacturer", "Solakon"),
-            model=self._device_info.get("model", "One"),
-            sw_version=self._device_info.get("version"),
-            serial_number=self._device_info.get("serial_number"),
-        )
 
     @callback
     def _handle_coordinator_update(self) -> None:
@@ -185,7 +165,7 @@ class SolakonSelect(CoordinatorEntity, SelectEntity):
         return self.coordinator.last_update_success
 
 
-class RemoteControlModeSelect(CoordinatorEntity, SelectEntity):
+class RemoteControlModeSelect(SolakonEntity, SelectEntity):
     """Special select entity for Remote Control Mode.
 
     This entity translates between user-friendly mode names and the
@@ -201,36 +181,17 @@ class RemoteControlModeSelect(CoordinatorEntity, SelectEntity):
         device_info: dict,
     ) -> None:
         """Initialize the remote control mode select entity."""
-        super().__init__(coordinator)
+        super().__init__(coordinator, config_entry, device_info, definition, "remote_control_mode")
         self._hub = hub
-        self._config_entry = config_entry
-        self._device_info = device_info
-        self._definition = definition
 
-        # Set unique ID and entity ID
-        self._attr_unique_id = f"{config_entry.entry_id}_remote_control_mode"
-        self._attr_translation_key = "remote_control_mode"
+        # Set entity ID
         self.entity_id = "select.solakon_one_remote_control_mode"
-
-        # Set basic attributes
-        self._attr_name = definition["name"]
+        self._attr_translation_key = "remote_control_mode"
 
         # Set up options (mapping from mode enum value to text)
         self._options_map = definition["options"]
         self._reverse_options_map = {v: k for k, v in self._options_map.items()}
         self._attr_options = list(self._options_map.values())
-
-    @property
-    def device_info(self) -> DeviceInfo:
-        """Return device information."""
-        return DeviceInfo(
-            identifiers={(DOMAIN, self._config_entry.entry_id)},
-            name=self._config_entry.data.get("name", "Solakon ONE"),
-            manufacturer=self._device_info.get("manufacturer", "Solakon"),
-            model=self._device_info.get("model", "One"),
-            sw_version=self._device_info.get("version"),
-            serial_number=self._device_info.get("serial_number"),
-        )
 
     @callback
     def _handle_coordinator_update(self) -> None:
@@ -312,7 +273,7 @@ class RemoteControlModeSelect(CoordinatorEntity, SelectEntity):
         return self.coordinator.last_update_success
 
 
-class ForceModeSelect(CoordinatorEntity, SelectEntity):
+class ForceModeSelect(SolakonEntity, SelectEntity):
     """Special select entity for Force Mode (Force Charge/Discharge).
 
     This entity provides a simplified interface for force charging/discharging
@@ -328,36 +289,17 @@ class ForceModeSelect(CoordinatorEntity, SelectEntity):
         device_info: dict,
     ) -> None:
         """Initialize the force mode select entity."""
-        super().__init__(coordinator)
+        super().__init__(coordinator, config_entry, device_info, definition, "force_mode")
         self._hub = hub
-        self._config_entry = config_entry
-        self._device_info = device_info
-        self._definition = definition
 
-        # Set unique ID and entity ID
-        self._attr_unique_id = f"{config_entry.entry_id}_force_mode"
-        self._attr_translation_key = "force_mode"
+        # Set entity ID
         self.entity_id = "select.solakon_one_force_mode"
-
-        # Set basic attributes
-        self._attr_name = definition["name"]
+        self._attr_translation_key = "force_mode"
 
         # Set up options (mapping from mode value to text)
         self._options_map = definition["options"]  # {0: "Disabled", 1: "Force Discharge", 3: "Force Charge"}
         self._reverse_options_map = {v: k for k, v in self._options_map.items()}
         self._attr_options = list(self._options_map.values())
-
-    @property
-    def device_info(self) -> DeviceInfo:
-        """Return device information."""
-        return DeviceInfo(
-            identifiers={(DOMAIN, self._config_entry.entry_id)},
-            name=self._config_entry.data.get("name", "Solakon ONE"),
-            manufacturer=self._device_info.get("manufacturer", "Solakon"),
-            model=self._device_info.get("model", "One"),
-            sw_version=self._device_info.get("version"),
-            serial_number=self._device_info.get("serial_number"),
-        )
 
     @callback
     def _handle_coordinator_update(self) -> None:
