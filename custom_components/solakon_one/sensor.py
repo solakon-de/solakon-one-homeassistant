@@ -22,11 +22,10 @@ from homeassistant.const import (
     UnitOfTime,
 )
 from homeassistant.core import HomeAssistant, callback
-from homeassistant.helpers.device_registry import DeviceInfo
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
-from homeassistant.helpers.update_coordinator import CoordinatorEntity
 
 from .const import DOMAIN, SENSOR_DEFINITIONS
+from .entity import SolakonEntity
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -58,7 +57,7 @@ async def async_setup_entry(
     async_add_entities(entities, True)
 
 
-class SolakonSensor(CoordinatorEntity, SensorEntity):
+class SolakonSensor(SolakonEntity, SensorEntity):
     """Representation of a Solakon ONE sensor."""
 
     def __init__(
@@ -70,20 +69,11 @@ class SolakonSensor(CoordinatorEntity, SensorEntity):
         device_info: dict,
     ) -> None:
         """Initialize the sensor."""
-        super().__init__(coordinator)
+        super().__init__(coordinator, config_entry, device_info, definition, sensor_key)
         self._sensor_key = sensor_key
-        self._definition = definition
-        self._config_entry = config_entry
-        self._device_info = device_info
-        
-        # Set unique ID and entity ID
-        self._attr_unique_id = f"{config_entry.entry_id}_{sensor_key}"
+        # Set entity ID
         self.entity_id = f"sensor.solakon_one_{sensor_key}"
         
-        # Set basic attributes
-        self._attr_name = definition["name"]
-        self._attr_icon = definition.get("icon")
-
         category = definition.get("entity_category", None)
         if category == "diagnostic":
             self._attr_entity_category = EntityCategory.DIAGNOSTIC
@@ -148,18 +138,6 @@ class SolakonSensor(CoordinatorEntity, SensorEntity):
             self._attr_native_unit_of_measurement = UnitOfTime.SECONDS
         elif unit:
             self._attr_native_unit_of_measurement = unit
-
-    @property
-    def device_info(self) -> DeviceInfo:
-        """Return device information."""
-        return DeviceInfo(
-            identifiers={(DOMAIN, self._config_entry.entry_id)},
-            name=self._config_entry.data.get("name", "Solakon ONE"),
-            manufacturer=self._device_info.get("manufacturer", "Solakon"),
-            model=self._device_info.get("model", "One"),
-            sw_version=self._device_info.get("version"),
-            serial_number=self._device_info.get("serial"),
-        )
 
     @callback
     def _handle_coordinator_update(self) -> None:
