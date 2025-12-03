@@ -9,9 +9,9 @@ from homeassistant.const import UnitOfPower
 from homeassistant.core import HomeAssistant, callback
 from homeassistant.helpers.device_registry import DeviceInfo
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
-from homeassistant.helpers.update_coordinator import CoordinatorEntity
 
 from .const import DOMAIN, NUMBER_DEFINITIONS, REGISTERS
+from .entity import SolakonEntity
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -69,7 +69,7 @@ async def async_setup_entry(
         async_add_entities(entities, True)
 
 
-class SolakonNumber(CoordinatorEntity, NumberEntity):
+class SolakonNumber(SolakonEntity, NumberEntity):
     """Representation of a Solakon ONE number entity."""
 
     def __init__(
@@ -82,21 +82,13 @@ class SolakonNumber(CoordinatorEntity, NumberEntity):
         device_info: dict,
     ) -> None:
         """Initialize the number entity."""
-        super().__init__(coordinator)
+        super().__init__(coordinator, config_entry, device_info, definition, number_key)
         self._hub = hub
         self._number_key = number_key
-        self._definition = definition
-        self._config_entry = config_entry
-        self._device_info = device_info
         self._register_config = REGISTERS[number_key]
 
-        # Set unique ID and entity ID
-        self._attr_unique_id = f"{config_entry.entry_id}_{number_key}"
+        # Set entity ID
         self.entity_id = f"number.solakon_one_{number_key}"
-
-        # Set basic attributes
-        self._attr_name = definition["name"]
-        self._attr_icon = definition.get("icon")
 
         # Set number attributes
         self._attr_native_min_value = definition.get("min", 0)
@@ -225,7 +217,7 @@ class SolakonNumber(CoordinatorEntity, NumberEntity):
         return self.coordinator.last_update_success
 
 
-class ForceDurationNumber(CoordinatorEntity, NumberEntity):
+class ForceDurationNumber(SolakonEntity, NumberEntity):
     """Number entity for Force Mode Duration with minutes<->seconds conversion.
 
     This entity controls register 46002 (remote_timeout_set) but displays
@@ -242,19 +234,11 @@ class ForceDurationNumber(CoordinatorEntity, NumberEntity):
         device_info: dict,
     ) -> None:
         """Initialize the force duration number entity."""
-        super().__init__(coordinator)
+        super().__init__(coordinator, config_entry, device_info, definition, "force_duration")
         self._hub = hub
-        self._definition = definition
-        self._config_entry = config_entry
-        self._device_info = device_info
 
-        # Set unique ID and entity ID
-        self._attr_unique_id = f"{config_entry.entry_id}_force_duration"
+        # Set entity ID
         self.entity_id = "number.solakon_one_force_duration"
-
-        # Set basic attributes
-        self._attr_name = definition["name"]
-        self._attr_icon = definition.get("icon")
 
         # Set number attributes (in minutes)
         self._attr_native_min_value = definition.get("min", 0)
@@ -336,7 +320,7 @@ class ForceDurationNumber(CoordinatorEntity, NumberEntity):
         return self.coordinator.last_update_success
 
 
-class ForcePowerNumber(CoordinatorEntity, NumberEntity):
+class ForcePowerNumber(SolakonEntity, NumberEntity):
     """Number entity for Force Mode Power.
 
     This entity controls both registers 46003 (remote_active_power) and
@@ -353,19 +337,11 @@ class ForcePowerNumber(CoordinatorEntity, NumberEntity):
         device_info: dict,
     ) -> None:
         """Initialize the force power number entity."""
-        super().__init__(coordinator)
+        super().__init__(coordinator, config_entry, device_info, definition, "force_power")
         self._hub = hub
-        self._definition = definition
-        self._config_entry = config_entry
-        self._device_info = device_info
 
-        # Set unique ID and entity ID
-        self._attr_unique_id = f"{config_entry.entry_id}_force_power"
+        # Set entity ID
         self.entity_id = "number.solakon_one_force_power"
-
-        # Set basic attributes
-        self._attr_name = definition["name"]
-        self._attr_icon = definition.get("icon")
 
         # Set number attributes
         self._attr_native_min_value = definition.get("min", 0)

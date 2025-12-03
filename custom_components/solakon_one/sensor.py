@@ -23,9 +23,9 @@ from homeassistant.const import (
 from homeassistant.core import HomeAssistant, callback
 from homeassistant.helpers.device_registry import DeviceInfo
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
-from homeassistant.helpers.update_coordinator import CoordinatorEntity
 
 from .const import DOMAIN, SENSOR_DEFINITIONS
+from .entity import SolakonEntity
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -57,7 +57,7 @@ async def async_setup_entry(
     async_add_entities(entities, True)
 
 
-class SolakonSensor(CoordinatorEntity, SensorEntity):
+class SolakonSensor(SolakonEntity, SensorEntity):
     """Representation of a Solakon ONE sensor."""
 
     def __init__(
@@ -69,19 +69,10 @@ class SolakonSensor(CoordinatorEntity, SensorEntity):
         device_info: dict,
     ) -> None:
         """Initialize the sensor."""
-        super().__init__(coordinator)
+        super().__init__(coordinator, config_entry, device_info, definition, sensor_key)
         self._sensor_key = sensor_key
-        self._definition = definition
-        self._config_entry = config_entry
-        self._device_info = device_info
-        
-        # Set unique ID and entity ID
-        self._attr_unique_id = f"{config_entry.entry_id}_{sensor_key}"
+        # Set entity ID
         self.entity_id = f"sensor.solakon_one_{sensor_key}"
-        
-        # Set basic attributes
-        self._attr_name = definition["name"]
-        self._attr_icon = definition.get("icon")
         
         # Set device class
         if "device_class" in definition:
