@@ -10,25 +10,32 @@ from homeassistant.components.sensor import (
     SensorStateClass,
 )
 from homeassistant.config_entries import ConfigEntry
-from homeassistant.const import (
-    PERCENTAGE,
-    UnitOfElectricCurrent,
-    UnitOfElectricPotential,
-    UnitOfEnergy,
-    UnitOfFrequency,
-    UnitOfPower,
-    UnitOfTemperature,
-    UnitOfTime,
-)
 from homeassistant.core import HomeAssistant, callback
 from homeassistant.helpers.device_registry import DeviceInfo
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
 
-from .const import DEVICE_CLASS_MAPPING, DOMAIN, SENSOR_DEFINITIONS, STATE_CLASS_MAPPING, UOM_MAPPING
+from .const import DOMAIN, SENSOR_DEFINITIONS, UOM_MAPPING
 
 _LOGGER = logging.getLogger(__name__)
 
+DEVICE_CLASS_MAPPING = {
+    "power": SensorDeviceClass.POWER,
+    "energy": SensorDeviceClass.ENERGY,
+    "voltage": SensorDeviceClass.VOLTAGE,
+    "current": SensorDeviceClass.CURRENT,
+    "temperature": SensorDeviceClass.TEMPERATURE,
+    "frequency": SensorDeviceClass.FREQUENCY,
+    "battery": SensorDeviceClass.BATTERY,
+    "power_factor": SensorDeviceClass.POWER_FACTOR,
+    "reactive_power": SensorDeviceClass.REACTIVE_POWER,
+    "duration": SensorDeviceClass.DURATION,
+}
+
+STATE_CLASS_MAPPING = {
+    "measurement": SensorStateClass.MEASUREMENT,
+    "total_increasing": SensorStateClass.TOTAL_INCREASING,
+}
 
 async def async_setup_entry(
     hass: HomeAssistant,
