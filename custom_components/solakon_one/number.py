@@ -92,11 +92,11 @@ class SolakonNumber(CoordinatorEntity, NumberEntity):
 
         # Set unique ID and entity ID
         self._attr_unique_id = f"{config_entry.entry_id}_{number_key}"
+        self._attr_translation_key = number_key
         self.entity_id = f"number.solakon_one_{number_key}"
 
         # Set basic attributes
         self._attr_name = definition["name"]
-        self._attr_icon = definition.get("icon")
 
         # Set number attributes
         self._attr_native_min_value = definition.get("min", 0)
@@ -250,11 +250,11 @@ class ForceDurationNumber(CoordinatorEntity, NumberEntity):
 
         # Set unique ID and entity ID
         self._attr_unique_id = f"{config_entry.entry_id}_force_duration"
+        self._attr_translation_key = "force_duration"
         self.entity_id = "number.solakon_one_force_duration"
 
         # Set basic attributes
         self._attr_name = definition["name"]
-        self._attr_icon = definition.get("icon")
 
         # Set number attributes (in minutes)
         self._attr_native_min_value = definition.get("min", 0)
@@ -361,11 +361,11 @@ class ForcePowerNumber(CoordinatorEntity, NumberEntity):
 
         # Set unique ID and entity ID
         self._attr_unique_id = f"{config_entry.entry_id}_force_power"
+        self._attr_translation_key = "force_power"
         self.entity_id = "number.solakon_one_force_power"
 
         # Set basic attributes
         self._attr_name = definition["name"]
-        self._attr_icon = definition.get("icon")
 
         # Set number attributes
         self._attr_native_min_value = definition.get("min", 0)

@@ -1,0 +1,173 @@
+{
+  "entity": {
+    "number": {
+      "minimum_soc": {
+        "default": "mdi:battery-low"
+      },
+      "maximum_soc": {
+        "default": "mdi:battery-high"
+      },
+      "minimum_soc_ongrid": {
+        "default": "mdi:battery-low"
+      },
+      "battery_max_charge_current": {
+        "default": "mdi:battery-charging"
+      },
+      "battery_max_discharge_current": {
+        "default": "mdi:battery-charging"
+      },
+      "remote_active_power": {
+        "default": "mdi:flash"
+      },
+      "remote_reactive_power": {
+        "default": "mdi:flash-outline"
+      },
+      "remote_timeout_set": {
+        "default": "mdi:timer"
+      },
+      "force_duration": {
+        "default": "mdi:timer-outline"
+      },
+      "force_power": {
+        "default": "mdi:flash"
+      }
+    },
+    "select": {
+      "eps_output": {
+        "default": "mdi:power-standby"
+      },
+      "remote_control_mode": {
+        "default": "mdi:remote"
+      },
+      "force_mode": {
+        "default": "mdi:battery-arrow-up-down"
+      }
+    },
+    "sensor": {
+      "pv1_power": {
+        "default": "mdi:solar-power"
+      },
+      "pv2_power": {
+        "default": "mdi:solar-power"
+      },
+      "pv3_power": {
+        "default": "mdi:solar-power"
+      },
+      "pv4_power": {
+        "default": "mdi:solar-power"
+      },
+      "total_pv_power": {
+        "default": "mdi:solar-power"
+      },
+      "active_power": {
+        "default": "mdi:flash"
+      },
+      "reactive_power": {
+        "default": "mdi:flash-outline"
+      },
+      "battery_combined_power": {
+        "default": "mdi:battery-charging"
+      },
+      "battery_soc": {
+        "default": "mdi:battery-unknown",
+        "range": {
+          "0": "mdi:battery-alert",
+          "10": "mdi:battery-10",
+          "20": "mdi:battery-20",
+          "30": "mdi:battery-30",
+          "40": "mdi:battery-40",
+          "50": "mdi:battery-50",
+          "60": "mdi:battery-60",
+          "70": "mdi:battery-70",
+          "80": "mdi:battery-80",
+          "90": "mdi:battery-90",
+          "100": "mdi:battery"
+        }
+      },
+      "pv1_voltage": {
+        "default": "mdi:flash"
+      },
+      "pv2_voltage": {
+        "default": "mdi:flash"
+      },
+      "pv3_voltage": {
+        "default": "mdi:flash"
+      },
+      "pv4_voltage": {
+        "default": "mdi:flash"
+      },
+      "grid_r_voltage": {
+        "default": "mdi:sine-wave"
+      },
+      "battery1_voltage": {
+        "default": "mdi:battery"
+      },
+      "pv1_current": {
+        "default": "mdi:current-dc"
+      },
+      "pv2_current": {
+        "default": "mdi:current-dc"
+      },
+      "pv3_current": {
+        "default": "mdi:current-dc"
+      },
+      "pv4_current": {
+        "default": "mdi:current-dc"
+      },
+      "battery1_current": {
+        "default": "mdi:current-dc"
+      },
+      "cumulative_generation": {
+        "default": "mdi:solar-panel"
+      },
+      "daily_generation": {
+        "default": "mdi:solar-panel"
+      },
+      "internal_temp": {
+        "default": "mdi:thermometer"
+      },
+      "power_factor": {
+        "default": "mdi:angle-acute"
+      },
+      "grid_frequency": {
+        "default": "mdi:sine-wave"
+      },
+      "eps_output": {
+        "default": "mdi:power-standby"
+      },
+      "minimum_soc": {
+        "default": "mdi:battery-low"
+      },
+      "maximum_soc": {
+        "default": "mdi:battery-high"
+      },
+      "minimum_soc_ongrid": {
+        "default": "mdi:battery-low"
+      },
+      "battery_max_charge_current": {
+        "default": "mdi:battery-charging"
+      },
+      "battery_max_discharge_current": {
+        "default": "mdi:battery-charging"
+      },
+      "network_status": {
+        "default": "mdi:network"
+      },
+      "remote_control": {
+        "default": "mdi:remote"
+      },
+      "remote_timeout_set": {
+        "default": "mdi:timer"
+      },
+      "remote_active_power": {
+        "default": "mdi:flash"
+      },
+      "remote_reactive_power": {
+        "default": "mdi:flash-outline"
+      },
+      "remote_timeout_countdown": {
+        "default": "mdi:timer-sand"
+      }
+    }
+  }
+}
