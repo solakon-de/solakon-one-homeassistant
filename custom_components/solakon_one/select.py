@@ -6,9 +6,7 @@ import logging
 from homeassistant.components.select import SelectEntity
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant, callback
-from homeassistant.helpers.device_registry import DeviceInfo
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
-from homeassistant.helpers.update_coordinator import CoordinatorEntity
 
 from .const import DOMAIN, SELECT_DEFINITIONS, REGISTERS
 from .entity import SolakonEntity
@@ -95,18 +93,6 @@ class SolakonSelect(SolakonEntity, SelectEntity):
         self._options_map = definition["options"]  # e.g., {0: "Disable", 2: "EPS Mode"}
         self._reverse_options_map = {v: k for k, v in self._options_map.items()}  # e.g., {"Disable": 0}
         self._attr_options = list(self._options_map.values())  # ["Disable", "EPS Mode"]
-
-    @property
-    def device_info(self) -> DeviceInfo:
-        """Return device information."""
-        return DeviceInfo(
-            identifiers={(DOMAIN, self._config_entry.entry_id)},
-            name=self._config_entry.data.get("name", "Solakon ONE"),
-            manufacturer=self._device_info.get("manufacturer", "Solakon"),
-            model=self._device_info.get("model", "One"),
-            sw_version=self._device_info.get("version"),
-            serial_number=self._device_info.get("serial_number"),
-        )
 
     @callback
     def _handle_coordinator_update(self) -> None:
@@ -204,18 +190,6 @@ class RemoteControlModeSelect(SolakonEntity, SelectEntity):
         self._options_map = definition["options"]
         self._reverse_options_map = {v: k for k, v in self._options_map.items()}
         self._attr_options = list(self._options_map.values())
-
-    @property
-    def device_info(self) -> DeviceInfo:
-        """Return device information."""
-        return DeviceInfo(
-            identifiers={(DOMAIN, self._config_entry.entry_id)},
-            name=self._config_entry.data.get("name", "Solakon ONE"),
-            manufacturer=self._device_info.get("manufacturer", "Solakon"),
-            model=self._device_info.get("model", "One"),
-            sw_version=self._device_info.get("version"),
-            serial_number=self._device_info.get("serial_number"),
-        )
 
     @callback
     def _handle_coordinator_update(self) -> None:
@@ -323,18 +297,6 @@ class ForceModeSelect(SolakonEntity, SelectEntity):
         self._options_map = definition["options"]  # {0: "Disabled", 1: "Force Discharge", 3: "Force Charge"}
         self._reverse_options_map = {v: k for k, v in self._options_map.items()}
         self._attr_options = list(self._options_map.values())
-
-    @property
-    def device_info(self) -> DeviceInfo:
-        """Return device information."""
-        return DeviceInfo(
-            identifiers={(DOMAIN, self._config_entry.entry_id)},
-            name=self._config_entry.data.get("name", "Solakon ONE"),
-            manufacturer=self._device_info.get("manufacturer", "Solakon"),
-            model=self._device_info.get("model", "One"),
-            sw_version=self._device_info.get("version"),
-            serial_number=self._device_info.get("serial_number"),
-        )
 
     @callback
     def _handle_coordinator_update(self) -> None:

@@ -21,7 +21,6 @@ from homeassistant.const import (
     UnitOfTime,
 )
 from homeassistant.core import HomeAssistant, callback
-from homeassistant.helpers.device_registry import DeviceInfo
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
 from .const import DOMAIN, SENSOR_DEFINITIONS
@@ -132,18 +131,6 @@ class SolakonSensor(SolakonEntity, SensorEntity):
             self._attr_native_unit_of_measurement = UnitOfTime.SECONDS
         elif unit:
             self._attr_native_unit_of_measurement = unit
-
-    @property
-    def device_info(self) -> DeviceInfo:
-        """Return device information."""
-        return DeviceInfo(
-            identifiers={(DOMAIN, self._config_entry.entry_id)},
-            name=self._config_entry.data.get("name", "Solakon ONE"),
-            manufacturer=self._device_info.get("manufacturer", "Solakon"),
-            model=self._device_info.get("model", "One"),
-            sw_version=self._device_info.get("version"),
-            serial_number=self._device_info.get("serial"),
-        )
 
     @callback
     def _handle_coordinator_update(self) -> None:

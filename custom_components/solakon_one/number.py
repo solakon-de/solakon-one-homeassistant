@@ -7,7 +7,6 @@ from homeassistant.components.number import NumberEntity, NumberMode, NumberDevi
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import UnitOfPower
 from homeassistant.core import HomeAssistant, callback
-from homeassistant.helpers.device_registry import DeviceInfo
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
 from .const import DOMAIN, NUMBER_DEFINITIONS, REGISTERS
@@ -110,18 +109,6 @@ class SolakonNumber(SolakonEntity, NumberEntity):
             self._attr_mode = NumberMode.SLIDER
         else:
             self._attr_mode = NumberMode.AUTO
-
-    @property
-    def device_info(self) -> DeviceInfo:
-        """Return device information."""
-        return DeviceInfo(
-            identifiers={(DOMAIN, self._config_entry.entry_id)},
-            name=self._config_entry.data.get("name", "Solakon ONE"),
-            manufacturer=self._device_info.get("manufacturer", "Solakon"),
-            model=self._device_info.get("model", "One"),
-            sw_version=self._device_info.get("version"),
-            serial_number=self._device_info.get("serial_number"),
-        )
 
     @callback
     def _handle_coordinator_update(self) -> None:
@@ -249,18 +236,6 @@ class ForceDurationNumber(SolakonEntity, NumberEntity):
         # Set mode
         self._attr_mode = NumberMode.SLIDER
 
-    @property
-    def device_info(self) -> DeviceInfo:
-        """Return device information."""
-        return DeviceInfo(
-            identifiers={(DOMAIN, self._config_entry.entry_id)},
-            name=self._config_entry.data.get("name", "Solakon ONE"),
-            manufacturer=self._device_info.get("manufacturer", "Solakon"),
-            model=self._device_info.get("model", "One"),
-            sw_version=self._device_info.get("version"),
-            serial_number=self._device_info.get("serial_number"),
-        )
-
     @callback
     def _handle_coordinator_update(self) -> None:
         """Handle updated data from the coordinator."""
@@ -354,18 +329,6 @@ class ForcePowerNumber(SolakonEntity, NumberEntity):
 
         # Set mode
         self._attr_mode = NumberMode.BOX
-
-    @property
-    def device_info(self) -> DeviceInfo:
-        """Return device information."""
-        return DeviceInfo(
-            identifiers={(DOMAIN, self._config_entry.entry_id)},
-            name=self._config_entry.data.get("name", "Solakon ONE"),
-            manufacturer=self._device_info.get("manufacturer", "Solakon"),
-            model=self._device_info.get("model", "One"),
-            sw_version=self._device_info.get("version"),
-            serial_number=self._device_info.get("serial_number"),
-        )
 
     @callback
     def _handle_coordinator_update(self) -> None:
