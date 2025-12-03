@@ -88,7 +88,6 @@ class SolakonNumber(SolakonEntity, NumberEntity):
 
         # Set entity ID
         self.entity_id = f"number.solakon_one_{number_key}"
-        self._attr_translation_key = number_key
 
         category = definition.get("entity_category", None)
         if category == "diagnostic":
@@ -233,7 +232,6 @@ class ForceDurationNumber(SolakonEntity, NumberEntity):
 
         # Set entity ID
         self.entity_id = "number.solakon_one_force_duration"
-        self._attr_translation_key = "force_duration"
 
         # Set number attributes (in minutes)
         self._attr_native_min_value = definition.get("min", 0)

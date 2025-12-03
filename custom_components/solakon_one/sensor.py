@@ -74,7 +74,6 @@ class SolakonSensor(SolakonEntity, SensorEntity):
 
         # Set entity ID
         self.entity_id = f"sensor.solakon_one_{sensor_key}"
-        self._attr_translation_key = sensor_key
         
         category = definition.get("entity_category", None)
         if category == "diagnostic":

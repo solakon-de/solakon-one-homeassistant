@@ -23,8 +23,9 @@ class SolakonEntity(CoordinatorEntity, Entity):
         self._config_entry = config_entry
         self._definition = definition
 
-        # Set unique ID and entity ID
+        # Set unique ID
         self._attr_unique_id = f"{config_entry.entry_id}_{key}"
+        self._attr_translation_key = key
 
         # Set basic attributes
         self._attr_name = definition["name"]

@@ -88,7 +88,6 @@ class SolakonSelect(SolakonEntity, SelectEntity):
 
         # Set entity ID
         self.entity_id = f"select.solakon_one_{select_key}"
-        self._attr_translation_key = select_key
 
         # Set up options (mapping from numeric value to text)
         self._options_map = definition["options"]  # e.g., {0: "Disable", 2: "EPS Mode"}
@@ -186,7 +185,6 @@ class RemoteControlModeSelect(SolakonEntity, SelectEntity):
 
         # Set entity ID
         self.entity_id = "select.solakon_one_remote_control_mode"
-        self._attr_translation_key = "remote_control_mode"
 
         # Set up options (mapping from mode enum value to text)
         self._options_map = definition["options"]
@@ -294,7 +292,6 @@ class ForceModeSelect(SolakonEntity, SelectEntity):
 
         # Set entity ID
         self.entity_id = "select.solakon_one_force_mode"
-        self._attr_translation_key = "force_mode"
 
         # Set up options (mapping from mode value to text)
         self._options_map = definition["options"]  # {0: "Disabled", 1: "Force Discharge", 3: "Force Charge"}
