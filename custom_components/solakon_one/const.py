@@ -483,7 +483,6 @@ NUMBER_DEFINITIONS = {
     #     "mode": "box",
     # },
     "minimum_soc": {
-        "name": "Minimum SoC Control",
         "min": 0,
         "max": 100,
         "step": 1,
@@ -492,7 +491,6 @@ NUMBER_DEFINITIONS = {
         "category": "config",
     },
     "maximum_soc": {
-        "name": "Maximum SoC Control",
         "min": 0,
         "max": 100,
         "step": 1,
@@ -501,7 +499,6 @@ NUMBER_DEFINITIONS = {
         "category": "config",
     },
     "minimum_soc_ongrid": {
-        "name": "Minimum SoC OnGrid Control",
         "min": 0,
         "max": 100,
         "step": 1,
@@ -510,7 +507,6 @@ NUMBER_DEFINITIONS = {
         "category": "config",
     },
     "battery_max_charge_current": {
-        "name": "Maximum Charge Current",
         "min": 0,
         "max": 40,
         "step": 1,
@@ -519,7 +515,6 @@ NUMBER_DEFINITIONS = {
         "category": "config",
     },
     "battery_max_discharge_current":{
-        "name": "Maximum Discharge Current",
         "min": 0,
         "max": 40,
         "step": 1,
@@ -528,7 +523,6 @@ NUMBER_DEFINITIONS = {
         "category": "config",
     },
     "remote_active_power": {
-        "name": "Remote Active Power Control",
         "min": -100000,  # -100kW (charging/import)
         "max": 100000,   # +100kW (discharging/export)
         "step": 100,
@@ -537,7 +531,6 @@ NUMBER_DEFINITIONS = {
         "mode": "box",
     },
     "remote_reactive_power": {
-        "name": "Remote Reactive Power Control",
         "min": -100000,
         "max": 100000,
         "step": 100,
@@ -545,7 +538,6 @@ NUMBER_DEFINITIONS = {
         "mode": "box",
     },
     "remote_timeout_set": {
-        "name": "Remote Timeout Control",
         "min": 0,
         "max": 3600,  # 1 hour max
         "step": 10,
@@ -553,7 +545,6 @@ NUMBER_DEFINITIONS = {
         "mode": "box",
     },
     "force_duration": {
-        "name": "Force Mode Duration",
         "min": 0,
         "max": 1092,  # 65535 seconds = ~1092 minutes
         "step": 1,
@@ -561,7 +552,6 @@ NUMBER_DEFINITIONS = {
         "mode": "slider",
     },
     "force_power": {
-        "name": "Force Mode Power",
         "min": 0,
         "max": 1200,  # Will be validated based on mode (1200W charge, 800W discharge)
         "step": 10,
