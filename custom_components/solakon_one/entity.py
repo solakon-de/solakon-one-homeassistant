@@ -29,7 +29,6 @@ class SolakonEntity(CoordinatorEntity, Entity):
 
         # Set basic attributes
         self._attr_name = definition["name"]
-        self._attr_icon = definition.get("icon")
 
         self._attr_device_info = DeviceInfo(
             identifiers={(DOMAIN, self._config_entry.entry_id)},
