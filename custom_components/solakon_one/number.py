@@ -15,7 +15,7 @@ from homeassistant.const import (
 from homeassistant.core import HomeAssistant, callback
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
-from .const import DOMAIN, NUMBER_DEFINITIONS, REGISTERS
+from .const import DOMAIN, REGISTERS
 from .entity import SolakonEntity
 
 _LOGGER = logging.getLogger(__name__)
@@ -92,9 +92,39 @@ NUMBER_ENTITY_DESCRIPTIONS: tuple[NumberEntityDescription, ...] = (
         native_max_value=3600,
         native_step=10,
     ),
+    # "export_power_limit": {
+    #     "name": "Export Power Limit Control",
+    #     "icon": "mdi:transmission-tower-export",
+    #     "min": 0,
+    #     "max": 100000,  # 100kW max, will be adjusted based on inverter Pmax
+    #     "step": 100,
+    #     "unit": "W",
+    #     "device_class": "power",
+    #     "mode": "box",
+    # },
+    # "import_power_limit": {
+    #     "name": "Import Power Limit Control",
+    #     "icon": "mdi:transmission-tower-import",
+    #     "min": 0,
+    #     "max": 100000,  # 100kW max
+    #     "step": 100,
+    #     "unit": "W",
+    #     "device_class": "power",
+    #     "mode": "box",
+    # },
+    # "export_peak_limit": {
+    #     "name": "Export Peak Limit Control",
+    #     "icon": "mdi:transmission-tower-export",
+    #     "min": 0,
+    #     "max": 100000,  # 100kW max
+    #     "step": 100,
+    #     "unit": "W",
+    #     "device_class": "power",
+    #     "mode": "box",
+    # },
 )
 
-FORCE_DURATION_NUMBER_ENTITY_DESCRIPTIONS = NumberEntityDescription(
+FORCE_DURATION_NUMBER_ENTITY_DESCRIPTION = NumberEntityDescription(
     key="force_duration",
     mode=NumberMode.SLIDER,
     native_unit_of_measurement=UnitOfTime.MINUTES,
@@ -103,7 +133,7 @@ FORCE_DURATION_NUMBER_ENTITY_DESCRIPTIONS = NumberEntityDescription(
     native_step=1,
 )
 
-FORCE_POWER_NUMBER_ENTITY_DESCRIPTIONS = NumberEntityDescription(
+FORCE_POWER_NUMBER_ENTITY_DESCRIPTION = NumberEntityDescription(
     key="force_power",
     mode=NumberMode.BOX,
     device_class=NumberDeviceClass.POWER,
@@ -134,7 +164,6 @@ async def async_setup_entry(
             config_entry,
             description.key,
             description,
-            NUMBER_DEFINITIONS[description.key],
             device_info,
         )
         for description in NUMBER_ENTITY_DESCRIPTIONS
@@ -147,8 +176,7 @@ async def async_setup_entry(
             coordinator,
             hub,
             config_entry,
-            FORCE_DURATION_NUMBER_ENTITY_DESCRIPTIONS,
-            NUMBER_DEFINITIONS["force_duration"],
+            FORCE_DURATION_NUMBER_ENTITY_DESCRIPTION,
             device_info,
         )
     )
@@ -158,8 +186,7 @@ async def async_setup_entry(
             coordinator,
             hub,
             config_entry,
-            FORCE_POWER_NUMBER_ENTITY_DESCRIPTIONS,
-            NUMBER_DEFINITIONS["force_power"],
+            FORCE_POWER_NUMBER_ENTITY_DESCRIPTION,
             device_info,
         )
     )
@@ -178,11 +205,10 @@ class SolakonNumber(SolakonEntity, NumberEntity):
         config_entry: ConfigEntry,
         number_key: str,
         description: NumberEntityDescription,
-        definition: dict,
         device_info: dict,
     ) -> None:
         """Initialize the number entity."""
-        super().__init__(coordinator, config_entry, device_info, definition, number_key)
+        super().__init__(coordinator, config_entry, device_info, number_key)
         self._hub = hub
         self._number_key = number_key
         self._register_config = REGISTERS[number_key]
@@ -300,11 +326,10 @@ class ForceDurationNumber(SolakonEntity, NumberEntity):
         hub,
         config_entry: ConfigEntry,
         description: NumberEntityDescription,
-        definition: dict,
         device_info: dict,
     ) -> None:
         """Initialize the force duration number entity."""
-        super().__init__(coordinator, config_entry, device_info, definition, "force_duration")
+        super().__init__(coordinator, config_entry, device_info, "force_duration")
         self._hub = hub
 
         self.entity_description = description
@@ -385,11 +410,10 @@ class ForcePowerNumber(SolakonEntity, NumberEntity):
         hub,
         config_entry: ConfigEntry,
         description: NumberEntityDescription,
-        definition: dict,
         device_info: dict,
     ) -> None:
         """Initialize the force power number entity."""
-        super().__init__(coordinator, config_entry, device_info, definition, "force_power")
+        super().__init__(coordinator, config_entry, device_info, "force_power")
         self._hub = hub
 
         self.entity_description = description
