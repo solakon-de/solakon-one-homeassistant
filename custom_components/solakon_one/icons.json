@@ -135,35 +135,11 @@
       "eps_output": {
         "default": "mdi:power-standby"
       },
-      "minimum_soc": {
-        "default": "mdi:battery-low"
-      },
-      "maximum_soc": {
-        "default": "mdi:battery-high"
-      },
-      "minimum_soc_ongrid": {
-        "default": "mdi:battery-low"
-      },
-      "battery_max_charge_current": {
-        "default": "mdi:battery-charging"
-      },
-      "battery_max_discharge_current": {
-        "default": "mdi:battery-charging"
-      },
       "network_status": {
         "default": "mdi:network"
       },
       "remote_control": {
         "default": "mdi:remote"
-      },
-      "remote_timeout_set": {
-        "default": "mdi:timer"
-      },
-      "remote_active_power": {
-        "default": "mdi:flash"
-      },
-      "remote_reactive_power": {
-        "default": "mdi:flash-outline"
       },
       "remote_timeout_countdown": {
         "default": "mdi:timer-sand"
