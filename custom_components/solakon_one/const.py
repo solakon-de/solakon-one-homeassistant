@@ -314,9 +314,6 @@ SENSOR_DEFINITIONS = {
     },
 
     # Control Status Sensors (showing current values of controllable parameters)
-    "eps_output": {
-        "name": "EPS Output Mode",
-    },
     # "export_power_limit": {
     #     "name": "Export Power Limit",
     #     "device_class": "power",

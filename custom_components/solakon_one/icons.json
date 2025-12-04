@@ -132,9 +132,6 @@
       "grid_frequency": {
         "default": "mdi:sine-wave"
       },
-      "eps_output": {
-        "default": "mdi:power-standby"
-      },
       "network_status": {
         "default": "mdi:network"
       },
