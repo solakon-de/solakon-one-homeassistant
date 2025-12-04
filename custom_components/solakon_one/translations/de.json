@@ -1,0 +1,47 @@
+{
+  "entity": {
+    "number": {
+      "minimum_soc": {
+        "name": "Minimaler Ladestand"
+      },
+      "maximum_soc": {
+        "name": "Maximaler Ladestand"
+      },
+      "minimum_soc_ongrid": {
+        "name": "Minimum SoC OnGrid Control"
+      },
+      "battery_max_charge_current": {
+        "name": "Maximaler Ladestrom"
+      },
+      "battery_max_discharge_current":{
+        "name": "Maximaler Entladestrom"
+      },
+      "remote_active_power": {
+        "name": "Remote Active Power Control"
+      },
+      "remote_reactive_power": {
+        "name": "Remote Reactive Power Control"
+      },
+      "remote_timeout_set": {
+        "name": "Remote Timeout Control"
+      },
+      "force_duration": {
+        "name": "Force Mode Duration"
+      },
+      "force_power": {
+        "name": "Force Mode Power"
+      }
+    },
+    "select": {
+      "eps_output": {
+        "name": "EPS Output Control"
+      },
+      "remote_control_mode": {
+        "name": "Remote Control Mode"
+      },
+      "force_mode": {
+        "name": "Betriebsmodus überschreiben"
+      }
+    }
+  }
+}
