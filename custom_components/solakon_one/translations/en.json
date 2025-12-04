@@ -157,7 +157,7 @@
       "grid_frequency": {
         "name": "Grid Frequency"
       },
-      "GRID_STANDARD_CODE": {
+      "grid_standard_code": {
         "name": "Grid Standard Code"
       },
       "eps_output": {
