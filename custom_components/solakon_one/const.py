@@ -56,7 +56,7 @@ REGISTERS = {
     "alarm_1": {"address": 39067, "count": 1, "type": "bitfield16"},
     "alarm_2": {"address": 39068, "count": 1, "type": "bitfield16"},
     "alarm_3": {"address": 39069, "count": 1, "type": "bitfield16"},
-    "GRID_STANDARD_CODE": {"address": 49079, "count": 1, "type": 'u16'},
+    "grid_standard_code": {"address": 49079, "count": 1, "type": 'u16'},
 
     # PV Input
     "pv1_voltage": {"address": 39070, "count": 1, "type": "i16", "scale": 10, "unit": "V"},
@@ -329,7 +329,7 @@ SENSOR_DEFINITIONS = {
         "state_class": "measurement",
         "unit": "Hz",
     },
-    "GRID_STANDARD_CODE": {
+    "grid_standard_code": {
        "name": "Grid Standard Code",
         "device_class": "sensor",
     },
