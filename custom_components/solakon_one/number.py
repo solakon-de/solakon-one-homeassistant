@@ -10,6 +10,7 @@ from homeassistant.const import (
     PERCENTAGE,
     UnitOfElectricCurrent,
     UnitOfPower,
+    UnitOfReactivePower,
     UnitOfTime,
 )
 from homeassistant.core import HomeAssistant, callback
@@ -20,6 +21,39 @@ from .entity import SolakonEntity
 
 _LOGGER = logging.getLogger(__name__)
 
+
+    # "export_power_limit": {
+    #     "name": "Export Power Limit Control",
+    #     "icon": "mdi:transmission-tower-export",
+    #     "min": 0,
+    #     "max": 100000,  # 100kW max, will be adjusted based on inverter Pmax
+    #     "step": 100,
+    #     "unit": "W",
+    #     "device_class": "power",
+    #     "mode": "box",
+    # },
+    # "import_power_limit": {
+    #     "name": "Import Power Limit Control",
+    #     "icon": "mdi:transmission-tower-import",
+    #     "min": 0,
+    #     "max": 100000,  # 100kW max
+    #     "step": 100,
+    #     "unit": "W",
+    #     "device_class": "power",
+    #     "mode": "box",
+    # },
+    # "export_peak_limit": {
+    #     "name": "Export Peak Limit Control",
+    #     "icon": "mdi:transmission-tower-export",
+    #     "min": 0,
+    #     "max": 100000,  # 100kW max
+    #     "step": 100,
+    #     "unit": "W",
+    #     "device_class": "power",
+    #     "mode": "box",
+    # },
+
+# Number entity definitions for Home Assistant
 NUMBER_ENTITY_DESCRIPTIONS: tuple[NumberEntityDescription, ...] = (
     NumberEntityDescription(
         key="minimum_soc",
@@ -72,14 +106,14 @@ NUMBER_ENTITY_DESCRIPTIONS: tuple[NumberEntityDescription, ...] = (
         device_class=NumberDeviceClass.POWER,
         entity_category=EntityCategory.CONFIG,
         native_unit_of_measurement=UnitOfPower.WATT,
-        native_min_value=-100000,
-        native_max_value=100000,
+        native_min_value=-100000, # -100kW (charging/import)
+        native_max_value=100000,  # +100kW (discharging/export)
         native_step=100,
     ),
     NumberEntityDescription(
         key="remote_reactive_power",
         mode=NumberMode.BOX,
-        native_unit_of_measurement="var",
+        native_unit_of_measurement=UnitOfReactivePower.VOLT_AMPERE_REACTIVE,
         native_min_value=-100000,
         native_max_value=100000,
         native_step=100,
@@ -92,36 +126,6 @@ NUMBER_ENTITY_DESCRIPTIONS: tuple[NumberEntityDescription, ...] = (
         native_max_value=3600,
         native_step=10,
     ),
-    # "export_power_limit": {
-    #     "name": "Export Power Limit Control",
-    #     "icon": "mdi:transmission-tower-export",
-    #     "min": 0,
-    #     "max": 100000,  # 100kW max, will be adjusted based on inverter Pmax
-    #     "step": 100,
-    #     "unit": "W",
-    #     "device_class": "power",
-    #     "mode": "box",
-    # },
-    # "import_power_limit": {
-    #     "name": "Import Power Limit Control",
-    #     "icon": "mdi:transmission-tower-import",
-    #     "min": 0,
-    #     "max": 100000,  # 100kW max
-    #     "step": 100,
-    #     "unit": "W",
-    #     "device_class": "power",
-    #     "mode": "box",
-    # },
-    # "export_peak_limit": {
-    #     "name": "Export Peak Limit Control",
-    #     "icon": "mdi:transmission-tower-export",
-    #     "min": 0,
-    #     "max": 100000,  # 100kW max
-    #     "step": 100,
-    #     "unit": "W",
-    #     "device_class": "power",
-    #     "mode": "box",
-    # },
 )
 
 FORCE_DURATION_NUMBER_ENTITY_DESCRIPTION = NumberEntityDescription(
