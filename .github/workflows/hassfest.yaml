@@ -1,4 +1,4 @@
-name: Validate with hassfest
+name: Build
 
 on:
   push:
@@ -7,7 +7,7 @@ on:
     - cron: "0 0 * * *"
 
 jobs:
-  validate:
+  hassfest:
     runs-on: "ubuntu-latest"
     steps:
       - name: ⤵️ Checkout repository

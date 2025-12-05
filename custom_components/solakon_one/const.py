@@ -92,6 +92,12 @@ REGISTERS = {
 
     # Temperature
     "internal_temp": {"address": 39141, "count": 1, "type": "i16", "scale": 10, "unit": "°C"},
+    "bms1_ambient_temp": {"address": 37611, "count": 1, "type": "i16", "scale": 10, "unit": "°C"},
+    "bms1_max_temp": {"address": 37617, "count": 1, "type": "i16", "scale": 10, "unit": "°C"},
+    "bms1_min_temp": {"address": 37618, "count": 1, "type": "i16", "scale": 10, "unit": "°C"},
+    "bms2_ambient_temp": {"address": 38309, "count": 1, "type": "i16", "scale": 10, "unit": "°C"},
+    "bms2_max_temp": {"address": 38315, "count": 1, "type": "i16", "scale": 10, "unit": "°C"},
+    "bms2_min_temp": {"address": 38316, "count": 1, "type": "i16", "scale": 10, "unit": "°C"},
 
     # Energy Statistics
     "cumulative_generation": {"address": 39149, "count": 2, "type": "u32", "scale": 100, "unit": "kWh"},
@@ -187,7 +193,6 @@ SENSOR_DEFINITIONS = {
         "device_class": "power",
         "state_class": "measurement",
         "unit": "W",
-        "icon": "mdi:solar-power",
     },
 
     # Voltage sensors
@@ -232,7 +237,6 @@ SENSOR_DEFINITIONS = {
         "device_class": "voltage",
         "state_class": "measurement",
         "unit": "V",
-        "icon": "mdi:flash",
     },
 
     # Current sensors
@@ -271,7 +275,6 @@ SENSOR_DEFINITIONS = {
         "device_class": "current",
         "state_class": "measurement",
         "unit": "A",
-        "icon": "mdi:current-dc",
     },
 
     # Energy sensors
@@ -295,6 +298,24 @@ SENSOR_DEFINITIONS = {
         "state_class": "measurement",
         "unit": "°C",
     },
+    "bms1_ambient_temp": {
+        "name": "Ambient Temperature",
+        "device_class": "temperature",
+        "state_class": "measurement",
+        "unit": "°C",
+    },
+    "bms1_max_temp": {
+        "name": "BMS max Temperature",
+        "device_class": "temperature",
+        "state_class": "measurement",
+        "unit": "°C",
+    },
+    "bms1_min_temp": {
+        "name": "BMS min Temperature",
+        "device_class": "temperature",
+        "state_class": "measurement",
+        "unit": "°C",
+    },
 
     # Other sensors
     "power_factor": {
@@ -314,9 +335,6 @@ SENSOR_DEFINITIONS = {
     },
 
     # Control Status Sensors (showing current values of controllable parameters)
-    "eps_output": {
-        "name": "EPS Output Mode",
-    },
     # "export_power_limit": {
     #     "name": "Export Power Limit",
     #     "device_class": "power",
@@ -338,36 +356,6 @@ SENSOR_DEFINITIONS = {
     #     "unit": "W",
     #     "icon": "mdi:transmission-tower-export",
     # },
-    "minimum_soc": {
-        "name": "Minimum State of Charge",
-        "device_class": "battery",
-        "state_class": "measurement",
-        "unit": "%",
-    },
-    "maximum_soc": {
-        "name": "Maximum State of Charge",
-        "device_class": "battery",
-        "state_class": "measurement",
-        "unit": "%",
-    },
-    "minimum_soc_ongrid": {
-        "name": "Minimum SoC OnGrid",
-        "device_class": "battery",
-        "state_class": "measurement",
-        "unit": "%",
-    },
-    "battery_max_charge_current": {
-        "name": "Maximum Charge Current",
-        "device_class": "current",
-        "state_class": "number",
-        "unit": "A",
-    },
-    "battery_max_discharge_current":{
-        "name": "Maximum Discharge Current",
-        "device_class": "current",
-        "state_class": "number",
-        "unit": "A",
-    },
     # "work_mode": {
     #     "name": "Work Mode",
     #     "icon": "mdi:cog",
@@ -380,24 +368,6 @@ SENSOR_DEFINITIONS = {
     # Remote Control Status Sensors
     "remote_control": {
         "name": "Remote Control Status",
-    },
-    "remote_timeout_set": {
-        "name": "Remote Timeout Setting",
-        "device_class": "duration",
-        "state_class": "measurement",
-        "unit": "s",
-    },
-    "remote_active_power": {
-        "name": "Remote Active Power Command",
-        "device_class": "power",
-        "state_class": "measurement",
-        "unit": "W",
-    },
-    "remote_reactive_power": {
-        "name": "Remote Reactive Power Command",
-        "device_class": "reactive_power",
-        "state_class": "measurement",
-        "unit": "var",
     },
     "remote_timeout_countdown": {
         "name": "Remote Timeout Countdown",
