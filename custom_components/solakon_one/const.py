@@ -140,7 +140,6 @@ REGISTERS = {
 # Sensor definitions for Home Assistant
 SENSOR_DEFINITIONS = {
     "bms1_soh": {
-        "name": "Battery State of Health",
         "state_class": "measurement",
         "unit": "%",
     },
