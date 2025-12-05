@@ -15,13 +15,11 @@ class SolakonEntity(CoordinatorEntity, Entity):
         coordinator,
         config_entry: ConfigEntry,
         device_info: dict,
-        definition: dict,
         key: str,
     ) -> None:
         """Initialize the solakon ONE entity."""
         super().__init__(coordinator)
         self._config_entry = config_entry
-        self._definition = definition
 
         # Set unique ID
         self._attr_unique_id = f"{config_entry.entry_id}_{key}"
