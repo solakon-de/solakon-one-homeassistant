@@ -162,9 +162,8 @@ async def async_setup_entry(
             coordinator,
             hub,
             config_entry,
-            description.key,
-            description,
             device_info,
+            description,
         )
         for description in NUMBER_ENTITY_DESCRIPTIONS
         # Only create number entities for registers that exist and have rw flag
@@ -176,8 +175,8 @@ async def async_setup_entry(
             coordinator,
             hub,
             config_entry,
-            FORCE_DURATION_NUMBER_ENTITY_DESCRIPTION,
             device_info,
+            FORCE_DURATION_NUMBER_ENTITY_DESCRIPTION,
         )
     )
     # Special handling for force_power (writes to both 46003 and 46005)
@@ -186,8 +185,8 @@ async def async_setup_entry(
             coordinator,
             hub,
             config_entry,
-            FORCE_POWER_NUMBER_ENTITY_DESCRIPTION,
             device_info,
+            FORCE_POWER_NUMBER_ENTITY_DESCRIPTION,
         )
     )
 
@@ -203,20 +202,19 @@ class SolakonNumber(SolakonEntity, NumberEntity):
         coordinator,
         hub,
         config_entry: ConfigEntry,
-        number_key: str,
-        description: NumberEntityDescription,
         device_info: dict,
+        description: NumberEntityDescription,
     ) -> None:
         """Initialize the number entity."""
-        super().__init__(coordinator, config_entry, device_info, number_key)
+        super().__init__(coordinator, config_entry, device_info, description.key)
         self._hub = hub
-        self._number_key = number_key
-        self._register_config = REGISTERS[number_key]
+        self._number_key = description.key
+        self._register_config = REGISTERS[description.key]
 
         self.entity_description = description
 
         # Set entity ID
-        self.entity_id = f"number.solakon_one_{number_key}"
+        self.entity_id = f"number.solakon_one_{description.key}"
 
     @callback
     def _handle_coordinator_update(self) -> None:
@@ -325,17 +323,17 @@ class ForceDurationNumber(SolakonEntity, NumberEntity):
         coordinator,
         hub,
         config_entry: ConfigEntry,
-        description: NumberEntityDescription,
         device_info: dict,
+        description: NumberEntityDescription,
     ) -> None:
         """Initialize the force duration number entity."""
-        super().__init__(coordinator, config_entry, device_info, "force_duration")
+        super().__init__(coordinator, config_entry, device_info, description.key)
         self._hub = hub
 
         self.entity_description = description
 
         # Set entity ID
-        self.entity_id = "number.solakon_one_force_duration"
+        self.entity_id = f"number.solakon_one_{description.key}"
 
     @callback
     def _handle_coordinator_update(self) -> None:
@@ -413,13 +411,13 @@ class ForcePowerNumber(SolakonEntity, NumberEntity):
         device_info: dict,
     ) -> None:
         """Initialize the force power number entity."""
-        super().__init__(coordinator, config_entry, device_info, "force_power")
+        super().__init__(coordinator, config_entry, device_info, description.key)
         self._hub = hub
 
         self.entity_description = description
 
         # Set entity ID
-        self.entity_id = "number.solakon_one_force_power"
+        self.entity_id = f"number.solakon_one_{description.key}"
 
     @callback
     def _handle_coordinator_update(self) -> None:
