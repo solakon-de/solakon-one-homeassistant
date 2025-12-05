@@ -63,13 +63,34 @@
     },
     "select": {
       "eps_output": {
-        "name": "EPS Output Control"
+        "name": "EPS Output Control",
+        "state": {
+          "0": "Disable",
+          "2": "EPS Mode",
+          "3": "UPS Mode"
+        }
       },
       "force_mode": {
-        "name": "Force Mode"
+        "name": "Force Mode",
+        "state": {
+          "0": "Disabled",
+          "1": "Force Discharge",
+          "3": "Force Charge"
+        }
       },
       "remote_control_mode": {
-        "name": "Remote Control Mode"
+        "name": "Remote Control Mode",
+        "state": {
+          "0": "Disabled",
+          "1": "INV Discharge (PV Priority)",
+          "3": "INV Charge (PV Priority)",
+          "5": "Battery Discharge",
+          "7": "Battery Charge",
+          "9": "Grid Discharge",
+          "11": "Grid Charge",
+          "13": "INV Discharge (AC First)",
+          "15": "INV Charge (AC First)"
+        }
       }
     },
     "sensor": {
