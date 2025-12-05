@@ -81,7 +81,7 @@ class SolakonSensor(SolakonEntity, SensorEntity):
         # Set entity ID
         self.entity_id = f"sensor.solakon_one_{sensor_key}"
         
-        category = definition.get("entity_category", None)
+        category = definition.get("category", None)
         if category == "diagnostic":
             self._attr_entity_category = EntityCategory.DIAGNOSTIC
         elif category == "config":
