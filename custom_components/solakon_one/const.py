@@ -273,19 +273,16 @@ SENSOR_DEFINITIONS = {
         "unit": "°C",
     },
     "bms1_ambient_temp": {
-        "name": "Ambient Temperature",
         "device_class": "temperature",
         "state_class": "measurement",
         "unit": "°C",
     },
     "bms1_max_temp": {
-        "name": "BMS max Temperature",
         "device_class": "temperature",
         "state_class": "measurement",
         "unit": "°C",
     },
     "bms1_min_temp": {
-        "name": "BMS min Temperature",
         "device_class": "temperature",
         "state_class": "measurement",
         "unit": "°C",

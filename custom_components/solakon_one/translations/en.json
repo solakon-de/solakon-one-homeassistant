@@ -73,6 +73,15 @@
       }
     },
     "sensor": {
+      "bms1_ambient_temp": {
+        "name": "Ambient Temperature"
+      },
+      "bms1_max_temp": {
+        "name": "BMS max Temperature"
+      },
+      "bms1_min_temp": {
+        "name": "BMS min Temperature"
+      },
       "pv1_power": {
         "name": "PV1 Power"
       },
