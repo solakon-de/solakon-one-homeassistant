@@ -300,6 +300,7 @@ SENSOR_DEFINITIONS = {
     },
     "grid_standard_code": {
         "device_class": "sensor",
+        "category": "diagnostic",
     },
 
     # Control Status Sensors (showing current values of controllable parameters)
