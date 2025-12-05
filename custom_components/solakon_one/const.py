@@ -92,6 +92,12 @@ REGISTERS = {
 
     # Temperature
     "internal_temp": {"address": 39141, "count": 1, "type": "i16", "scale": 10, "unit": "°C"},
+    "bms1_ambient_temp": {"address": 37611, "count": 1, "type": "i16", "scale": 10, "unit": "°C"},
+    "bms1_max_temp": {"address": 37617, "count": 1, "type": "i16", "scale": 10, "unit": "°C"},
+    "bms1_min_temp": {"address": 37618, "count": 1, "type": "i16", "scale": 10, "unit": "°C"},
+    "bms2_ambient_temp": {"address": 38309, "count": 1, "type": "i16", "scale": 10, "unit": "°C"},
+    "bms2_max_temp": {"address": 38315, "count": 1, "type": "i16", "scale": 10, "unit": "°C"},
+    "bms2_min_temp": {"address": 38316, "count": 1, "type": "i16", "scale": 10, "unit": "°C"},
 
     # Energy Statistics
     "cumulative_generation": {"address": 39149, "count": 2, "type": "u32", "scale": 100, "unit": "kWh"},
@@ -288,6 +294,24 @@ SENSOR_DEFINITIONS = {
     # Temperature sensors
     "internal_temp": {
         "name": "Internal Temperature",
+        "device_class": "temperature",
+        "state_class": "measurement",
+        "unit": "°C",
+    },
+    "bms1_ambient_temp": {
+        "name": "Ambient Temperature",
+        "device_class": "temperature",
+        "state_class": "measurement",
+        "unit": "°C",
+    },
+    "bms1_max_temp": {
+        "name": "BMS max Temperature",
+        "device_class": "temperature",
+        "state_class": "measurement",
+        "unit": "°C",
+    },
+    "bms1_min_temp": {
+        "name": "BMS min Temperature",
         "device_class": "temperature",
         "state_class": "measurement",
         "unit": "°C",
