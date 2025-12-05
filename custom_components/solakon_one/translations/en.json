@@ -103,6 +103,9 @@
       "bms1_min_temp": {
         "name": "BMS min Temperature"
       },
+      "bms1_soh": {
+        "name": "Battery State of Health"
+      },
       "cumulative_generation": {
         "name": "Total Energy"
       },

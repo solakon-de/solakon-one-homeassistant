@@ -46,6 +46,12 @@ REGISTERS = {
     "slave_version": {"address": 36002, "count": 1, "type": "u16"},
     "manager_version": {"address": 36003, "count": 1, "type": "u16"},
 
+    # Battery Version Information (Table 3-3)
+    "bms1_soh": {"address": 37624, "count": 1, "type": "u16", "scale": 1, "unit": "%"},
+    "bms2_soh": {"address": 38322, "count": 1, "type": "u16", "scale": 1, "unit": "%"},
+    "bms1_soc": {"address": 37612, "count": 1, "type": "i16", "scale": 1, "unit": "%"},
+    "bms2_soc": {"address": 38310, "count": 1, "type": "i16", "scale": 1, "unit": "%"},
+
     # Protocol & Device Info (Table 3-5)
     "protocol_version": {"address": 39000, "count": 2, "type": "u32"},
     "rated_power": {"address": 39053, "count": 2, "type": "i32", "scale": 1, "unit": "W"},
@@ -133,6 +139,10 @@ REGISTERS = {
 
 # Sensor definitions for Home Assistant
 SENSOR_DEFINITIONS = {
+    "bms1_soh": {
+        "state_class": "measurement",
+        "unit": "%",
+    },
     # Power sensors
     "pv1_power": {
         "device_class": "power",
