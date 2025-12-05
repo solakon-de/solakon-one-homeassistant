@@ -92,6 +92,12 @@ REGISTERS = {
 
     # Temperature
     "internal_temp": {"address": 39141, "count": 1, "type": "i16", "scale": 10, "unit": "°C"},
+    "bms1_ambient_temp": {"address": 37611, "count": 1, "type": "i16", "scale": 10, "unit": "°C"},
+    "bms1_max_temp": {"address": 37617, "count": 1, "type": "i16", "scale": 10, "unit": "°C"},
+    "bms1_min_temp": {"address": 37618, "count": 1, "type": "i16", "scale": 10, "unit": "°C"},
+    "bms2_ambient_temp": {"address": 38309, "count": 1, "type": "i16", "scale": 10, "unit": "°C"},
+    "bms2_max_temp": {"address": 38315, "count": 1, "type": "i16", "scale": 10, "unit": "°C"},
+    "bms2_min_temp": {"address": 38316, "count": 1, "type": "i16", "scale": 10, "unit": "°C"},
 
     # Energy Statistics
     "cumulative_generation": {"address": 39149, "count": 2, "type": "u32", "scale": 100, "unit": "kWh"},
@@ -266,6 +272,24 @@ SENSOR_DEFINITIONS = {
         "state_class": "measurement",
         "unit": "°C",
     },
+    "bms1_ambient_temp": {
+        "name": "Ambient Temperature",
+        "device_class": "temperature",
+        "state_class": "measurement",
+        "unit": "°C",
+    },
+    "bms1_max_temp": {
+        "name": "BMS max Temperature",
+        "device_class": "temperature",
+        "state_class": "measurement",
+        "unit": "°C",
+    },
+    "bms1_min_temp": {
+        "name": "BMS min Temperature",
+        "device_class": "temperature",
+        "state_class": "measurement",
+        "unit": "°C",
+    },
 
     # Other sensors
     "power_factor": {
@@ -282,8 +306,6 @@ SENSOR_DEFINITIONS = {
     },
 
     # Control Status Sensors (showing current values of controllable parameters)
-    "eps_output": {
-    },
     # "export_power_limit": {
     #     "name": "Export Power Limit",
     #     "device_class": "power",
@@ -305,31 +327,6 @@ SENSOR_DEFINITIONS = {
     #     "unit": "W",
     #     "icon": "mdi:transmission-tower-export",
     # },
-    "minimum_soc": {
-        "device_class": "battery",
-        "state_class": "measurement",
-        "unit": "%",
-    },
-    "maximum_soc": {
-        "device_class": "battery",
-        "state_class": "measurement",
-        "unit": "%",
-    },
-    "minimum_soc_ongrid": {
-        "device_class": "battery",
-        "state_class": "measurement",
-        "unit": "%",
-    },
-    "battery_max_charge_current": {
-        "device_class": "current",
-        "state_class": "number",
-        "unit": "A",
-    },
-    "battery_max_discharge_current":{
-        "device_class": "current",
-        "state_class": "number",
-        "unit": "A",
-    },
     # "work_mode": {
     #     "name": "Work Mode",
     #     "icon": "mdi:cog",
@@ -340,21 +337,6 @@ SENSOR_DEFINITIONS = {
 
     # Remote Control Status Sensors
     "remote_control": {
-    },
-    "remote_timeout_set": {
-        "device_class": "duration",
-        "state_class": "measurement",
-        "unit": "s",
-    },
-    "remote_active_power": {
-        "device_class": "power",
-        "state_class": "measurement",
-        "unit": "W",
-    },
-    "remote_reactive_power": {
-        "device_class": "reactive_power",
-        "state_class": "measurement",
-        "unit": "var",
     },
     "remote_timeout_countdown": {
         "device_class": "duration",
