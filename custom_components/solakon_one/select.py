@@ -81,7 +81,7 @@ class SolakonSelect(SolakonEntity, SelectEntity):
         device_info: dict,
     ) -> None:
         """Initialize the select entity."""
-        super().__init__(coordinator, config_entry, device_info, definition, select_key)
+        super().__init__(coordinator, config_entry, device_info, select_key)
         self._hub = hub
         self._select_key = select_key
         self._register_config = REGISTERS[select_key]
@@ -180,7 +180,7 @@ class RemoteControlModeSelect(SolakonEntity, SelectEntity):
         device_info: dict,
     ) -> None:
         """Initialize the remote control mode select entity."""
-        super().__init__(coordinator, config_entry, device_info, definition, "remote_control_mode")
+        super().__init__(coordinator, config_entry, device_info, "remote_control_mode")
         self._hub = hub
 
         # Set entity ID
@@ -287,7 +287,7 @@ class ForceModeSelect(SolakonEntity, SelectEntity):
         device_info: dict,
     ) -> None:
         """Initialize the force mode select entity."""
-        super().__init__(coordinator, config_entry, device_info, definition, "force_mode")
+        super().__init__(coordinator, config_entry, device_info, "force_mode")
         self._hub = hub
 
         # Set entity ID
