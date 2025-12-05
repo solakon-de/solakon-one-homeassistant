@@ -75,7 +75,7 @@ class SolakonSensor(SolakonEntity, SensorEntity):
         device_info: dict,
     ) -> None:
         """Initialize the sensor."""
-        super().__init__(coordinator, config_entry, device_info, definition, sensor_key)
+        super().__init__(coordinator, config_entry, device_info, sensor_key)
         self._sensor_key = sensor_key
 
         # Set entity ID
