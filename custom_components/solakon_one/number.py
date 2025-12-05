@@ -3,17 +3,149 @@ from __future__ import annotations
 
 import logging
 
-from homeassistant.components.number import NumberEntity, NumberMode, NumberDeviceClass
+from homeassistant.components.number import NumberEntity, NumberMode, NumberDeviceClass, NumberEntityDescription
 from homeassistant.config_entries import ConfigEntry
-from homeassistant.const import EntityCategory, UnitOfPower
+from homeassistant.const import (
+    EntityCategory,
+    PERCENTAGE,
+    UnitOfElectricCurrent,
+    UnitOfPower,
+    UnitOfReactivePower,
+    UnitOfTime,
+)
 from homeassistant.core import HomeAssistant, callback
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
-from .const import DOMAIN, NUMBER_DEFINITIONS, REGISTERS
+from .const import DOMAIN, REGISTERS
 from .entity import SolakonEntity
 
 _LOGGER = logging.getLogger(__name__)
 
+
+    # "export_power_limit": {
+    #     "name": "Export Power Limit Control",
+    #     "icon": "mdi:transmission-tower-export",
+    #     "min": 0,
+    #     "max": 100000,  # 100kW max, will be adjusted based on inverter Pmax
+    #     "step": 100,
+    #     "unit": "W",
+    #     "device_class": "power",
+    #     "mode": "box",
+    # },
+    # "import_power_limit": {
+    #     "name": "Import Power Limit Control",
+    #     "icon": "mdi:transmission-tower-import",
+    #     "min": 0,
+    #     "max": 100000,  # 100kW max
+    #     "step": 100,
+    #     "unit": "W",
+    #     "device_class": "power",
+    #     "mode": "box",
+    # },
+    # "export_peak_limit": {
+    #     "name": "Export Peak Limit Control",
+    #     "icon": "mdi:transmission-tower-export",
+    #     "min": 0,
+    #     "max": 100000,  # 100kW max
+    #     "step": 100,
+    #     "unit": "W",
+    #     "device_class": "power",
+    #     "mode": "box",
+    # },
+
+# Number entity definitions for Home Assistant
+NUMBER_ENTITY_DESCRIPTIONS: tuple[NumberEntityDescription, ...] = (
+    NumberEntityDescription(
+        key="minimum_soc",
+        mode=NumberMode.SLIDER,
+        entity_category=EntityCategory.CONFIG,
+        native_unit_of_measurement=PERCENTAGE,
+        native_min_value=0,
+        native_max_value=100,
+        native_step=1,
+    ),
+    NumberEntityDescription(
+        key="maximum_soc",
+        mode=NumberMode.SLIDER,
+        entity_category=EntityCategory.CONFIG,
+        native_unit_of_measurement=PERCENTAGE,
+        native_min_value=0,
+        native_max_value=100,
+        native_step=1,
+    ),
+    NumberEntityDescription(
+        key="minimum_soc_ongrid",
+        mode=NumberMode.SLIDER,
+        entity_category=EntityCategory.CONFIG,
+        native_unit_of_measurement=PERCENTAGE,
+        native_min_value=0,
+        native_max_value=100,
+        native_step=1,
+    ),
+    NumberEntityDescription(
+        key="battery_max_charge_current",
+        mode=NumberMode.BOX,
+        entity_category=EntityCategory.CONFIG,
+        native_unit_of_measurement=UnitOfElectricCurrent.AMPERE,
+        native_min_value=0,
+        native_max_value=40,
+        native_step=1,
+    ),
+    NumberEntityDescription(
+        key="battery_max_discharge_current",
+        mode=NumberMode.BOX,
+        entity_category=EntityCategory.CONFIG,
+        native_unit_of_measurement=UnitOfElectricCurrent.AMPERE,
+        native_min_value=0,
+        native_max_value=40,
+        native_step=1,
+    ),
+    NumberEntityDescription(
+        key="remote_active_power",
+        mode=NumberMode.BOX,
+        device_class=NumberDeviceClass.POWER,
+        entity_category=EntityCategory.CONFIG,
+        native_unit_of_measurement=UnitOfPower.WATT,
+        native_min_value=-100000, # -100kW (charging/import)
+        native_max_value=100000,  # +100kW (discharging/export)
+        native_step=100,
+    ),
+    NumberEntityDescription(
+        key="remote_reactive_power",
+        mode=NumberMode.BOX,
+        native_unit_of_measurement=UnitOfReactivePower.VOLT_AMPERE_REACTIVE,
+        native_min_value=-100000,
+        native_max_value=100000,
+        native_step=100,
+    ),
+    NumberEntityDescription(
+        key="remote_timeout_set",
+        mode=NumberMode.BOX,
+        native_unit_of_measurement=UnitOfTime.SECONDS,
+        native_min_value=0,
+        native_max_value=3600,
+        native_step=10,
+    ),
+)
+
+FORCE_DURATION_NUMBER_ENTITY_DESCRIPTION = NumberEntityDescription(
+    key="force_duration",
+    mode=NumberMode.SLIDER,
+    native_unit_of_measurement=UnitOfTime.MINUTES,
+    native_min_value=0,
+    native_max_value=1092,  # 65535 seconds = ~1092 minutes
+    native_step=1,
+)
+
+FORCE_POWER_NUMBER_ENTITY_DESCRIPTION = NumberEntityDescription(
+    key="force_power",
+    mode=NumberMode.BOX,
+    device_class=NumberDeviceClass.POWER,
+    native_unit_of_measurement=UnitOfPower.WATT,
+    native_min_value=0,
+    native_max_value=1200,  # Will be validated based on mode (1200W charge, 800W discharge)
+    native_step=10,
+)
 
 async def async_setup_entry(
     hass: HomeAssistant,
@@ -28,41 +160,39 @@ async def async_setup_entry(
     device_info = await hub.async_get_device_info()
 
     entities = []
-    for key, definition in NUMBER_DEFINITIONS.items():
-        # Special handling for force_duration (virtual entity with minutes<->seconds conversion)
-        if key == "force_duration":
-            entities.append(
-                ForceDurationNumber(
-                    coordinator,
-                    hub,
-                    config_entry,
-                    definition,
-                    device_info,
-                )
-            )
-        # Special handling for force_power (writes to both 46003 and 46005)
-        elif key == "force_power":
-            entities.append(
-                ForcePowerNumber(
-                    coordinator,
-                    hub,
-                    config_entry,
-                    definition,
-                    device_info,
-                )
-            )
+
+    entities.extend(
+        SolakonNumber(
+            coordinator,
+            hub,
+            config_entry,
+            device_info,
+            description,
+        )
+        for description in NUMBER_ENTITY_DESCRIPTIONS
         # Only create number entities for registers that exist and have rw flag
-        elif key in REGISTERS and REGISTERS[key].get("rw", False):
-            entities.append(
-                SolakonNumber(
-                    coordinator,
-                    hub,
-                    config_entry,
-                    key,
-                    definition,
-                    device_info,
-                )
-            )
+        if description.key in REGISTERS and REGISTERS[description.key].get("rw", False)
+    )
+    # Special handling for force_duration (virtual entity with minutes<->seconds conversion)
+    entities.append(
+        ForceDurationNumber(
+            coordinator,
+            hub,
+            config_entry,
+            device_info,
+            FORCE_DURATION_NUMBER_ENTITY_DESCRIPTION,
+        )
+    )
+    # Special handling for force_power (writes to both 46003 and 46005)
+    entities.append(
+        ForcePowerNumber(
+            coordinator,
+            hub,
+            config_entry,
+            device_info,
+            FORCE_POWER_NUMBER_ENTITY_DESCRIPTION,
+        )
+    )
 
     if entities:
         async_add_entities(entities, True)
@@ -76,45 +206,19 @@ class SolakonNumber(SolakonEntity, NumberEntity):
         coordinator,
         hub,
         config_entry: ConfigEntry,
-        number_key: str,
-        definition: dict,
         device_info: dict,
+        description: NumberEntityDescription,
     ) -> None:
         """Initialize the number entity."""
-        super().__init__(coordinator, config_entry, device_info, number_key)
+        super().__init__(coordinator, config_entry, device_info, description.key)
         self._hub = hub
-        self._number_key = number_key
-        self._register_config = REGISTERS[number_key]
+        self._number_key = description.key
+        self._register_config = REGISTERS[description.key]
+
+        self.entity_description = description
 
         # Set entity ID
-        self.entity_id = f"number.solakon_one_{number_key}"
-
-        category = definition.get("category", None)
-        if category == "diagnostic":
-            self._attr_entity_category = EntityCategory.DIAGNOSTIC
-        elif category == "config":
-            self._attr_entity_category = EntityCategory.CONFIG
-
-        # Set number attributes
-        self._attr_native_min_value = definition.get("min", 0)
-        self._attr_native_max_value = definition.get("max", 100000)
-        self._attr_native_step = definition.get("step", 1)
-
-        # Set device class and unit
-        if definition.get("device_class") == "power":
-            self._attr_device_class = NumberDeviceClass.POWER
-            self._attr_native_unit_of_measurement = UnitOfPower.WATT
-        elif definition.get("unit"):
-            self._attr_native_unit_of_measurement = definition["unit"]
-
-        # Set mode
-        mode = definition.get("mode", "box")
-        if mode == "box":
-            self._attr_mode = NumberMode.BOX
-        elif mode == "slider":
-            self._attr_mode = NumberMode.SLIDER
-        else:
-            self._attr_mode = NumberMode.AUTO
+        self.entity_id = f"number.solakon_one_{description.key}"
 
     @callback
     def _handle_coordinator_update(self) -> None:
@@ -223,24 +327,17 @@ class ForceDurationNumber(SolakonEntity, NumberEntity):
         coordinator,
         hub,
         config_entry: ConfigEntry,
-        definition: dict,
         device_info: dict,
+        description: NumberEntityDescription,
     ) -> None:
         """Initialize the force duration number entity."""
-        super().__init__(coordinator, config_entry, device_info, "force_duration")
+        super().__init__(coordinator, config_entry, device_info, description.key)
         self._hub = hub
 
+        self.entity_description = description
+
         # Set entity ID
-        self.entity_id = "number.solakon_one_force_duration"
-
-        # Set number attributes (in minutes)
-        self._attr_native_min_value = definition.get("min", 0)
-        self._attr_native_max_value = definition.get("max", 1092)
-        self._attr_native_step = definition.get("step", 1)
-        self._attr_native_unit_of_measurement = "min"
-
-        # Set mode
-        self._attr_mode = NumberMode.SLIDER
+        self.entity_id = f"number.solakon_one_{description.key}"
 
     @callback
     def _handle_coordinator_update(self) -> None:
@@ -314,27 +411,17 @@ class ForcePowerNumber(SolakonEntity, NumberEntity):
         coordinator,
         hub,
         config_entry: ConfigEntry,
-        definition: dict,
+        description: NumberEntityDescription,
         device_info: dict,
     ) -> None:
         """Initialize the force power number entity."""
-        super().__init__(coordinator, config_entry, device_info, "force_power")
+        super().__init__(coordinator, config_entry, device_info, description.key)
         self._hub = hub
 
+        self.entity_description = description
+
         # Set entity ID
-        self.entity_id = "number.solakon_one_force_power"
-
-        # Set number attributes
-        self._attr_native_min_value = definition.get("min", 0)
-        self._attr_native_max_value = definition.get("max", 1200)
-        self._attr_native_step = definition.get("step", 10)
-
-        # Set device class and unit
-        self._attr_device_class = NumberDeviceClass.POWER
-        self._attr_native_unit_of_measurement = UnitOfPower.WATT
-
-        # Set mode
-        self._attr_mode = NumberMode.BOX
+        self.entity_id = f"number.solakon_one_{description.key}"
 
     @callback
     def _handle_coordinator_update(self) -> None:
