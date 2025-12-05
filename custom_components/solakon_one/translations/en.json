@@ -28,6 +28,185 @@
       "already_configured": "Device is already configured"
     }
   },
+  "entity": {
+    "number": {
+      "battery_max_charge_current": {
+        "name": "Maximum Charge Current"
+      },
+      "battery_max_discharge_current": {
+        "name": "Maximum Discharge Current"
+      },
+      "force_duration": {
+        "name": "Force Mode Duration"
+      },
+      "force_power": {
+        "name": "Force Mode Power"
+      },
+      "maximum_soc": {
+        "name": "Maximum SoC Control"
+      },
+      "minimum_soc": {
+        "name": "Minimum SoC Control"
+      },
+      "minimum_soc_ongrid": {
+        "name": "Minimum SoC OnGrid Control"
+      },
+      "remote_active_power": {
+        "name": "Remote Active Power Control"
+      },
+      "remote_reactive_power": {
+        "name": "Remote Reactive Power Control"
+      },
+      "remote_timeout_set": {
+        "name": "Remote Timeout Control"
+      }
+    },
+    "select": {
+      "eps_output": {
+        "name": "EPS Output Control"
+      },
+      "force_mode": {
+        "name": "Force Mode"
+      },
+      "remote_control_mode": {
+        "name": "Remote Control Mode"
+      }
+    },
+    "sensor": {
+      "active_power": {
+        "name": "Active Power"
+      },
+      "battery1_current": {
+        "name": "Battery Current"
+      },
+      "battery1_voltage": {
+        "name": "Battery Voltage"
+      },
+      "battery_combined_power": {
+        "name": "Battery Power"
+      },
+      "battery_max_charge_current": {
+        "name": "Maximum Charge Current"
+      },
+      "battery_max_discharge_current": {
+        "name": "Maximum Discharge Current"
+      },
+      "battery_soc": {
+        "name": "Battery State of Charge"
+      },
+      "bms1_ambient_temp": {
+        "name": "Ambient Temperature"
+      },
+      "bms1_max_temp": {
+        "name": "BMS max Temperature"
+      },
+      "bms1_min_temp": {
+        "name": "BMS min Temperature"
+      },
+      "cumulative_generation": {
+        "name": "Total Energy"
+      },
+      "daily_generation": {
+        "name": "Daily Energy"
+      },
+      "eps_current": {
+        "name": "EPS Current"
+      },
+      "eps_output": {
+        "name": "EPS Output Mode"
+      },
+      "eps_power": {
+        "name": "EPS Power"
+      },
+      "eps_voltage": {
+        "name": "EPS Voltage"
+      },
+      "grid_frequency": {
+        "name": "Grid Frequency"
+      },
+      "grid_r_voltage": {
+        "name": "Grid R Voltage"
+      },
+      "grid_standard_code": {
+        "name": "Grid Standard Code"
+      },
+      "internal_temp": {
+        "name": "Internal Temperature"
+      },
+      "maximum_soc": {
+        "name": "Maximum State of Charge"
+      },
+      "minimum_soc": {
+        "name": "Minimum State of Charge"
+      },
+      "minimum_soc_ongrid": {
+        "name": "Minimum SoC OnGrid"
+      },
+      "network_status": {
+        "name": "Network Status"
+      },
+      "power_factor": {
+        "name": "Power Factor"
+      },
+      "pv1_current": {
+        "name": "PV1 Current"
+      },
+      "pv1_power": {
+        "name": "PV1 Power"
+      },
+      "pv1_voltage": {
+        "name": "PV1 Voltage"
+      },
+      "pv2_current": {
+        "name": "PV2 Current"
+      },
+      "pv2_power": {
+        "name": "PV2 Power"
+      },
+      "pv2_voltage": {
+        "name": "PV2 Voltage"
+      },
+      "pv3_current": {
+        "name": "PV3 Current"
+      },
+      "pv3_power": {
+        "name": "PV3 Power"
+      },
+      "pv3_voltage": {
+        "name": "PV3 Voltage"
+      },
+      "pv4_current": {
+        "name": "PV4 Current"
+      },
+      "pv4_power": {
+        "name": "PV4 Power"
+      },
+      "pv4_voltage": {
+        "name": "PV4 Voltage"
+      },
+      "reactive_power": {
+        "name": "Reactive Power"
+      },
+      "remote_active_power": {
+        "name": "Remote Active Power Command"
+      },
+      "remote_control": {
+        "name": "Remote Control Status"
+      },
+      "remote_reactive_power": {
+        "name": "Remote Reactive Power Command"
+      },
+      "remote_timeout_countdown": {
+        "name": "Remote Timeout Countdown"
+      },
+      "remote_timeout_set": {
+        "name": "Remote Timeout Setting"
+      },
+      "total_pv_power": {
+        "name": "PV Power"
+      }
+    }
+  },
   "options": {
     "step": {
       "init": {

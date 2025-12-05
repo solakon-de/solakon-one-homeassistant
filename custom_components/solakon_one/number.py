@@ -81,7 +81,7 @@ class SolakonNumber(SolakonEntity, NumberEntity):
         device_info: dict,
     ) -> None:
         """Initialize the number entity."""
-        super().__init__(coordinator, config_entry, device_info, definition, number_key)
+        super().__init__(coordinator, config_entry, device_info, number_key)
         self._hub = hub
         self._number_key = number_key
         self._register_config = REGISTERS[number_key]
@@ -227,7 +227,7 @@ class ForceDurationNumber(SolakonEntity, NumberEntity):
         device_info: dict,
     ) -> None:
         """Initialize the force duration number entity."""
-        super().__init__(coordinator, config_entry, device_info, definition, "force_duration")
+        super().__init__(coordinator, config_entry, device_info, "force_duration")
         self._hub = hub
 
         # Set entity ID
@@ -318,7 +318,7 @@ class ForcePowerNumber(SolakonEntity, NumberEntity):
         device_info: dict,
     ) -> None:
         """Initialize the force power number entity."""
-        super().__init__(coordinator, config_entry, device_info, definition, "force_power")
+        super().__init__(coordinator, config_entry, device_info, "force_power")
         self._hub = hub
 
         # Set entity ID

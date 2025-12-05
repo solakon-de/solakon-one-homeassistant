@@ -135,61 +135,51 @@ REGISTERS = {
 SENSOR_DEFINITIONS = {
     # Power sensors
     "pv1_power": {
-        "name": "PV1 Power",
         "device_class": "power",
         "state_class": "measurement",
         "unit": "W",
     },
     "pv2_power": {
-        "name": "PV2 Power",
         "device_class": "power",
         "state_class": "measurement",
         "unit": "W",
     },
     "pv3_power": {
-        "name": "PV3 Power",
         "device_class": "power",
         "state_class": "measurement",
         "unit": "W",
     },
     "pv4_power": {
-        "name": "PV4 Power",
         "device_class": "power",
         "state_class": "measurement",
         "unit": "W",
     },
     "total_pv_power": {
-        "name": "PV Power",
         "device_class": "power",
         "state_class": "measurement",
         "unit": "W",
     },
     "active_power": {
-        "name": "Active Power",
         "device_class": "power",
         "state_class": "measurement",
         "unit": "W",
     },
     "reactive_power": {
-        "name": "Reactive Power",
         "device_class": "reactive_power",
         "state_class": "measurement",
         "unit": "kvar",
     },
     "battery_combined_power": {
-        "name": "Battery Power",
         "device_class": "power",
         "state_class": "measurement",
         "unit": "W",
     },
     "battery_soc": {
-        "name": "Battery State of Charge",
         "device_class": "battery",
         "state_class": "measurement",
         "unit": "%",
     },
     "eps_power": {
-        "name": "EPS Power",
         "device_class": "power",
         "state_class": "measurement",
         "unit": "W",
@@ -197,43 +187,36 @@ SENSOR_DEFINITIONS = {
 
     # Voltage sensors
     "pv1_voltage": {
-        "name": "PV1 Voltage",
         "device_class": "voltage",
         "state_class": "measurement",
         "unit": "V",
     },
     "pv2_voltage": {
-        "name": "PV2 Voltage",
         "device_class": "voltage",
         "state_class": "measurement",
         "unit": "V",
     },
     "pv3_voltage": {
-        "name": "PV3 Voltage",
         "device_class": "voltage",
         "state_class": "measurement",
         "unit": "V",
     },
     "pv4_voltage": {
-        "name": "PV4 Voltage",
         "device_class": "voltage",
         "state_class": "measurement",
         "unit": "V",
     },
     "grid_r_voltage": {
-        "name": "Grid R Voltage",
         "device_class": "voltage",
         "state_class": "measurement",
         "unit": "V",
     },
     "battery1_voltage": {
-        "name": "Battery Voltage",
         "device_class": "voltage",
         "state_class": "measurement",
         "unit": "V",
     },
     "eps_voltage": {
-        "name": "EPS Voltage",
         "device_class": "voltage",
         "state_class": "measurement",
         "unit": "V",
@@ -241,37 +224,31 @@ SENSOR_DEFINITIONS = {
 
     # Current sensors
     "pv1_current": {
-        "name": "PV1 Current",
         "device_class": "current",
         "state_class": "measurement",
         "unit": "A",
     },
     "pv2_current": {
-        "name": "PV2 Current",
         "device_class": "current",
         "state_class": "measurement",
         "unit": "A",
     },
     "pv3_current": {
-        "name": "PV3 Current",
         "device_class": "current",
         "state_class": "measurement",
         "unit": "A",
     },
     "pv4_current": {
-        "name": "PV4 Current",
         "device_class": "current",
         "state_class": "measurement",
         "unit": "A",
     },
     "battery1_current": {
-        "name": "Battery Current",
         "device_class": "current",
         "state_class": "measurement",
         "unit": "A",
     },
     "eps_current": {
-        "name": "EPS Current",
         "device_class": "current",
         "state_class": "measurement",
         "unit": "A",
@@ -279,13 +256,11 @@ SENSOR_DEFINITIONS = {
 
     # Energy sensors
     "cumulative_generation": {
-        "name": "Total Energy",
         "device_class": "energy",
         "state_class": "total_increasing",
         "unit": "kWh",
     },
     "daily_generation": {
-        "name": "Daily Energy",
         "device_class": "energy",
         "state_class": "total_increasing",
         "unit": "kWh",
@@ -293,25 +268,21 @@ SENSOR_DEFINITIONS = {
 
     # Temperature sensors
     "internal_temp": {
-        "name": "Internal Temperature",
         "device_class": "temperature",
         "state_class": "measurement",
         "unit": "°C",
     },
     "bms1_ambient_temp": {
-        "name": "Ambient Temperature",
         "device_class": "temperature",
         "state_class": "measurement",
         "unit": "°C",
     },
     "bms1_max_temp": {
-        "name": "BMS max Temperature",
         "device_class": "temperature",
         "state_class": "measurement",
         "unit": "°C",
     },
     "bms1_min_temp": {
-        "name": "BMS min Temperature",
         "device_class": "temperature",
         "state_class": "measurement",
         "unit": "°C",
@@ -319,18 +290,15 @@ SENSOR_DEFINITIONS = {
 
     # Other sensors
     "power_factor": {
-        "name": "Power Factor",
         "device_class": "power_factor",
         "state_class": "measurement",
     },
     "grid_frequency": {
-        "name": "Grid Frequency",
         "device_class": "frequency",
         "state_class": "measurement",
         "unit": "Hz",
     },
     "grid_standard_code": {
-       "name": "Grid Standard Code",
         "device_class": "sensor",
     },
 
@@ -361,16 +329,13 @@ SENSOR_DEFINITIONS = {
     #     "icon": "mdi:cog",
     # },
     "network_status": {
-        "name": "Network Status",
         "category": "diagnostic",
     },
 
     # Remote Control Status Sensors
     "remote_control": {
-        "name": "Remote Control Status",
     },
     "remote_timeout_countdown": {
-        "name": "Remote Timeout Countdown",
         "device_class": "duration",
         "state_class": "measurement",
         "unit": "s",
@@ -380,7 +345,6 @@ SENSOR_DEFINITIONS = {
 # Select entity definitions for Home Assistant
 SELECT_DEFINITIONS = {
     "eps_output": {
-        "name": "EPS Output Control",
         "options": {
             0: "Disable",
             2: "EPS Mode",
@@ -400,7 +364,6 @@ SELECT_DEFINITIONS = {
     #     },
     # },
     "remote_control_mode": {
-        "name": "Remote Control Mode",
         "options": {
             0: "Disabled",
             1: "INV Discharge (PV Priority)",
@@ -414,7 +377,6 @@ SELECT_DEFINITIONS = {
         },
     },
     "force_mode": {
-        "name": "Force Mode",
         "options": {
             0: "Disabled",
             1: "Force Discharge",
@@ -456,7 +418,6 @@ NUMBER_DEFINITIONS = {
     #     "mode": "box",
     # },
     "minimum_soc": {
-        "name": "Minimum SoC Control",
         "min": 0,
         "max": 100,
         "step": 1,
@@ -465,7 +426,6 @@ NUMBER_DEFINITIONS = {
         "category": "config",
     },
     "maximum_soc": {
-        "name": "Maximum SoC Control",
         "min": 0,
         "max": 100,
         "step": 1,
@@ -474,7 +434,6 @@ NUMBER_DEFINITIONS = {
         "category": "config",
     },
     "minimum_soc_ongrid": {
-        "name": "Minimum SoC OnGrid Control",
         "min": 0,
         "max": 100,
         "step": 1,
@@ -483,7 +442,6 @@ NUMBER_DEFINITIONS = {
         "category": "config",
     },
     "battery_max_charge_current": {
-        "name": "Maximum Charge Current",
         "min": 0,
         "max": 40,
         "step": 1,
@@ -492,7 +450,6 @@ NUMBER_DEFINITIONS = {
         "category": "config",
     },
     "battery_max_discharge_current":{
-        "name": "Maximum Discharge Current",
         "min": 0,
         "max": 40,
         "step": 1,
@@ -501,7 +458,6 @@ NUMBER_DEFINITIONS = {
         "category": "config",
     },
     "remote_active_power": {
-        "name": "Remote Active Power Control",
         "min": -100000,  # -100kW (charging/import)
         "max": 100000,   # +100kW (discharging/export)
         "step": 100,
@@ -510,7 +466,6 @@ NUMBER_DEFINITIONS = {
         "mode": "box",
     },
     "remote_reactive_power": {
-        "name": "Remote Reactive Power Control",
         "min": -100000,
         "max": 100000,
         "step": 100,
@@ -518,7 +473,6 @@ NUMBER_DEFINITIONS = {
         "mode": "box",
     },
     "remote_timeout_set": {
-        "name": "Remote Timeout Control",
         "min": 0,
         "max": 3600,  # 1 hour max
         "step": 10,
@@ -526,7 +480,6 @@ NUMBER_DEFINITIONS = {
         "mode": "box",
     },
     "force_duration": {
-        "name": "Force Mode Duration",
         "min": 0,
         "max": 1092,  # 65535 seconds = ~1092 minutes
         "step": 1,
@@ -534,7 +487,6 @@ NUMBER_DEFINITIONS = {
         "mode": "slider",
     },
     "force_power": {
-        "name": "Force Mode Power",
         "min": 0,
         "max": 1200,  # Will be validated based on mode (1200W charge, 800W discharge)
         "step": 10,
