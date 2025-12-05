@@ -187,7 +187,6 @@ SENSOR_DEFINITIONS = {
         "device_class": "power",
         "state_class": "measurement",
         "unit": "W",
-        "icon": "mdi:solar-power",
     },
 
     # Voltage sensors
@@ -232,7 +231,6 @@ SENSOR_DEFINITIONS = {
         "device_class": "voltage",
         "state_class": "measurement",
         "unit": "V",
-        "icon": "mdi:flash",
     },
 
     # Current sensors
@@ -271,7 +269,6 @@ SENSOR_DEFINITIONS = {
         "device_class": "current",
         "state_class": "measurement",
         "unit": "A",
-        "icon": "mdi:current-dc",
     },
 
     # Energy sensors
