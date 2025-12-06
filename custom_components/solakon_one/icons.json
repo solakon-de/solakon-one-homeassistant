@@ -85,10 +85,10 @@
         }
       },
       "bms1_soh": {
-        "name": "mdi:hospital"
+        "default": "mdi:hospital"
       },
       "grid_standard_code": {
-        "name": "mdi:transmission-tower"
+        "default": "mdi:transmission-tower"
       },
       "eps_power": {
         "default": "mdi:solar-power"
