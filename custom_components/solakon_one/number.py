@@ -411,8 +411,8 @@ class ForcePowerNumber(SolakonEntity, NumberEntity):
         coordinator,
         hub,
         config_entry: ConfigEntry,
-        description: NumberEntityDescription,
         device_info: dict,
+        description: NumberEntityDescription,
     ) -> None:
         """Initialize the force power number entity."""
         super().__init__(coordinator, config_entry, device_info, description.key)
