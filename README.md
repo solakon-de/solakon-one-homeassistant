@@ -347,7 +347,6 @@ Device control is implemented using Home Assistant entities (Select and Number e
 - `solakon_one.set_time_of_use`: Configure TOU schedules
 
 ## Support
-## Support
 
 For issues or questions:
 - Report issues on [GitHub](https://github.com/solakon-de/solakon-one-homeassistant/issues)
