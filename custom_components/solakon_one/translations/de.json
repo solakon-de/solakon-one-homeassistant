@@ -69,12 +69,12 @@
         "name": "Modus überschreiben"
       },
       "remote_control_mode": {
-        "name": "Remote Control Mode"
+        "name": "Modus Fernsteuerung"
       }
     },
     "sensor": {
       "active_power": {
-        "name": "Active Power"
+        "name": "Leistung"
       },
       "battery1_current": {
         "name": "Batterie Strom"
@@ -89,13 +89,13 @@
         "name": "Batterie Ladestand"
       },
       "bms1_ambient_temp": {
-        "name": "Außentemperature"
+        "name": "Umgebungstemperature"
       },
       "bms1_max_temp": {
-        "name": "BMS max Temperature"
+        "name": "BMS max. Temperature"
       },
       "bms1_min_temp": {
-        "name": "BMS min Temperature"
+        "name": "BMS min. Temperature"
       },
       "bms1_soh": {
         "name": "Batterie Gesundheitszustand"
@@ -107,7 +107,7 @@
         "name": "Tägliche Energie"
       },
       "eps_current": {
-        "name": "EPS Current"
+        "name": "Steckdose Strom"
       },
       "eps_power": {
         "name": "Steckdose Leistung"
@@ -119,13 +119,13 @@
         "name": "Netzfrequenz"
       },
       "grid_r_voltage": {
-        "name": "Grid R Voltage"
+        "name": "Netz Spannung"
       },
       "grid_standard_code": {
-        "name": "Grid Standard Code"
+        "name": "Netzstandard Code"
       },
       "internal_temp": {
-        "name": "Internal Temperature"
+        "name": "Interne Temperature"
       },
       "network_status": {
         "name": "Netzwerk Status"
@@ -173,10 +173,10 @@
         "name": "Reaktive Leistung"
       },
       "remote_control": {
-        "name": "Fernsteuerung Control Status"
+        "name": "Fernsteuerung Status"
       },
       "remote_timeout_countdown": {
-        "name": "Fernsteuerung Timeout Countdown"
+        "name": "Fernsteuerung Zeitüberschreitung"
       },
       "total_pv_power": {
         "name": "PV Energie"
