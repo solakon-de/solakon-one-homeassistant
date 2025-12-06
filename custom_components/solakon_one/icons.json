@@ -34,7 +34,7 @@
     },
     "select": {
       "eps_output": {
-        "default": "mdi:power-standby"
+        "default": "mdi:power-socket-de"
       },
       "remote_control_mode": {
         "default": "mdi:remote"
@@ -83,6 +83,12 @@
           "90": "mdi:battery-90",
           "100": "mdi:battery"
         }
+      },
+      "bms1_soh": {
+        "name": "mdi:hospital"
+      },
+      "grid_standard_code": {
+        "name": "mdi:transmission-tower"
       },
       "eps_power": {
         "default": "mdi:solar-power"
