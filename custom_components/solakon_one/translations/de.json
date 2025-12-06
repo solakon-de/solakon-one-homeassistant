@@ -1,0 +1,200 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Solakon ONE konfigurieren",
+        "description": "Set up your Solakon ONE device for integration with Home Assistant.",
+        "data": {
+          "host": "Gerät",
+          "port": "Port",
+          "name": "Gerätename",
+          "slave_id": "Modbus Node ID",
+          "scan_interval": "Update Interval (Sekunden)"
+        },
+        "data_description": {
+          "host": "IP Adresse des Gerätes",
+          "port": "Modbus TCP Port",
+          "name": "Anzeigename für dein Gerät",
+          "slave_id": "Modbus slave address (1-247)",
+          "scan_interval": "How often to poll the device (1-300 seconds)"
+        }
+      }
+    },
+    "error": {
+      "cannot_connect": "Failed to connect to the device",
+      "unknown": "Unexpected error occurred"
+    },
+    "abort": {
+      "already_configured": "Gerät ist schon konfiguriert"
+    }
+  },
+  "entity": {
+    "number": {
+      "battery_max_charge_current": {
+        "name": "Maximaler Ladestrom"
+      },
+      "battery_max_discharge_current": {
+        "name": "Maximaler Entladestrom"
+      },
+      "force_duration": {
+        "name": "Force Mode Dauer"
+      },
+      "force_power": {
+        "name": "Force Mode Power"
+      },
+      "maximum_soc": {
+        "name": "Maximaler Ladestand"
+      },
+      "minimum_soc": {
+        "name": "Minimaler Ladestand"
+      },
+      "minimum_soc_ongrid": {
+        "name": "Minimaler Ladestand OnGrid"
+      },
+      "remote_active_power": {
+        "name": "Fernsteuerung Leistung"
+      },
+      "remote_reactive_power": {
+        "name": "Fernsteuerung Reaktive Leistung"
+      },
+      "remote_timeout_set": {
+        "name": "Fernsteuerung Zeitüberschreitung"
+      }
+    },
+    "select": {
+      "eps_output": {
+        "name": "Steckdose"
+      },
+      "force_mode": {
+        "name": "Modus überschreiben"
+      },
+      "remote_control_mode": {
+        "name": "Modus Fernsteuerung"
+      }
+    },
+    "sensor": {
+      "active_power": {
+        "name": "Leistung"
+      },
+      "battery1_current": {
+        "name": "Batterie Strom"
+      },
+      "battery1_voltage": {
+        "name": "Batterie Spannung"
+      },
+      "battery_combined_power": {
+        "name": "Batterie Leistung"
+      },
+      "battery_soc": {
+        "name": "Batterie Ladestand"
+      },
+      "bms1_ambient_temp": {
+        "name": "Umgebungstemperature"
+      },
+      "bms1_max_temp": {
+        "name": "BMS max. Temperature"
+      },
+      "bms1_min_temp": {
+        "name": "BMS min. Temperature"
+      },
+      "bms1_soh": {
+        "name": "Batterie Gesundheitszustand"
+      },
+      "cumulative_generation": {
+        "name": "Energie"
+      },
+      "daily_generation": {
+        "name": "Tägliche Energie"
+      },
+      "eps_current": {
+        "name": "Steckdose Strom"
+      },
+      "eps_power": {
+        "name": "Steckdose Leistung"
+      },
+      "eps_voltage": {
+        "name": "Steckdose Spannung"
+      },
+      "grid_frequency": {
+        "name": "Netzfrequenz"
+      },
+      "grid_r_voltage": {
+        "name": "Netz Spannung"
+      },
+      "grid_standard_code": {
+        "name": "Netzstandard Code"
+      },
+      "internal_temp": {
+        "name": "Interne Temperature"
+      },
+      "network_status": {
+        "name": "Netzwerk Status"
+      },
+      "power_factor": {
+        "name": "Leistungsfaktor"
+      },
+      "pv1_current": {
+        "name": "PV1 Strom"
+      },
+      "pv1_power": {
+        "name": "PV1 Leistung"
+      },
+      "pv1_voltage": {
+        "name": "PV1 Spannung"
+      },
+      "pv2_current": {
+        "name": "PV2 Strom"
+      },
+      "pv2_power": {
+        "name": "PV2 Leistung"
+      },
+      "pv2_voltage": {
+        "name": "PV2 Spannung"
+      },
+      "pv3_current": {
+        "name": "PV3 Strom"
+      },
+      "pv3_power": {
+        "name": "PV3 Leistung"
+      },
+      "pv3_voltage": {
+        "name": "PV3 Spannung"
+      },
+      "pv4_current": {
+        "name": "PV4 Strom"
+      },
+      "pv4_power": {
+        "name": "PV4 Leistung"
+      },
+      "pv4_voltage": {
+        "name": "PV4 Spannung"
+      },
+      "reactive_power": {
+        "name": "Reaktive Leistung"
+      },
+      "remote_control": {
+        "name": "Fernsteuerung Status"
+      },
+      "remote_timeout_countdown": {
+        "name": "Fernsteuerung Zeitüberschreitung"
+      },
+      "total_pv_power": {
+        "name": "PV Energie"
+      }
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Configure Options",
+        "description": "Adjust settings for your Solakon ONE device.",
+        "data": {
+          "scan_interval": "Update Interval (seconds)"
+        },
+        "data_description": {
+          "scan_interval": "How often to poll the device for updates (1-300 seconds)"
+        }
+      }
+    }
+  }
+}
