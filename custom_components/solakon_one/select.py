@@ -3,7 +3,7 @@ from __future__ import annotations
 
 import logging
 
-from homeassistant.components.select import SelectEntity
+from homeassistant.components.select import SelectEntity, SelectEntityDescription
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant, callback
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
@@ -13,6 +13,37 @@ from .entity import SolakonEntity
 from .remote_control import mode_to_register_value, register_value_to_mode, RemoteControlMode
 
 _LOGGER = logging.getLogger(__name__)
+
+    # "work_mode": {
+    #     "name": "Work Mode Control",
+    #     "icon": "mdi:cog",
+    #     "options": {
+    #         1: "Self Use",
+    #         2: "Feedin Priority",
+    #         3: "Backup",
+    #         4: "Peak Shaving",
+    #         6: "Force Charge",
+    #         7: "Force Discharge",
+    #     },
+    # },
+
+class SolakonSelectEntityDescription(SelectEntityDescription):
+    options: dict
+
+# Select entity definitions for Home Assistant
+SELECT_ENTITY_DESCRIPTIONS: tuple[SolakonSelectEntityDescription, ...] = (
+    SolakonSelectEntityDescription(
+        key="eps_output",
+    ),
+)
+
+FORCE_MODE_SELECT_ENTITY_DESCRIPTION = SolakonSelectEntityDescription(
+    key="force_mode",
+)
+
+REMOTE_CONTROLL_MODE_SELECT_ENTITY_DESCRIPTION = SolakonSelectEntityDescription(
+    key="remote_control_mode",
+)
 
 
 async def async_setup_entry(
@@ -28,41 +59,39 @@ async def async_setup_entry(
     device_info = await hub.async_get_device_info()
 
     entities = []
-    for key, definition in SELECT_DEFINITIONS.items():
-        # Special handling for remote_control_mode (virtual entity)
-        if key == "remote_control_mode":
-            entities.append(
-                RemoteControlModeSelect(
-                    coordinator,
-                    hub,
-                    config_entry,
-                    definition,
-                    device_info,
-                )
-            )
-        # Special handling for force_mode (virtual entity)
-        elif key == "force_mode":
-            entities.append(
-                ForceModeSelect(
-                    coordinator,
-                    hub,
-                    config_entry,
-                    definition,
-                    device_info,
-                )
-            )
-        # Only create select entities for registers that exist and have rw flag
-        elif key in REGISTERS and REGISTERS[key].get("rw", False):
-            entities.append(
-                SolakonSelect(
-                    coordinator,
-                    hub,
-                    config_entry,
-                    key,
-                    definition,
-                    device_info,
-                )
-            )
+
+    entities.extend(
+        SolakonSelect(
+            coordinator,
+            hub,
+            config_entry,
+            device_info,
+            description,
+        )
+        for description in SELECT_ENTITY_DESCRIPTIONS
+        # Only create number entities for registers that exist and have rw flag
+        if description.key in REGISTERS and REGISTERS[description.key].get("rw", False)
+    )
+    # Special handling for remote_control_mode (virtual entity)
+    entities.append(
+        RemoteControlModeSelect(
+            coordinator,
+            hub,
+            config_entry,
+            device_info,
+            REMOTE_CONTROLL_MODE_SELECT_ENTITY_DESCRIPTION,
+        )
+    )
+    # Special handling for force_mode (virtual entity)
+    entities.append(
+        ForceModeSelect(
+            coordinator,
+            hub,
+            config_entry,
+            device_info,
+            FORCE_MODE_SELECT_ENTITY_DESCRIPTION,
+        )
+    )
 
     if entities:
         async_add_entities(entities, True)
@@ -76,21 +105,20 @@ class SolakonSelect(SolakonEntity, SelectEntity):
         coordinator,
         hub,
         config_entry: ConfigEntry,
-        select_key: str,
-        definition: dict,
         device_info: dict,
+        description: SolakonSelectEntityDescription,
     ) -> None:
         """Initialize the select entity."""
-        super().__init__(coordinator, config_entry, device_info, select_key)
+        super().__init__(coordinator, config_entry, device_info, description.key)
         self._hub = hub
-        self._select_key = select_key
-        self._register_config = REGISTERS[select_key]
+        self._select_key = description.key
+        self._register_config = REGISTERS[description.key]
 
         # Set entity ID
-        self.entity_id = f"select.solakon_one_{select_key}"
+        self.entity_id = f"select.solakon_one_{description.key}"
 
         # Set up options (mapping from numeric value to text)
-        self._options_map = definition["options"]  # e.g., {0: "Disable", 2: "EPS Mode"}
+        self._options_map = description.options  # e.g., {0: "Disable", 2: "EPS Mode"}
         self._reverse_options_map = {v: k for k, v in self._options_map.items()}  # e.g., {"Disable": 0}
         self._attr_options = list(self._options_map.values())  # ["Disable", "EPS Mode"]
 
@@ -176,18 +204,18 @@ class RemoteControlModeSelect(SolakonEntity, SelectEntity):
         coordinator,
         hub,
         config_entry: ConfigEntry,
-        definition: dict,
         device_info: dict,
+        description: SolakonSelectEntityDescription,
     ) -> None:
         """Initialize the remote control mode select entity."""
-        super().__init__(coordinator, config_entry, device_info, "remote_control_mode")
+        super().__init__(coordinator, config_entry, device_info, description.key)
         self._hub = hub
 
         # Set entity ID
-        self.entity_id = "select.solakon_one_remote_control_mode"
+        self.entity_id = f"select.solakon_one_{description.key}"
 
         # Set up options (mapping from mode enum value to text)
-        self._options_map = definition["options"]
+        self._options_map = description.options
         self._reverse_options_map = {v: k for k, v in self._options_map.items()}
         self._attr_options = list(self._options_map.values())
 
@@ -283,18 +311,18 @@ class ForceModeSelect(SolakonEntity, SelectEntity):
         coordinator,
         hub,
         config_entry: ConfigEntry,
-        definition: dict,
         device_info: dict,
+        description: SolakonSelectEntityDescription,
     ) -> None:
         """Initialize the force mode select entity."""
-        super().__init__(coordinator, config_entry, device_info, "force_mode")
+        super().__init__(coordinator, config_entry, device_info, description.key)
         self._hub = hub
 
         # Set entity ID
-        self.entity_id = "select.solakon_one_force_mode"
+        self.entity_id = "select.solakon_one_{description.key}"
 
         # Set up options (mapping from mode value to text)
-        self._options_map = definition["options"]  # {0: "Disabled", 1: "Force Discharge", 3: "Force Charge"}
+        self._options_map = description.options  # {0: "Disabled", 1: "Force Discharge", 3: "Force Charge"}
         self._reverse_options_map = {v: k for k, v in self._options_map.items()}
         self._attr_options = list(self._options_map.values())
 
