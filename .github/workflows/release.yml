@@ -1,0 +1,72 @@
+name: Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version number (e.g., 1.0.0)'
+        required: true
+        type: string
+      prerelease:
+        description: 'Is this a pre-release?'
+        required: false
+        type: boolean
+        default: false
+
+jobs:
+  release:
+    name: Create Release
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    
+    steps:
+      - name: ⤵️ Checkout repository
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+      
+      - name: 🏷️ Create and push tag
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git tag -a "v${{ inputs.version }}" -m "Release v${{ inputs.version }}"
+          git push origin "v${{ inputs.version }}"
+      
+      - name: 📝 Extract changelog for version
+        id: changelog
+        run: |
+          VERSION="${{ inputs.version }}"
+          # Extract changelog section for this version from CHANGELOG.md
+          if [ -f "CHANGELOG.md" ]; then
+            # Try to extract the unreleased or specific version section
+            sed -n "/## \[Unreleased\]/,/## \[/p" CHANGELOG.md | sed '$d' > /tmp/release_notes.md
+            if [ ! -s /tmp/release_notes.md ]; then
+              echo "## Changes" > /tmp/release_notes.md
+              echo "See [CHANGELOG.md](https://github.com/${{ github.repository }}/blob/main/CHANGELOG.md) for details." >> /tmp/release_notes.md
+            fi
+          else
+            echo "## Release v${VERSION}" > /tmp/release_notes.md
+            echo "No changelog available." >> /tmp/release_notes.md
+          fi
+          
+      - name: 🚀 Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: "v${{ inputs.version }}"
+          name: "Release v${{ inputs.version }}"
+          body_path: /tmp/release_notes.md
+          prerelease: ${{ inputs.prerelease }}
+          generate_release_notes: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      
+      - name: 📋 Update manifest.json version
+        run: |
+          VERSION="${{ inputs.version }}"
+          sed -i "s/\"version\": \".*\"/\"version\": \"${VERSION}\"/" custom_components/solakon_one/manifest.json
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add custom_components/solakon_one/manifest.json
+          git commit -m "chore: bump version to ${VERSION}" || echo "No changes to commit"
+          git push origin main || echo "No changes to push"

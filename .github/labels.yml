@@ -1,0 +1,88 @@
+---
+# GitHub Labels Configuration
+# This file documents the standard labels used in this repository
+# Repository maintainers can use this as a reference to create labels
+
+# Type Labels
+- name: bug
+  description: Something isn't working
+  color: d73a4a
+
+- name: feature
+  description: New feature or request
+  color: a2eeef
+
+- name: enhancement
+  description: Improvement to existing functionality
+  color: a2eeef
+
+- name: documentation
+  description: Improvements or additions to documentation
+  color: 0075ca
+
+- name: question
+  description: Further information is requested
+  color: d876e3
+
+# Priority Labels
+- name: priority:high
+  description: High priority issue
+  color: e11d21
+
+- name: priority:medium
+  description: Medium priority issue
+  color: fbca04
+
+- name: priority:low
+  description: Low priority issue
+  color: 0e8a16
+
+# Status Labels
+- name: wontfix
+  description: This will not be worked on
+  color: ffffff
+
+- name: duplicate
+  description: This issue or pull request already exists
+  color: cfd3d7
+
+- name: good first issue
+  description: Good for newcomers
+  color: 7057ff
+
+- name: help wanted
+  description: Extra attention is needed
+  color: 008672
+
+# Release Management Labels (used by release-drafter)
+- name: breaking-change
+  description: Breaking change requiring major version bump
+  color: d73a4a
+
+- name: new-feature
+  description: New feature for minor version bump
+  color: 84b6eb
+
+- name: bugfix
+  description: Bug fix for patch version bump
+  color: d876e3
+
+- name: maintenance
+  description: Maintenance task
+  color: fbca04
+
+- name: ci
+  description: Continuous integration related
+  color: 0e8a16
+
+- name: dependencies
+  description: Pull requests that update a dependency file
+  color: 0366d6
+
+- name: refactor
+  description: Code refactoring
+  color: 5319e7
+
+- name: performance
+  description: Performance improvement
+  color: c7def8

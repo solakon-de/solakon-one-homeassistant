@@ -1,35 +1,19 @@
 # Solakon ONE Home Assistant Integration
 
+[![GitHub Release](https://img.shields.io/github/release/solakon-de/solakon-one-homeassistant.svg)](https://github.com/solakon-de/solakon-one-homeassistant/releases)
+[![GitHub commits since latest release](https://img.shields.io/github/commits-since/solakon-de/solakon-one-homeassistant/latest)](https://github.com/solakon-de/solakon-one-homeassistant/commits/main)
+
 A complete Home Assistant custom integration for Solakon ONE devices using Modbus TCP communication.
 
 > ⚠️ **IMPORTANT**: This is a Home Assistant **Integration**, not an Add-on.
 > - Do NOT add this as an Add-on repository
 > - Install it through HACS as an Integration (see instructions below)
 
-## Changelog
+## Documentation
 
-### Latest Version
-**New Features:**
-- ✨ **Device Control Entities**: Control your Solakon ONE device directly from Home Assistant
-  - EPS Output Mode control (Disable/EPS/UPS)
-  - Remote Control Mode with 9 operating modes
-  - Battery SoC limits (Minimum/Maximum/OnGrid)
-  - Remote Active/Reactive Power control
-  - Remote timeout settings
-- 📊 **New Sensors**: Added control status sensors to monitor current device settings
-  - EPS Output Mode status
-  - Battery SoC limit settings
-  - Remote control status and commands
-  - Network status
-- 🔧 **Improved Energy Dashboard Integration**: Comprehensive documentation for battery integration workaround
-- 📖 **Documentation Updates**: Accurate Energy Dashboard integration guide with step-by-step battery setup
-
-**Bug Fixes:**
-- Fixed misleading documentation about Grid Import/Export sensors (not currently supported)
-- Corrected Energy Dashboard integration instructions
-
-### Previous Versions
-- Initial release with basic monitoring capabilities
+- 📖 **[Full Changelog](CHANGELOG.md)** - Complete version history and changes
+- 📚 **[Entity Documentation](ENTITY_DOCUMENTATION.md)** - Detailed guide to understanding entities, terminology, and capabilities
+- 💡 See [Automation Examples](#automation-examples) below for practical use cases
 
 ## Features
 
@@ -119,6 +103,20 @@ These sensors display the current values of controllable parameters:
 11. Go to **Settings → Devices & Services**
 12. Click **"+ Add Integration"**
 13. Search for **"Solakon ONE"** and configure it
+
+### Checking Your Version
+
+After installation, you can check your installed version:
+
+1. Go to **HACS → Integrations**
+2. Find **Solakon ONE** in your installed integrations
+3. The version number will be displayed (e.g., v1.0.0)
+4. Compare with the [latest release](https://github.com/solakon-de/solakon-one-homeassistant/releases/latest) to see if updates are available
+
+Alternatively, check the `manifest.json` file in your installation directory:
+```
+custom_components/solakon_one/manifest.json
+```
 
 ### Manual Installation
 
@@ -349,9 +347,21 @@ Device control is implemented using Home Assistant entities (Select and Number e
 - `solakon_one.set_time_of_use`: Configure TOU schedules
 
 ## Support
+## Support
 
 For issues or questions:
 - Report issues on [GitHub](https://github.com/solakon-de/solakon-one-homeassistant/issues)
+- Check the [Entity Documentation](ENTITY_DOCUMENTATION.md) for detailed information
+- Read the [Contributing Guide](CONTRIBUTING.md) if you want to help improve this integration
+
+## Contributing
+
+Contributions are welcome! Please read the [Contributing Guidelines](CONTRIBUTING.md) for information on:
+- How to report bugs and suggest features
+- Development setup and testing
+- Version management and release process
+- Pull request guidelines
+- Code style standards
 
 ## License
 
