@@ -53,7 +53,7 @@ _LOGGER = logging.getLogger(__name__)
     #     "mode": "box",
     # },
 
-# Number entity definitions for Home Assistant
+# Number entity descriptions for Home Assistant
 NUMBER_ENTITY_DESCRIPTIONS: tuple[NumberEntityDescription, ...] = (
     NumberEntityDescription(
         key="minimum_soc",
