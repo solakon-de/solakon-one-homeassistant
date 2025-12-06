@@ -23,6 +23,10 @@ categories:
     labels:
       - "maintenance"
       - "ci"
+  - title: "🌎 Translation"
+    labels:
+      - "i18n"
+      - "translation"
   - title: "📚 Documentation"
     labels:
       - "documentation"
