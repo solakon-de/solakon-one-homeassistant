@@ -85,12 +85,6 @@
       "battery_combined_power": {
         "name": "Battery Power"
       },
-      "battery_max_charge_current": {
-        "name": "Maximum Charge Current"
-      },
-      "battery_max_discharge_current": {
-        "name": "Maximum Discharge Current"
-      },
       "battery_soc": {
         "name": "Battery State of Charge"
       },
@@ -115,9 +109,6 @@
       "eps_current": {
         "name": "EPS Current"
       },
-      "eps_output": {
-        "name": "EPS Output Mode"
-      },
       "eps_power": {
         "name": "EPS Power"
       },
@@ -135,15 +126,6 @@
       },
       "internal_temp": {
         "name": "Internal Temperature"
-      },
-      "maximum_soc": {
-        "name": "Maximum State of Charge"
-      },
-      "minimum_soc": {
-        "name": "Minimum State of Charge"
-      },
-      "minimum_soc_ongrid": {
-        "name": "Minimum SoC OnGrid"
       },
       "network_status": {
         "name": "Network Status"
@@ -190,20 +172,11 @@
       "reactive_power": {
         "name": "Reactive Power"
       },
-      "remote_active_power": {
-        "name": "Remote Active Power Command"
-      },
       "remote_control": {
         "name": "Remote Control Status"
       },
-      "remote_reactive_power": {
-        "name": "Remote Reactive Power Command"
-      },
       "remote_timeout_countdown": {
         "name": "Remote Timeout Countdown"
-      },
-      "remote_timeout_set": {
-        "name": "Remote Timeout Setting"
       },
       "total_pv_power": {
         "name": "PV Power"
