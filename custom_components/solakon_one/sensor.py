@@ -309,6 +309,8 @@ class SolakonSensor(SolakonEntity, SensorEntity):
         super().__init__(coordinator, config_entry, device_info, description.key)
         self._sensor_key = description.key
 
+        self.entity_description = description
+
         # Set entity ID
         self.entity_id = f"sensor.solakon_one_{description.key}"
 
