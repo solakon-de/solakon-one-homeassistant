@@ -8,7 +8,7 @@ from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant, callback
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
-from .const import DOMAIN, SELECT_DEFINITIONS, REGISTERS
+from .const import DOMAIN, REGISTERS
 from .entity import SolakonEntity
 from .remote_control import mode_to_register_value, register_value_to_mode, RemoteControlMode
 
