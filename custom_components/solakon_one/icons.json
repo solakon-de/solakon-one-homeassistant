@@ -34,7 +34,7 @@
     },
     "select": {
       "eps_output": {
-        "default": "mdi:power-socket-de"
+        "default": "mdi:power-socket-eu"
       },
       "remote_control_mode": {
         "default": "mdi:remote"
