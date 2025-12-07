@@ -10,6 +10,8 @@ from .const import DOMAIN
 class SolakonEntity(CoordinatorEntity, Entity):
     """Base class for Solakon ONE entities."""
 
+    _attr_has_entity_name = True
+
     def __init__(
         self,
         coordinator,
