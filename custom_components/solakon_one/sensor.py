@@ -251,7 +251,7 @@ SENSOR_ENTITY_DESCRIPTIONS: tuple[SensorEntityDescription, ...] = (
     SensorEntityDescription(
         key="grid_standard_code",
         device_class=SensorDeviceClass.SENSOR,
-        entity_category=EntityCategory.diagnostic,
+        entity_category=EntityCategory.DIAGNOSTIC,
     ),
     SensorEntityDescription(
         key="network_status",
