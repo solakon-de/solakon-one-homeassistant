@@ -34,7 +34,11 @@
     },
     "select": {
       "eps_output": {
-        "default": "mdi:power-plug-off"
+        "default": "mdi:power-plug-off",
+        "state": {
+          "1": "mdi:power-plug",
+          "3": "mdi:power-plug",
+        }
       },
       "remote_control_mode": {
         "default": "mdi:remote"
