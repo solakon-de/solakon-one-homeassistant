@@ -2,19 +2,19 @@
   "config": {
     "step": {
       "user": {
-        "title": "Configure Solakon ONE",
+        "title": "Solakon ONE konfigurieren",
         "description": "Set up your Solakon ONE device for integration with Home Assistant.",
         "data": {
-          "host": "Host",
+          "host": "Gerät",
           "port": "Port",
-          "name": "Device Name",
-          "slave_id": "Modbus Slave ID",
-          "scan_interval": "Update Interval (seconds)"
+          "name": "Gerätename",
+          "slave_id": "Modbus Node ID",
+          "scan_interval": "Update Interval (Sekunden)"
         },
         "data_description": {
-          "host": "IP address of your Solakon ONE device",
-          "port": "Modbus TCP port (usually 502)",
-          "name": "Friendly name for your device",
+          "host": "IP Adresse des Gerätes",
+          "port": "Modbus TCP Port",
+          "name": "Anzeigename für dein Gerät",
           "slave_id": "Modbus slave address (1-247)",
           "scan_interval": "How often to poll the device (1-300 seconds)"
         }
@@ -25,161 +25,161 @@
       "unknown": "Unexpected error occurred"
     },
     "abort": {
-      "already_configured": "Device is already configured"
+      "already_configured": "Gerät ist schon konfiguriert"
     }
   },
   "entity": {
     "number": {
       "battery_max_charge_current": {
-        "name": "Maximum Charge Current"
+        "name": "Maximaler Ladestrom"
       },
       "battery_max_discharge_current": {
-        "name": "Maximum Discharge Current"
+        "name": "Maximaler Entladestrom"
       },
       "force_duration": {
-        "name": "Force Mode Duration"
+        "name": "Force Mode Dauer"
       },
       "force_power": {
         "name": "Force Mode Power"
       },
       "maximum_soc": {
-        "name": "Maximum SoC Control"
+        "name": "Maximaler Ladestand"
       },
       "minimum_soc": {
-        "name": "Minimum SoC Control"
+        "name": "Minimaler Ladestand"
       },
       "minimum_soc_ongrid": {
-        "name": "Minimum SoC OnGrid Control"
+        "name": "Minimaler Ladestand OnGrid"
       },
       "remote_active_power": {
-        "name": "Remote Active Power Control"
+        "name": "Fernsteuerung Leistung"
       },
       "remote_reactive_power": {
-        "name": "Remote Reactive Power Control"
+        "name": "Fernsteuerung Reaktive Leistung"
       },
       "remote_timeout_set": {
-        "name": "Remote Timeout Control"
+        "name": "Fernsteuerung Zeitüberschreitung"
       }
     },
     "select": {
       "eps_output": {
-        "name": "EPS Output Control"
+        "name": "Steckdose"
       },
       "force_mode": {
-        "name": "Force Mode"
+        "name": "Modus überschreiben"
       },
       "remote_control_mode": {
-        "name": "Remote Control Mode"
+        "name": "Modus Fernsteuerung"
       }
     },
     "sensor": {
       "active_power": {
-        "name": "Active Power"
+        "name": "Leistung"
       },
       "battery1_current": {
-        "name": "Battery Current"
+        "name": "Batterie Strom"
       },
       "battery1_voltage": {
-        "name": "Battery Voltage"
+        "name": "Batterie Spannung"
       },
       "battery_combined_power": {
-        "name": "Battery Power"
+        "name": "Batterie Leistung"
       },
       "battery_soc": {
-        "name": "Battery State of Charge"
+        "name": "Batterie Ladestand"
       },
       "bms1_ambient_temp": {
-        "name": "Ambient Temperature"
+        "name": "Umgebungstemperature"
       },
       "bms1_max_temp": {
-        "name": "BMS max Temperature"
+        "name": "BMS max. Temperature"
       },
       "bms1_min_temp": {
-        "name": "BMS min Temperature"
+        "name": "BMS min. Temperature"
       },
       "bms1_soh": {
-        "name": "Battery State of Health"
+        "name": "Batterie Gesundheitszustand"
       },
       "cumulative_generation": {
-        "name": "Total Energy"
+        "name": "Energie"
       },
       "daily_generation": {
-        "name": "Daily Energy"
+        "name": "Tägliche Energie"
       },
       "eps_current": {
-        "name": "EPS Current"
+        "name": "Steckdose Strom"
       },
       "eps_power": {
-        "name": "EPS Power"
+        "name": "Steckdose Leistung"
       },
       "eps_voltage": {
-        "name": "EPS Voltage"
+        "name": "Steckdose Spannung"
       },
       "grid_frequency": {
-        "name": "Grid Frequency"
+        "name": "Netzfrequenz"
       },
       "grid_r_voltage": {
-        "name": "Grid R Voltage"
+        "name": "Netz Spannung"
       },
       "grid_standard_code": {
-        "name": "Grid Standard Code"
+        "name": "Netzstandard Code"
       },
       "internal_temp": {
-        "name": "Internal Temperature"
+        "name": "Interne Temperature"
       },
       "network_status": {
-        "name": "Network Status"
+        "name": "Netzwerk Status"
       },
       "power_factor": {
-        "name": "Power Factor"
+        "name": "Leistungsfaktor"
       },
       "pv1_current": {
-        "name": "PV1 Current"
+        "name": "PV1 Strom"
       },
       "pv1_power": {
-        "name": "PV1 Power"
+        "name": "PV1 Leistung"
       },
       "pv1_voltage": {
-        "name": "PV1 Voltage"
+        "name": "PV1 Spannung"
       },
       "pv2_current": {
-        "name": "PV2 Current"
+        "name": "PV2 Strom"
       },
       "pv2_power": {
-        "name": "PV2 Power"
+        "name": "PV2 Leistung"
       },
       "pv2_voltage": {
-        "name": "PV2 Voltage"
+        "name": "PV2 Spannung"
       },
       "pv3_current": {
-        "name": "PV3 Current"
+        "name": "PV3 Strom"
       },
       "pv3_power": {
-        "name": "PV3 Power"
+        "name": "PV3 Leistung"
       },
       "pv3_voltage": {
-        "name": "PV3 Voltage"
+        "name": "PV3 Spannung"
       },
       "pv4_current": {
-        "name": "PV4 Current"
+        "name": "PV4 Strom"
       },
       "pv4_power": {
-        "name": "PV4 Power"
+        "name": "PV4 Leistung"
       },
       "pv4_voltage": {
-        "name": "PV4 Voltage"
+        "name": "PV4 Spannung"
       },
       "reactive_power": {
-        "name": "Reactive Power"
+        "name": "Reaktive Leistung"
       },
       "remote_control": {
-        "name": "Remote Control Status"
+        "name": "Fernsteuerung Status"
       },
       "remote_timeout_countdown": {
-        "name": "Remote Timeout Countdown"
+        "name": "Fernsteuerung Zeitüberschreitung"
       },
       "total_pv_power": {
-        "name": "PV Power"
+        "name": "PV Energie"
       }
     }
   },

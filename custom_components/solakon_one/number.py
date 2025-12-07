@@ -53,7 +53,7 @@ _LOGGER = logging.getLogger(__name__)
     #     "mode": "box",
     # },
 
-# Number entity definitions for Home Assistant
+# Number entity descriptions for Home Assistant
 NUMBER_ENTITY_DESCRIPTIONS: tuple[NumberEntityDescription, ...] = (
     NumberEntityDescription(
         key="minimum_soc",
@@ -113,6 +113,7 @@ NUMBER_ENTITY_DESCRIPTIONS: tuple[NumberEntityDescription, ...] = (
     NumberEntityDescription(
         key="remote_reactive_power",
         mode=NumberMode.BOX,
+        entity_category=EntityCategory.CONFIG,
         native_unit_of_measurement=UnitOfReactivePower.VOLT_AMPERE_REACTIVE,
         native_min_value=-100000,
         native_max_value=100000,
@@ -121,6 +122,7 @@ NUMBER_ENTITY_DESCRIPTIONS: tuple[NumberEntityDescription, ...] = (
     NumberEntityDescription(
         key="remote_timeout_set",
         mode=NumberMode.BOX,
+        entity_category=EntityCategory.CONFIG,
         native_unit_of_measurement=UnitOfTime.SECONDS,
         native_min_value=0,
         native_max_value=3600,
@@ -131,6 +133,7 @@ NUMBER_ENTITY_DESCRIPTIONS: tuple[NumberEntityDescription, ...] = (
 FORCE_DURATION_NUMBER_ENTITY_DESCRIPTION = NumberEntityDescription(
     key="force_duration",
     mode=NumberMode.SLIDER,
+    entity_category=EntityCategory.CONFIG,
     native_unit_of_measurement=UnitOfTime.MINUTES,
     native_min_value=0,
     native_max_value=1092,  # 65535 seconds = ~1092 minutes
@@ -141,6 +144,7 @@ FORCE_POWER_NUMBER_ENTITY_DESCRIPTION = NumberEntityDescription(
     key="force_power",
     mode=NumberMode.BOX,
     device_class=NumberDeviceClass.POWER,
+    entity_category=EntityCategory.CONFIG,
     native_unit_of_measurement=UnitOfPower.WATT,
     native_min_value=0,
     native_max_value=1200,  # Will be validated based on mode (1200W charge, 800W discharge)
