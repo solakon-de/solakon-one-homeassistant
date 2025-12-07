@@ -2,13 +2,13 @@
   "entity": {
     "number": {
       "minimum_soc": {
-        "default": "mdi:battery-low"
+        "default": "mdi:battery-outline"
       },
       "maximum_soc": {
         "default": "mdi:battery-high"
       },
       "minimum_soc_ongrid": {
-        "default": "mdi:battery-low"
+        "default": "mdi:power-plug-battery-outline"
       },
       "battery_max_charge_current": {
         "default": "mdi:battery-charging"
@@ -34,13 +34,13 @@
     },
     "select": {
       "eps_output": {
-        "default": "mdi:power-socket-eu"
+        "default": "mdi:power-plug-off"
       },
       "remote_control_mode": {
         "default": "mdi:remote"
       },
       "force_mode": {
-        "default": "mdi:battery-arrow-up-down"
+        "default": "mdi:debug-step-over"
       }
     },
     "sensor": {
@@ -94,16 +94,16 @@
         "default": "mdi:solar-power"
       },
       "pv1_voltage": {
-        "default": "mdi:flash"
+        "default": "mdi:sine-wave"
       },
       "pv2_voltage": {
-        "default": "mdi:flash"
+        "default": "mdi:sine-wave"
       },
       "pv3_voltage": {
-        "default": "mdi:flash"
+        "default": "mdi:sine-wave"
       },
       "pv4_voltage": {
-        "default": "mdi:flash"
+        "default": "mdi:sine-wave"
       },
       "grid_r_voltage": {
         "default": "mdi:sine-wave"
@@ -112,7 +112,7 @@
         "default": "mdi:battery"
       },
       "eps_voltage": {
-        "default": "mdi:flash"
+        "default": "mdi:sine-wave"
       },
       "pv1_current": {
         "default": "mdi:current-dc"
