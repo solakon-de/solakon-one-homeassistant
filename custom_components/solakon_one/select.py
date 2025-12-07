@@ -113,6 +113,8 @@ class SolakonSelect(SolakonEntity, SelectEntity):
         self._hub = hub
         self._select_key = description.key
         self._register_config = REGISTERS[description.key]
+        
+        self.entity_description = description
 
         # Set entity ID
         self.entity_id = f"select.solakon_one_{description.key}"
@@ -210,6 +212,8 @@ class RemoteControlModeSelect(SolakonEntity, SelectEntity):
         """Initialize the remote control mode select entity."""
         super().__init__(coordinator, config_entry, device_info, description.key)
         self._hub = hub
+        
+        self.entity_description = description
 
         # Set entity ID
         self.entity_id = f"select.solakon_one_{description.key}"
@@ -317,6 +321,8 @@ class ForceModeSelect(SolakonEntity, SelectEntity):
         """Initialize the force mode select entity."""
         super().__init__(coordinator, config_entry, device_info, description.key)
         self._hub = hub
+        
+        self.entity_description = description
 
         # Set entity ID
         self.entity_id = "select.solakon_one_{description.key}"
