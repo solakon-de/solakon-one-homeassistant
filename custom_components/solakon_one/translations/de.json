@@ -55,7 +55,7 @@
         "name": "Fernsteuerung Leistung"
       },
       "remote_reactive_power": {
-        "name": "Fernsteuerung Blindeistung"
+        "name": "Fernsteuerung Blindleistung"
       },
       "remote_timeout_set": {
         "name": "Fernsteuerung Zeitüberschreitung"
@@ -170,7 +170,7 @@
         "name": "PV4 Spannung"
       },
       "reactive_power": {
-        "name": "Blindeistung"
+        "name": "Blindleistung"
       },
       "remote_control": {
         "name": "Fernsteuerung Status"
