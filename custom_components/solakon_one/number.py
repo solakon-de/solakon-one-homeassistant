@@ -85,6 +85,7 @@ NUMBER_ENTITY_DESCRIPTIONS: tuple[NumberEntityDescription, ...] = (
     NumberEntityDescription(
         key="battery_max_charge_current",
         mode=NumberMode.BOX,
+        device_class=NumberDeviceClass.CURRENT,
         entity_category=EntityCategory.CONFIG,
         native_unit_of_measurement=UnitOfElectricCurrent.AMPERE,
         native_min_value=0,
@@ -94,6 +95,7 @@ NUMBER_ENTITY_DESCRIPTIONS: tuple[NumberEntityDescription, ...] = (
     NumberEntityDescription(
         key="battery_max_discharge_current",
         mode=NumberMode.BOX,
+        device_class=NumberDeviceClass.CURRENT,
         entity_category=EntityCategory.CONFIG,
         native_unit_of_measurement=UnitOfElectricCurrent.AMPERE,
         native_min_value=0,
@@ -113,6 +115,7 @@ NUMBER_ENTITY_DESCRIPTIONS: tuple[NumberEntityDescription, ...] = (
     NumberEntityDescription(
         key="remote_reactive_power",
         mode=NumberMode.BOX,
+        device_class=NumberDeviceClass.REACTIVE_POWER,
         entity_category=EntityCategory.CONFIG,
         native_unit_of_measurement=UnitOfReactivePower.VOLT_AMPERE_REACTIVE,
         native_min_value=-100000,
@@ -122,6 +125,7 @@ NUMBER_ENTITY_DESCRIPTIONS: tuple[NumberEntityDescription, ...] = (
     NumberEntityDescription(
         key="remote_timeout_set",
         mode=NumberMode.BOX,
+        device_class=NumberDeviceClass.DURATION,
         entity_category=EntityCategory.CONFIG,
         native_unit_of_measurement=UnitOfTime.SECONDS,
         native_min_value=0,
@@ -133,6 +137,7 @@ NUMBER_ENTITY_DESCRIPTIONS: tuple[NumberEntityDescription, ...] = (
 FORCE_DURATION_NUMBER_ENTITY_DESCRIPTION = NumberEntityDescription(
     key="force_duration",
     mode=NumberMode.SLIDER,
+    device_class=NumberDeviceClass.DURATION,
     entity_category=EntityCategory.CONFIG,
     native_unit_of_measurement=UnitOfTime.MINUTES,
     native_min_value=0,
