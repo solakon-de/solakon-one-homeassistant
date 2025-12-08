@@ -60,16 +60,10 @@
         "default": "mdi:flash-outline"
       },
       "bms1_soh": {
-        "default": "mdi:hospital"
+        "default": "mdi:hospital-box-outline"
       },
       "grid_standard_code": {
         "default": "mdi:transmission-tower"
-      },
-      "eps_power": {
-        "default": "mdi:solar-power"
-      },
-      "battery1_voltage": {
-        "default": "mdi:battery"
       },
       "pv1_current": {
         "default": "mdi:current-dc"
@@ -86,11 +80,12 @@
       "battery1_current": {
         "default": "mdi:current-dc"
       },
-      "eps_current": {
-        "default": "mdi:current-dc"
-      },
       "network_status": {
-        "default": "mdi:network"
+        "default": "mdi:network",
+        "state": {
+          "1": "mdi:close-network",
+          "2": "mdi:network"
+        }
       },
       "remote_control": {
         "default": "mdi:remote"
