@@ -16,9 +16,6 @@
       "battery_max_discharge_current": {
         "default": "mdi:battery-charging"
       },
-      "remote_active_power": {
-        "default": "mdi:flash"
-      },
       "remote_reactive_power": {
         "default": "mdi:flash-outline"
       },
@@ -27,9 +24,6 @@
       },
       "force_duration": {
         "default": "mdi:timer-outline"
-      },
-      "force_power": {
-        "default": "mdi:flash"
       }
     },
     "select": {
@@ -62,30 +56,8 @@
       "total_pv_power": {
         "default": "mdi:solar-power"
       },
-      "active_power": {
-        "default": "mdi:flash"
-      },
       "reactive_power": {
         "default": "mdi:flash-outline"
-      },
-      "battery_combined_power": {
-        "default": "mdi:battery-charging"
-      },
-      "battery_soc": {
-        "default": "mdi:battery-unknown",
-        "range": {
-          "0": "mdi:battery-alert",
-          "10": "mdi:battery-10",
-          "20": "mdi:battery-20",
-          "30": "mdi:battery-30",
-          "40": "mdi:battery-40",
-          "50": "mdi:battery-50",
-          "60": "mdi:battery-60",
-          "70": "mdi:battery-70",
-          "80": "mdi:battery-80",
-          "90": "mdi:battery-90",
-          "100": "mdi:battery"
-        }
       },
       "bms1_soh": {
         "default": "mdi:hospital"
@@ -96,26 +68,8 @@
       "eps_power": {
         "default": "mdi:solar-power"
       },
-      "pv1_voltage": {
-        "default": "mdi:sine-wave"
-      },
-      "pv2_voltage": {
-        "default": "mdi:sine-wave"
-      },
-      "pv3_voltage": {
-        "default": "mdi:sine-wave"
-      },
-      "pv4_voltage": {
-        "default": "mdi:sine-wave"
-      },
-      "grid_r_voltage": {
-        "default": "mdi:sine-wave"
-      },
       "battery1_voltage": {
         "default": "mdi:battery"
-      },
-      "eps_voltage": {
-        "default": "mdi:sine-wave"
       },
       "pv1_current": {
         "default": "mdi:current-dc"
@@ -134,21 +88,6 @@
       },
       "eps_current": {
         "default": "mdi:current-dc"
-      },
-      "cumulative_generation": {
-        "default": "mdi:solar-panel"
-      },
-      "daily_generation": {
-        "default": "mdi:solar-panel"
-      },
-      "internal_temp": {
-        "default": "mdi:thermometer"
-      },
-      "power_factor": {
-        "default": "mdi:angle-acute"
-      },
-      "grid_frequency": {
-        "default": "mdi:sine-wave"
       },
       "network_status": {
         "default": "mdi:network"
