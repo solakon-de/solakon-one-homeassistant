@@ -89,13 +89,13 @@
         "name": "Batterie Ladestand"
       },
       "bms1_ambient_temp": {
-        "name": "Umgebungstemperature"
+        "name": "Umgebungstemperatur"
       },
       "bms1_max_temp": {
-        "name": "BMS max. Temperature"
+        "name": "BMS max. Temperatur"
       },
       "bms1_min_temp": {
-        "name": "BMS min. Temperature"
+        "name": "BMS min. Temperatur"
       },
       "bms1_soh": {
         "name": "Batterie Gesundheitszustand"
@@ -119,13 +119,13 @@
         "name": "Netzfrequenz"
       },
       "grid_r_voltage": {
-        "name": "Netz Spannung"
+        "name": "Netzspannung"
       },
       "grid_standard_code": {
         "name": "Netzstandard Code"
       },
       "internal_temp": {
-        "name": "Interne Temperature"
+        "name": "Interne Temperatur"
       },
       "network_status": {
         "name": "Netzwerk Status"
@@ -186,13 +186,13 @@
   "options": {
     "step": {
       "init": {
-        "title": "Configure Options",
-        "description": "Adjust settings for your Solakon ONE device.",
+        "title": "Einstellungen anpassen",
+        "description": "Passe die Einstellungen für dein Solakon ONE an.",
         "data": {
-          "scan_interval": "Update Interval (seconds)"
+          "scan_interval": "Aktualisierungsintervall (Sekunden)"
         },
         "data_description": {
-          "scan_interval": "How often to poll the device for updates (1-300 seconds)"
+          "scan_interval": "In welchem Zeitintervall am Gerät Aktualisierungen abgefragt werden sollen (1-300 Sekunden)"
         }
       }
     }
