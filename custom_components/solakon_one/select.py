@@ -27,22 +27,40 @@ _LOGGER = logging.getLogger(__name__)
     #     },
     # },
 
-class SolakonSelectEntityDescription(SelectEntityDescription):
-    options: dict
-
 # Select entity definitions for Home Assistant
-SELECT_ENTITY_DESCRIPTIONS: tuple[SolakonSelectEntityDescription, ...] = (
-    SolakonSelectEntityDescription(
+SELECT_ENTITY_DESCRIPTIONS: tuple[SelectEntityDescription, ...] = (
+    SelectEntityDescription(
         key="eps_output",
+        options=[
+          "0", # Disable
+          "2", # EPS Mode
+          "3", # UPS Mode
+        ],
     ),
 )
 
-FORCE_MODE_SELECT_ENTITY_DESCRIPTION = SolakonSelectEntityDescription(
+FORCE_MODE_SELECT_ENTITY_DESCRIPTION = SelectEntityDescription(
     key="force_mode",
+    options=[
+        "0" # Disabled
+        "1" # Force Discharge
+        "3" # Force Charge
+    ],
 )
 
-REMOTE_CONTROLL_MODE_SELECT_ENTITY_DESCRIPTION = SolakonSelectEntityDescription(
+REMOTE_CONTROLL_MODE_SELECT_ENTITY_DESCRIPTION = SelectEntityDescription(
     key="remote_control_mode",
+    options=[
+        "0", # Disabled
+        "1", # INV Discharge (PV Priority)
+        "3", # INV Charge (PV Priority)
+        "5", # Battery Discharge
+        "7", # Battery Charge
+        "9", # Grid Discharge
+        "11", # Grid Charge
+        "13", # INV Discharge (AC First)
+        "15", # INV Charge (AC First)
+    ],
 )
 
 
@@ -106,7 +124,7 @@ class SolakonSelect(SolakonEntity, SelectEntity):
         hub,
         config_entry: ConfigEntry,
         device_info: dict,
-        description: SolakonSelectEntityDescription,
+        description: SelectEntityDescription,
     ) -> None:
         """Initialize the select entity."""
         super().__init__(coordinator, config_entry, device_info, description.key)
@@ -120,9 +138,9 @@ class SolakonSelect(SolakonEntity, SelectEntity):
         self.entity_id = f"select.solakon_one_{description.key}"
 
         # Set up options (mapping from numeric value to text)
-        self._options_map = description.options  # e.g., {0: "Disable", 2: "EPS Mode"}
-        self._reverse_options_map = {v: k for k, v in self._options_map.items()}  # e.g., {"Disable": 0}
-        self._attr_options = list(self._options_map.values())  # ["Disable", "EPS Mode"]
+#        self._options_map = description.options  # e.g., {0: "Disable", 2: "EPS Mode"}
+#        self._reverse_options_map = {v: k for k, v in self._options_map.items()}  # e.g., {"Disable": 0}
+#        self._attr_options = list(self._options_map.values())  # ["Disable", "EPS Mode"]
 
     @callback
     def _handle_coordinator_update(self) -> None:
@@ -134,17 +152,18 @@ class SolakonSelect(SolakonEntity, SelectEntity):
             # For selects, it should be an integer
             if isinstance(raw_value, (int, float)):
                 value = int(raw_value)
+                str_value = f"{value}"
 
                 # Convert numeric value to string option
-                if value in self._options_map:
-                    self._attr_current_option = self._options_map[value]
+                if str_value in self.entity_description.options:
+                    self._attr_current_option = str_value
                     _LOGGER.debug(
                         f"{self._select_key}: raw_value={raw_value}, mapped to '{self._attr_current_option}'"
                     )
                 else:
                     _LOGGER.warning(
                         f"Unknown value {value} for {self._select_key}. "
-                        f"Valid options: {self._options_map}"
+                        f"Valid options: {self.entity_description.options}"
                     )
                     self._attr_current_option = None
             else:
@@ -159,15 +178,15 @@ class SolakonSelect(SolakonEntity, SelectEntity):
 
     async def async_select_option(self, option: str) -> None:
         """Change the selected option."""
-        if option not in self._reverse_options_map:
+        if option not in self.entity_description.options:
             _LOGGER.error(
                 f"Invalid option '{option}' for {self._select_key}. "
-                f"Valid options: {list(self._reverse_options_map.keys())}"
+                f"Valid options: {self.entity_description.options}"
             )
             return
 
         # Get the numeric value to write
-        numeric_value = self._reverse_options_map[option]
+        numeric_value = int(option)
         address = self._register_config["address"]
 
         _LOGGER.info(
