@@ -4,5 +4,5 @@
   "homeassistant": "2024.1.0",
   "content_in_root": false,
   "filename": "solakon_one.zip",
-  "country": ["DE"]
+  "country": ["EN", "DE"]
 }
