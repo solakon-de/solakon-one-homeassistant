@@ -129,7 +129,6 @@ class SolakonSelect(SolakonEntity, SelectEntity):
         """Initialize the select entity."""
         super().__init__(coordinator, config_entry, device_info, description.key)
         self._hub = hub
-        self._select_key = description.key
         self._register_config = REGISTERS[description.key]
         
         self.entity_description = description
@@ -137,16 +136,11 @@ class SolakonSelect(SolakonEntity, SelectEntity):
         # Set entity ID
         self.entity_id = f"select.solakon_one_{description.key}"
 
-        # Set up options (mapping from numeric value to text)
-#        self._options_map = description.options  # e.g., {0: "Disable", 2: "EPS Mode"}
-#        self._reverse_options_map = {v: k for k, v in self._options_map.items()}  # e.g., {"Disable": 0}
-#        self._attr_options = list(self._options_map.values())  # ["Disable", "EPS Mode"]
-
     @callback
     def _handle_coordinator_update(self) -> None:
         """Handle updated data from the coordinator."""
-        if self.coordinator.data and self._select_key in self.coordinator.data:
-            raw_value = self.coordinator.data[self._select_key]
+        if self.coordinator.data and self.entity_description.key in self.coordinator.data:
+            raw_value = self.coordinator.data[self.entity_description.key]
 
             # raw_value is already processed by modbus.py (scaled if needed)
             # For selects, it should be an integer
@@ -158,17 +152,17 @@ class SolakonSelect(SolakonEntity, SelectEntity):
                 if str_value in self.entity_description.options:
                     self._attr_current_option = str_value
                     _LOGGER.debug(
-                        f"{self._select_key}: raw_value={raw_value}, mapped to '{self._attr_current_option}'"
+                        f"{self.entity_description.key}: raw_value={raw_value}, mapped to '{self._attr_current_option}'"
                     )
                 else:
                     _LOGGER.warning(
-                        f"Unknown value {value} for {self._select_key}. "
+                        f"Unknown value {value} for {self.entity_description.key}. "
                         f"Valid options: {self.entity_description.options}"
                     )
                     self._attr_current_option = None
             else:
                 _LOGGER.warning(
-                    f"Invalid value type for {self._select_key}: {type(raw_value)}"
+                    f"Invalid value type for {self.entity_description.key}: {type(raw_value)}"
                 )
                 self._attr_current_option = None
         else:
@@ -180,7 +174,7 @@ class SolakonSelect(SolakonEntity, SelectEntity):
         """Change the selected option."""
         if option not in self.entity_description.options:
             _LOGGER.error(
-                f"Invalid option '{option}' for {self._select_key}. "
+                f"Invalid option '{option}' for {self.entity_description.key}. "
                 f"Valid options: {self.entity_description.options}"
             )
             return
@@ -190,21 +184,21 @@ class SolakonSelect(SolakonEntity, SelectEntity):
         address = self._register_config["address"]
 
         _LOGGER.info(
-            f"Setting {self._select_key} at address {address} to '{option}' (value: {numeric_value})"
+            f"Setting {self.entity_description.key} at address {address} to '{option}' (value: {numeric_value})"
         )
 
         # Write the value to the register (single register for selects)
         success = await self._hub.async_write_register(address, numeric_value)
 
         if success:
-            _LOGGER.info(f"Successfully set {self._select_key} to '{option}'")
+            _LOGGER.info(f"Successfully set {self.entity_description.key} to '{option}'")
             # Update the state immediately (optimistic update)
             self._attr_current_option = option
             self.async_write_ha_state()
             # Request coordinator to refresh data to confirm the change
             await self.coordinator.async_request_refresh()
         else:
-            _LOGGER.error(f"Failed to set {self._select_key} to '{option}'")
+            _LOGGER.error(f"Failed to set {self.entity_description.key} to '{option}'")
 
     @property
     def available(self) -> bool:
@@ -226,21 +220,16 @@ class RemoteControlModeSelect(SolakonEntity, SelectEntity):
         hub,
         config_entry: ConfigEntry,
         device_info: dict,
-        description: SolakonSelectEntityDescription,
+        description: SelectEntityDescription,
     ) -> None:
         """Initialize the remote control mode select entity."""
         super().__init__(coordinator, config_entry, device_info, description.key)
         self._hub = hub
-        
+
         self.entity_description = description
 
         # Set entity ID
         self.entity_id = f"select.solakon_one_{description.key}"
-
-        # Set up options (mapping from mode enum value to text)
-        self._options_map = description.options
-        self._reverse_options_map = {v: k for k, v in self._options_map.items()}
-        self._attr_options = list(self._options_map.values())
 
     @callback
     def _handle_coordinator_update(self) -> None:
@@ -256,8 +245,8 @@ class RemoteControlModeSelect(SolakonEntity, SelectEntity):
                 mode_value = int(mode)
 
                 # Convert mode value to string option
-                if mode_value in self._options_map:
-                    self._attr_current_option = self._options_map[mode_value]
+                if mode_value in self.entity_description.options:
+                    self._attr_current_option = mode_value
                     _LOGGER.debug(
                         f"Remote control mode: register={register_value:#06x}, "
                         f"mode={mode.name}, option='{self._attr_current_option}'"
@@ -265,7 +254,7 @@ class RemoteControlModeSelect(SolakonEntity, SelectEntity):
                 else:
                     _LOGGER.warning(
                         f"Unknown remote control mode value {mode_value}. "
-                        f"Valid modes: {self._options_map}"
+                        f"Valid modes: {self.entity_description.options}"
                     )
                     self._attr_current_option = None
             else:
@@ -335,7 +324,7 @@ class ForceModeSelect(SolakonEntity, SelectEntity):
         hub,
         config_entry: ConfigEntry,
         device_info: dict,
-        description: SolakonSelectEntityDescription,
+        description: SelectEntityDescription,
     ) -> None:
         """Initialize the force mode select entity."""
         super().__init__(coordinator, config_entry, device_info, description.key)
@@ -345,11 +334,6 @@ class ForceModeSelect(SolakonEntity, SelectEntity):
 
         # Set entity ID
         self.entity_id = "select.solakon_one_{description.key}"
-
-        # Set up options (mapping from mode value to text)
-        self._options_map = description.options  # {0: "Disabled", 1: "Force Discharge", 3: "Force Charge"}
-        self._reverse_options_map = {v: k for k, v in self._options_map.items()}
-        self._attr_options = list(self._options_map.values())
 
     @callback
     def _handle_coordinator_update(self) -> None:
@@ -364,8 +348,8 @@ class ForceModeSelect(SolakonEntity, SelectEntity):
                 # Force modes: 0 (disabled), 1 (force discharge), 3 (force charge)
                 mode_value = register_value & 0b1111  # Lower 4 bits
 
-                if mode_value in self._options_map:
-                    self._attr_current_option = self._options_map[mode_value]
+                if mode_value in self.entity_description.options:
+                    self._attr_current_option = self.mode_value
                     _LOGGER.debug(
                         f"Force mode: register={register_value:#06x}, "
                         f"mode={mode_value}, option='{self._attr_current_option}'"
