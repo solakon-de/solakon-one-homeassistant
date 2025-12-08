@@ -16,9 +16,6 @@
       "battery_max_discharge_current": {
         "default": "mdi:battery-charging"
       },
-      "remote_active_power": {
-        "default": "mdi:flash"
-      },
       "remote_reactive_power": {
         "default": "mdi:flash-outline"
       },
@@ -27,9 +24,6 @@
       },
       "force_duration": {
         "default": "mdi:timer-outline"
-      },
-      "force_power": {
-        "default": "mdi:flash"
       }
     },
     "select": {
