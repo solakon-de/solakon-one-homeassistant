@@ -9,5 +9,5 @@
   "iot_class": "local_polling",
   "issue_tracker": "https://github.com/solakon-de/solakon-one-homeassistant/issues",
   "requirements": ["pymodbus>=3.11.1"],
-  "version": "1.1.1"
+  "version": "1.1.2"
 }
