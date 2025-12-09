@@ -244,18 +244,18 @@ class RemoteControlModeSelect(SolakonEntity, SelectEntity):
 
                 # Convert register value to mode
                 mode = register_value_to_mode(register_value)
-                mode_value = int(mode)
+                str_value = f"{mode}"
 
                 # Convert mode value to string option
-                if mode_value in self.entity_description.options:
-                    self._attr_current_option = mode_value
+                if str_value in self.entity_description.options:
+                    self._attr_current_option = str_value
                     _LOGGER.debug(
                         f"Remote control mode: register={register_value:#06x}, "
                         f"mode={mode.name}, option='{self._attr_current_option}'"
                     )
                 else:
                     _LOGGER.warning(
-                        f"Unknown remote control mode value {mode_value}. "
+                        f"Unknown remote control mode value {str_value}. "
                         f"Valid modes: {self.entity_description.options}"
                     )
                     self._attr_current_option = None
