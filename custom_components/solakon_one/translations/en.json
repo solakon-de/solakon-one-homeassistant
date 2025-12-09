@@ -106,14 +106,8 @@
       "daily_generation": {
         "name": "Daily Energy"
       },
-      "eps_current": {
-        "name": "EPS Current"
-      },
       "eps_power": {
         "name": "EPS Power"
-      },
-      "eps_voltage": {
-        "name": "EPS Voltage"
       },
       "grid_frequency": {
         "name": "Grid Frequency"
