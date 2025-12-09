@@ -55,9 +55,7 @@ REGISTERS = {
     "total_pv_power": {"address": 39118, "count": 2, "type": "i32", "scale": 1, "unit": "W"},
 
     # EPS Information
-    "eps_voltage": {"address": 31010, "count": 1, "type": "i16", "scale": 10, "unit": "V"},
-    "eps_current": {"address": 31011, "count": 1, "type": "i16", "scale": 10, "unit": "A"},
-    "eps_power": {"address": 31047, "count": 2, "type": "i32", "scale": 1, "unit": "W"},
+    "eps_power": {"address": 39216, "count": 2, "type": "i32", "scale": 1, "unit": "W"},
 
     # Grid Information
     "grid_r_voltage": {"address": 39123, "count": 1, "type": "i16", "scale": 10, "unit": "V"},
