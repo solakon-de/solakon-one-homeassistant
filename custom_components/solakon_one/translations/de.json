@@ -122,13 +122,22 @@
         "name": "Netz Spannung"
       },
       "grid_standard_code": {
-        "name": "Netzstandard Code"
+        "name": "Netzstandard Code",
+        "state": {
+          "6": "VDE0126",
+          "7": "VDE4105_DE"
+        }
       },
       "internal_temp": {
         "name": "Interne Temperature"
       },
       "network_status": {
-        "name": "Netzwerk Status"
+        "name": "Netzwerk Status",
+        "state": {
+          "0": "Aus",
+          "1": "Getrennt",
+          "2": "Verbunden"
+        }
       },
       "power_factor": {
         "name": "Leistungsfaktor"
@@ -173,7 +182,18 @@
         "name": "Blindleistung"
       },
       "remote_control": {
-        "name": "Fernsteuerung Status"
+        "name": "Fernsteuerung Status",
+        "state": {
+          "0": "Aus",
+          "1": "Inverter entladen (PV Priority)",
+          "3": "Inverter laden (PV Priority)",
+          "5": "Batterie entladen",
+          "7": "Batterie laden",
+          "9": "Netz entladen",
+          "11": "Netz laden",
+          "13": "Inverter entladen (AC First)",
+          "15": "Inverter laden (AC First)"
+        }
       },
       "remote_timeout_countdown": {
         "name": "Fernsteuerung Zeitüberschreitung"
