@@ -91,7 +91,6 @@ NUMBER_ENTITY_DESCRIPTIONS: tuple[NumberEntityDescription, ...] = (
         native_min_value=0,
         native_max_value=40,
         native_step=1,
-        suggested_display_precision=0,
     ),
     NumberEntityDescription(
         key="battery_max_discharge_current",
@@ -102,7 +101,6 @@ NUMBER_ENTITY_DESCRIPTIONS: tuple[NumberEntityDescription, ...] = (
         native_min_value=0,
         native_max_value=40,
         native_step=1,
-        suggested_display_precision=0,
     ),
     NumberEntityDescription(
         key="remote_active_power",
@@ -113,7 +111,6 @@ NUMBER_ENTITY_DESCRIPTIONS: tuple[NumberEntityDescription, ...] = (
         native_min_value=-100000, # -100kW (charging/import)
         native_max_value=100000,  # +100kW (discharging/export)
         native_step=100,
-        suggested_display_precision=0,
     ),
     NumberEntityDescription(
         key="remote_reactive_power",
@@ -124,7 +121,6 @@ NUMBER_ENTITY_DESCRIPTIONS: tuple[NumberEntityDescription, ...] = (
         native_min_value=-100000,
         native_max_value=100000,
         native_step=100,
-        suggested_display_precision=0,
     ),
     NumberEntityDescription(
         key="remote_timeout_set",
@@ -135,7 +131,6 @@ NUMBER_ENTITY_DESCRIPTIONS: tuple[NumberEntityDescription, ...] = (
         native_min_value=0,
         native_max_value=3600,
         native_step=10,
-        suggested_display_precision=0,
     ),
 )
 
@@ -159,7 +154,6 @@ FORCE_POWER_NUMBER_ENTITY_DESCRIPTION = NumberEntityDescription(
     native_min_value=0,
     native_max_value=1200,  # Will be validated based on mode (1200W charge, 800W discharge)
     native_step=10,
-    suggested_display_precision=0,
 )
 
 async def async_setup_entry(
