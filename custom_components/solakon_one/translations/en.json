@@ -122,13 +122,22 @@
         "name": "Grid R Voltage"
       },
       "grid_standard_code": {
-        "name": "Grid Standard Code"
+        "name": "Grid Standard Code",
+        "state": {
+          "6": "VDE0126",
+          "7": "VDE4105_DE"
+        }
       },
       "internal_temp": {
         "name": "Internal Temperature"
       },
       "network_status": {
-        "name": "Network Status"
+        "name": "Network Status",
+        "state": {
+          "0": "Disabled",
+          "1": "Disconnected",
+          "2": "Connected"
+        }
       },
       "power_factor": {
         "name": "Power Factor"
@@ -173,7 +182,18 @@
         "name": "Reactive Power"
       },
       "remote_control": {
-        "name": "Remote Control Status"
+        "name": "Remote Control Status",
+        "state": {
+          "0": "Disabled",
+          "1": "Inverter Discharge (PV Priority)",
+          "3": "Inverter Charge (PV Priority)",
+          "5": "Battery Discharge",
+          "7": "Battery Charge",
+          "9": "Grid Discharge",
+          "11": "Grid Charge",
+          "13": "Inverter Discharge (AC First)",
+          "15": "Inverter Charge (AC First)"
+        }
       },
       "remote_timeout_countdown": {
         "name": "Remote Timeout Countdown"
