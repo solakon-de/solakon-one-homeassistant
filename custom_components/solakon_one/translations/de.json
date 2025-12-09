@@ -106,8 +106,8 @@
       "daily_generation": {
         "name": "Tägliche Energie"
       },
-      "eps_voltage": {
-        "name": "Steckdose Spannung"
+      "eps_power": {
+        "name": "Steckdose Leistung"
       },
       "grid_frequency": {
         "name": "Netzfrequenz"
