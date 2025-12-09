@@ -307,19 +307,16 @@ class SolakonSensor(SolakonEntity, SensorEntity):
     ) -> None:
         """Initialize the sensor."""
         super().__init__(coordinator, config_entry, device_info, description.key)
-        self._sensor_key = description.key
-
+        # Set entity description
         self.entity_description = description
-
         # Set entity ID
         self.entity_id = f"sensor.solakon_one_{description.key}"
-
 
     @callback
     def _handle_coordinator_update(self) -> None:
         """Handle updated data from the coordinator."""
-        if self.coordinator.data and self._sensor_key in self.coordinator.data:
-            value = self.coordinator.data[self._sensor_key]
+        if self.coordinator.data and self.entity_description.key in self.coordinator.data:
+            value = self.coordinator.data[self.entity_description.key]
 
             # Handle special cases
             if isinstance(value, dict):
