@@ -63,13 +63,34 @@
     },
     "select": {
       "eps_output": {
-        "name": "Steckdose"
+        "name": "Steckdose",
+        "state": {
+          "0": "Aus",
+          "2": "Notstromversorgung",
+          "3": "Unterbrechungsfreie Stromversorgung"
+        }
       },
       "force_mode": {
-        "name": "Modus überschreiben"
+        "name": "Modus überschreiben",
+        "state": {
+          "0": "Aus",
+          "1": "Entladen",
+          "3": "Laden"
+        }
       },
       "remote_control_mode": {
-        "name": "Modus Fernsteuerung"
+        "name": "Modus Fernsteuerung",
+        "state": {
+          "0": "Aus",
+          "1": "Inverter entladen (PV priorität)",
+          "3": "Inverter laden (PV priorität)",
+          "5": "Batterie entladen",
+          "7": "Battery laden",
+          "9": "Netz entladen",
+          "11": "Netz laden",
+          "13": "Inverter entladen (Netz priorität)",
+          "15": "Inverter laden (Netz priorität)"
+        }
       }
     },
     "sensor": {
