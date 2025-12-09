@@ -265,6 +265,7 @@ SENSOR_ENTITY_DESCRIPTIONS: tuple[SensorEntityDescription, ...] = (
         device_class=SensorDeviceClass.DURATION,
         entity_category=EntityCategory.CONFIG,
         native_unit_of_measurement=UnitOfTime.SECONDS,
+        suggested_display_precision=0,
     )
 )
 
