@@ -106,7 +106,7 @@
       "daily_generation": {
         "name": "Tägliche Energie"
       },
-            "eps_current": {
+      "eps_current": {
         "name": "Steckdose Strom"
       },
       "eps_power": {
