@@ -145,8 +145,7 @@ class SolakonSelect(SolakonEntity, SelectEntity):
             # raw_value is already processed by modbus.py (scaled if needed)
             # For selects, it should be an integer
             if isinstance(raw_value, (int, float)):
-                value = int(raw_value)
-                str_value = f"{value}"
+                str_value = f"{int(raw_value)}"
 
                 # Convert numeric value to string option
                 if str_value in self.entity_description.options:
@@ -156,7 +155,7 @@ class SolakonSelect(SolakonEntity, SelectEntity):
                     )
                 else:
                     _LOGGER.warning(
-                        f"Unknown value {value} for {self.entity_description.key}. "
+                        f"Unknown value {str_value} for {self.entity_description.key}. "
                         f"Valid options: {self.entity_description.options}"
                     )
                     self._attr_current_option = None
@@ -244,7 +243,7 @@ class RemoteControlModeSelect(SolakonEntity, SelectEntity):
 
                 # Convert register value to mode
                 mode = register_value_to_mode(register_value)
-                str_value = f"{mode}"
+                str_value = f"{int(mode)}"
 
                 # Convert mode value to string option
                 if str_value in self.entity_description.options:
@@ -333,7 +332,7 @@ class ForceModeSelect(SolakonEntity, SelectEntity):
         self._hub = hub
         self._register_key = "remote_control"
         self._register_config = REGISTERS[self._register_key]
-        
+
         self.entity_description = description
 
         # Set entity ID
@@ -351,12 +350,13 @@ class ForceModeSelect(SolakonEntity, SelectEntity):
                 # Check if the value matches one of our force modes
                 # Force modes: 0 (disabled), 1 (force discharge), 3 (force charge)
                 mode_value = register_value & 0b1111  # Lower 4 bits
+                str_value = f"{mode_value}"
 
-                if mode_value in self.entity_description.options:
-                    self._attr_current_option = self.mode_value
+                if str_value in self.entity_description.options:
+                    self._attr_current_option = str_value
                     _LOGGER.debug(
                         f"Force mode: register={register_value:#06x}, "
-                        f"mode={mode_value}, option='{self._attr_current_option}'"
+                        f"mode={str_value}, option='{self._attr_current_option}'"
                     )
                 else:
                     # Not a force mode (could be other remote control mode)
