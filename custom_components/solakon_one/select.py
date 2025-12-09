@@ -87,7 +87,7 @@ async def async_setup_entry(
             description,
         )
         for description in SELECT_ENTITY_DESCRIPTIONS
-        # Only create number entities for registers that exist and have rw flag
+        # Only create select entities for registers that exist and have rw flag
         if description.key in REGISTERS and REGISTERS[description.key].get("rw", False)
     )
     # Special handling for remote_control_mode (virtual entity)
@@ -225,6 +225,8 @@ class RemoteControlModeSelect(SolakonEntity, SelectEntity):
         """Initialize the remote control mode select entity."""
         super().__init__(coordinator, config_entry, device_info, description.key)
         self._hub = hub
+        self._register_key = "remote_control"
+        self._register_config = REGISTERS[self._register_key]
 
         self.entity_description = description
 
@@ -234,8 +236,8 @@ class RemoteControlModeSelect(SolakonEntity, SelectEntity):
     @callback
     def _handle_coordinator_update(self) -> None:
         """Handle updated data from the coordinator."""
-        if self.coordinator.data and "remote_control" in self.coordinator.data:
-            raw_value = self.coordinator.data["remote_control"]
+        if self.coordinator.data and self._register_key in self.coordinator.data:
+            raw_value = self.coordinator.data[self._register_key]
 
             if isinstance(raw_value, (int, float)):
                 register_value = int(raw_value)
@@ -269,22 +271,22 @@ class RemoteControlModeSelect(SolakonEntity, SelectEntity):
 
     async def async_select_option(self, option: str) -> None:
         """Change the selected option."""
-        if option not in self._reverse_options_map:
+        if option not in self.entity_description.options:
             _LOGGER.error(
                 f"Invalid option '{option}' for remote_control_mode. "
-                f"Valid options: {list(self._reverse_options_map.keys())}"
+                f"Valid options: {self.entity_description.options}"
             )
             return
 
         # Get the mode enum value
-        mode_value = self._reverse_options_map[option]
+        mode_value = int(option)
         mode = RemoteControlMode(mode_value)
 
         # Convert mode to register value
         register_value = mode_to_register_value(mode)
 
         # Get the register address for remote_control
-        address = REGISTERS["remote_control"]["address"]
+        address = self._register_config["address"]
 
         _LOGGER.info(
             f"Setting remote_control_mode to '{option}' "
@@ -329,6 +331,8 @@ class ForceModeSelect(SolakonEntity, SelectEntity):
         """Initialize the force mode select entity."""
         super().__init__(coordinator, config_entry, device_info, description.key)
         self._hub = hub
+        self._register_key = "remote_control"
+        self._register_config = REGISTERS[self._register_key]
         
         self.entity_description = description
 
@@ -338,8 +342,8 @@ class ForceModeSelect(SolakonEntity, SelectEntity):
     @callback
     def _handle_coordinator_update(self) -> None:
         """Handle updated data from the coordinator."""
-        if self.coordinator.data and "remote_control" in self.coordinator.data:
-            raw_value = self.coordinator.data["remote_control"]
+        if self.coordinator.data and self._register_key in self.coordinator.data:
+            raw_value = self.coordinator.data[self._register_key]
 
             if isinstance(raw_value, (int, float)):
                 register_value = int(raw_value)
@@ -356,7 +360,7 @@ class ForceModeSelect(SolakonEntity, SelectEntity):
                     )
                 else:
                     # Not a force mode (could be other remote control mode)
-                    self._attr_current_option = self._options_map[0]  # Default to "Disabled"
+                    self._attr_current_option = self.entity_description.options[0]  # Default to "Disabled"
                     _LOGGER.debug(
                         f"Force mode: register={register_value:#06x} not a force mode, showing as Disabled"
                     )
@@ -372,18 +376,18 @@ class ForceModeSelect(SolakonEntity, SelectEntity):
 
     async def async_select_option(self, option: str) -> None:
         """Change the selected option."""
-        if option not in self._reverse_options_map:
+        if option not in self.entity_description.options:
             _LOGGER.error(
                 f"Invalid option '{option}' for force_mode. "
-                f"Valid options: {list(self._reverse_options_map.keys())}"
+                f"Valid options: {self.entity_description.options}"
             )
             return
 
         # Get the mode value (0, 1, or 3)
-        mode_value = self._reverse_options_map[option]
+        mode_value = int(option)
 
         # Get the register address for remote_control
-        address = REGISTERS["remote_control"]["address"]
+        address = self._register_config["address"]
 
         _LOGGER.info(
             f"Setting force_mode to '{option}' "
