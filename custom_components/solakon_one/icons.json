@@ -2,13 +2,13 @@
   "entity": {
     "number": {
       "minimum_soc": {
-        "default": "mdi:battery-low"
+        "default": "mdi:battery-outline"
       },
       "maximum_soc": {
         "default": "mdi:battery-high"
       },
       "minimum_soc_ongrid": {
-        "default": "mdi:battery-low"
+        "default": "mdi:power-plug-battery-outline"
       },
       "battery_max_charge_current": {
         "default": "mdi:battery-charging"
@@ -28,13 +28,16 @@
     },
     "select": {
       "eps_output": {
-        "default": "mdi:power-standby"
+        "default": "mdi:power-plug",
+        "state": {
+          "0": "mdi:power-plug-off"
+        }
       },
       "remote_control_mode": {
         "default": "mdi:remote"
       },
       "force_mode": {
-        "default": "mdi:battery-arrow-up-down"
+        "default": "mdi:debug-step-over"
       }
     },
     "sensor": {
@@ -53,54 +56,14 @@
       "total_pv_power": {
         "default": "mdi:solar-power"
       },
-      "active_power": {
-        "default": "mdi:flash"
-      },
       "reactive_power": {
         "default": "mdi:flash-outline"
       },
-      "battery_combined_power": {
-        "default": "mdi:battery-charging"
+      "bms1_soh": {
+        "default": "mdi:hospital-box-outline"
       },
-      "battery_soc": {
-        "default": "mdi:battery-unknown",
-        "range": {
-          "0": "mdi:battery-alert",
-          "10": "mdi:battery-10",
-          "20": "mdi:battery-20",
-          "30": "mdi:battery-30",
-          "40": "mdi:battery-40",
-          "50": "mdi:battery-50",
-          "60": "mdi:battery-60",
-          "70": "mdi:battery-70",
-          "80": "mdi:battery-80",
-          "90": "mdi:battery-90",
-          "100": "mdi:battery"
-        }
-      },
-      "eps_power": {
-        "default": "mdi:solar-power"
-      },
-      "pv1_voltage": {
-        "default": "mdi:flash"
-      },
-      "pv2_voltage": {
-        "default": "mdi:flash"
-      },
-      "pv3_voltage": {
-        "default": "mdi:flash"
-      },
-      "pv4_voltage": {
-        "default": "mdi:flash"
-      },
-      "grid_r_voltage": {
-        "default": "mdi:sine-wave"
-      },
-      "battery1_voltage": {
-        "default": "mdi:battery"
-      },
-      "eps_voltage": {
-        "default": "mdi:flash"
+      "grid_standard_code": {
+        "default": "mdi:transmission-tower"
       },
       "pv1_current": {
         "default": "mdi:current-dc"
@@ -117,26 +80,12 @@
       "battery1_current": {
         "default": "mdi:current-dc"
       },
-      "eps_current": {
-        "default": "mdi:current-dc"
-      },
-      "cumulative_generation": {
-        "default": "mdi:solar-panel"
-      },
-      "daily_generation": {
-        "default": "mdi:solar-panel"
-      },
-      "internal_temp": {
-        "default": "mdi:thermometer"
-      },
-      "power_factor": {
-        "default": "mdi:angle-acute"
-      },
-      "grid_frequency": {
-        "default": "mdi:sine-wave"
-      },
       "network_status": {
-        "default": "mdi:network"
+        "default": "mdi:network",
+        "state": {
+          "1": "mdi:close-network",
+          "2": "mdi:network"
+        }
       },
       "remote_control": {
         "default": "mdi:remote"
