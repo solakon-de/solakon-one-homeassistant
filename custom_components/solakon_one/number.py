@@ -91,6 +91,7 @@ NUMBER_ENTITY_DESCRIPTIONS: tuple[NumberEntityDescription, ...] = (
         native_min_value=0,
         native_max_value=40,
         native_step=1,
+        entity_registry_enabled_default=False,
     ),
     NumberEntityDescription(
         key="battery_max_discharge_current",
@@ -101,6 +102,7 @@ NUMBER_ENTITY_DESCRIPTIONS: tuple[NumberEntityDescription, ...] = (
         native_min_value=0,
         native_max_value=40,
         native_step=1,
+        entity_registry_enabled_default=False,
     ),
     NumberEntityDescription(
         key="remote_active_power",
