@@ -22,6 +22,8 @@ REGISTERS = {
     "manager_version": {"address": 36003, "count": 1, "type": "u16"},
 
     # Battery Version Information (Table 3-3)
+    "bms1_design_energy": {"address": 37635, "count": 1, "type": "i16", "scale": 0.1, "unit": "Wh"},
+
     "bms1_soh": {"address": 37624, "count": 1, "type": "u16", "scale": 1, "unit": "%"},
     "bms2_soh": {"address": 38322, "count": 1, "type": "u16", "scale": 1, "unit": "%"},
     "bms1_soc": {"address": 37612, "count": 1, "type": "i16", "scale": 1, "unit": "%"},

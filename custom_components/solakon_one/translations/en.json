@@ -200,6 +200,9 @@
       },
       "total_pv_power": {
         "name": "PV Power"
+      },
+      "bms1_design_energy": {
+        "name": "Battery Capacity"
       }
     }
   },
