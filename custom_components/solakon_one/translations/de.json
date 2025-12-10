@@ -122,7 +122,7 @@
         "name": "Netzspannung"
       },
       "grid_standard_code": {
-        "name": "Netzstandard Code",
+        "name": "Netzstandard",
         "state": {
           "6": "VDE0126",
           "7": "VDE4105_DE"
@@ -132,7 +132,7 @@
         "name": "Interne Temperatur"
       },
       "network_status": {
-        "name": "Netzwerk Status",
+        "name": "Netzwerk",
         "state": {
           "0": "Aus",
           "1": "Getrennt",
@@ -182,7 +182,7 @@
         "name": "Blindleistung"
       },
       "remote_control": {
-        "name": "Fernsteuerung Status",
+        "name": "Fernsteuerung",
         "state": {
           "0": "Aus",
           "1": "Inverter entladen (PV Priority)",
