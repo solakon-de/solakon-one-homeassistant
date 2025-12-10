@@ -89,13 +89,16 @@
         "name": "Batterie Ladestand"
       },
       "bms1_ambient_temp": {
-        "name": "Umgebungstemperature"
+        "name": "Umgebungstemperatur"
+      },
+      "bms1_design_energy": {
+        "name": "Batteriekapazität"
       },
       "bms1_max_temp": {
-        "name": "BMS max. Temperature"
+        "name": "BMS max. Temperatur"
       },
       "bms1_min_temp": {
-        "name": "BMS min. Temperature"
+        "name": "BMS min. Temperatur"
       },
       "bms1_soh": {
         "name": "Batterie Gesundheitszustand"
@@ -119,16 +122,25 @@
         "name": "Netzfrequenz"
       },
       "grid_r_voltage": {
-        "name": "Netz Spannung"
+        "name": "Netzspannung"
       },
       "grid_standard_code": {
-        "name": "Netzstandard Code"
+        "name": "Netzstandard",
+        "state": {
+          "6": "VDE0126",
+          "7": "VDE4105_DE"
+        }
       },
       "internal_temp": {
-        "name": "Interne Temperature"
+        "name": "Interne Temperatur"
       },
       "network_status": {
-        "name": "Netzwerk Status"
+        "name": "Netzwerk",
+        "state": {
+          "0": "Aus",
+          "1": "Getrennt",
+          "2": "Verbunden"
+        }
       },
       "power_factor": {
         "name": "Leistungsfaktor"
@@ -173,7 +185,18 @@
         "name": "Blindleistung"
       },
       "remote_control": {
-        "name": "Fernsteuerung Status"
+        "name": "Fernsteuerung",
+        "state": {
+          "0": "Aus",
+          "1": "Inverter entladen (PV Priority)",
+          "3": "Inverter laden (PV Priority)",
+          "5": "Batterie entladen",
+          "7": "Batterie laden",
+          "9": "Netz entladen",
+          "11": "Netz laden",
+          "13": "Inverter entladen (AC First)",
+          "15": "Inverter laden (AC First)"
+        }
       },
       "remote_timeout_countdown": {
         "name": "Fernsteuerung Zeitüberschreitung"
@@ -186,13 +209,13 @@
   "options": {
     "step": {
       "init": {
-        "title": "Configure Options",
-        "description": "Adjust settings for your Solakon ONE device.",
+        "title": "Einstellungen anpassen",
+        "description": "Passe die Einstellungen für dein Solakon ONE an.",
         "data": {
-          "scan_interval": "Update Interval (seconds)"
+          "scan_interval": "Aktualisierungsintervall (Sekunden)"
         },
         "data_description": {
-          "scan_interval": "How often to poll the device for updates (1-300 seconds)"
+          "scan_interval": "In welchem Zeitintervall am Gerät Aktualisierungen abgefragt werden sollen (1-300 Sekunden)"
         }
       }
     }

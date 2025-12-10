@@ -22,6 +22,8 @@ REGISTERS = {
     "manager_version": {"address": 36003, "count": 1, "type": "u16"},
 
     # Battery Version Information (Table 3-3)
+    "bms1_design_energy": {"address": 37635, "count": 1, "type": "i16", "scale": 0.1, "unit": "Wh"},
+
     "bms1_soh": {"address": 37624, "count": 1, "type": "u16", "scale": 1, "unit": "%"},
     "bms2_soh": {"address": 38322, "count": 1, "type": "u16", "scale": 1, "unit": "%"},
     "bms1_soc": {"address": 37612, "count": 1, "type": "i16", "scale": 1, "unit": "%"},
@@ -55,9 +57,9 @@ REGISTERS = {
     "total_pv_power": {"address": 39118, "count": 2, "type": "i32", "scale": 1, "unit": "W"},
 
     # EPS Information
-    "eps_voltage": {"address": 31010, "count": 1, "type": "i16", "scale": 10, "unit": "V"},
-    "eps_current": {"address": 31011, "count": 1, "type": "i16", "scale": 10, "unit": "A"},
-    "eps_power": {"address": 31047, "count": 2, "type": "i32", "scale": 1, "unit": "W"},
+    "eps_voltage": {"address": 39201, "count": 1, "type": "i16", "scale": 10, "unit": "V"},
+    "eps_current": {"address": 39204, "count": 1, "type": "i16", "scale": 10, "unit": "A"},
+    "eps_power": {"address": 39216, "count": 2, "type": "i32", "scale": 1, "unit": "W"},
 
     # Grid Information
     "grid_r_voltage": {"address": 39123, "count": 1, "type": "i16", "scale": 10, "unit": "V"},
