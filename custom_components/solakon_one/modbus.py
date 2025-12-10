@@ -202,6 +202,10 @@ class SolakonModbusHub:
         async with self._lock:
             for key, config in REGISTERS.items():
                 try:
+                    # Skip bitfield types for now
+                    if config.get("type") in ("bitfield16", "bitfield32"):
+                        continue
+
                     # Read register with device_id parameter (like working script)
                     result = await self._client.read_holding_registers(
                         address=config["address"],
@@ -230,11 +234,6 @@ class SolakonModbusHub:
                     
         return data
 
-    def _extract_bitfield(self, value, start, length) -> bool:
-        """Extracts a bitflag from a register value."""
-        mask = (1 << length) - 1
-        return bool((value >> start) & mask)
-
     async def async_read_all_data(self) -> dict[str, Any]:
         """Read all data from the device."""
         return await self.async_read_registers()
@@ -250,19 +249,12 @@ class SolakonModbusHub:
         scale = config.get("scale", 1)
 
         try:
-            if data_type in ("bitfield16"):
-                value = self._extract_bitfield(registers[0], config.get("bit", 0), 1)
-            elif data_type in ("uint16", "u16"):
+            if data_type in ("uint16", "u16"):
                 value = registers[0]
             elif data_type in ("int16", "i16"):
                 value = registers[0]
                 if value > 0x7FFF:  # Using same conversion as working script
                     value = value - 0x10000
-            elif data_type in ("bitfield32"):
-                if len(registers) < 2:
-                    return None
-                value = (registers[0] << 16) | registers[1]
-                value = self._extract_bitfield(value, config.get("bit", 0), 1)
             elif data_type in ("uint32", "u32"):
                 if len(registers) < 2:
                     return None
