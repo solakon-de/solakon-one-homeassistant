@@ -125,7 +125,7 @@
         "name": "Grid R Voltage"
       },
       "grid_standard_code": {
-        "name": "Grid Standard Code",
+        "name": "Grid Standard",
         "state": {
           "6": "VDE0126",
           "7": "VDE4105_DE"
@@ -135,7 +135,7 @@
         "name": "Internal Temperature"
       },
       "network_status": {
-        "name": "Network Status",
+        "name": "Network",
         "state": {
           "0": "Disabled",
           "1": "Disconnected",
@@ -185,7 +185,7 @@
         "name": "Reactive Power"
       },
       "remote_control": {
-        "name": "Remote Control Status",
+        "name": "Remote Control",
         "state": {
           "0": "Disabled",
           "1": "Inverter Discharge (PV Priority)",
