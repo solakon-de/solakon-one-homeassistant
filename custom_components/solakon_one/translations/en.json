@@ -91,6 +91,9 @@
       "bms1_ambient_temp": {
         "name": "Ambient Temperature"
       },
+      "bms1_design_energy": {
+        "name": "Battery Capacity"
+      },
       "bms1_max_temp": {
         "name": "BMS max Temperature"
       },
