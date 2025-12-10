@@ -29,6 +29,11 @@
     }
   },
   "entity": {
+    "binary_sensor": {
+      "island_mode": {
+        "name": "Island mode"
+      }
+    },
     "number": {
       "battery_max_charge_current": {
         "name": "Maximum Charge Current"

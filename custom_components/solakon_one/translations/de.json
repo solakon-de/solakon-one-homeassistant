@@ -29,6 +29,11 @@
     }
   },
   "entity": {
+    "binary_sensor": {
+      "island_mode": {
+        "name": "Inselbetrieb"
+      }
+    },
     "number": {
       "battery_max_charge_current": {
         "name": "Maximaler Ladestrom"
