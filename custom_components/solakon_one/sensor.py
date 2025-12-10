@@ -273,6 +273,7 @@ SENSOR_ENTITY_DESCRIPTIONS: tuple[SensorEntityDescription, ...] = (
         state_class=SensorStateClass.MEASUREMENT,
         device_class=SensorDeviceClass.ENERGY_STORAGE,
         native_unit_of_measurement=UnitOfEnergy.WATT_HOUR,
+        entity_category=EntityCategory.DIAGNOSTIC,
         suggested_display_precision=2,
         suggested_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
     )
