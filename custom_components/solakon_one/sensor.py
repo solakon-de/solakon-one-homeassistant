@@ -227,6 +227,15 @@ SENSOR_ENTITY_DESCRIPTIONS: tuple[SensorEntityDescription, ...] = (
         native_unit_of_measurement=UnitOfTemperature.CELSIUS,
     ),
     SensorEntityDescription(
+        key="bms1_design_energy",
+        state_class=SensorStateClass.MEASUREMENT,
+        device_class=SensorDeviceClass.ENERGY_STORAGE,
+        native_unit_of_measurement=UnitOfEnergy.WATT_HOUR,
+        entity_category=EntityCategory.DIAGNOSTIC,
+        suggested_display_precision=2,
+        suggested_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
+    ),
+    SensorEntityDescription(
         key="bms1_max_temp",
         state_class=SensorStateClass.MEASUREMENT,
         device_class=SensorDeviceClass.TEMPERATURE,
@@ -267,15 +276,6 @@ SENSOR_ENTITY_DESCRIPTIONS: tuple[SensorEntityDescription, ...] = (
         state_class=SensorStateClass.MEASUREMENT,
         device_class=SensorDeviceClass.DURATION,
         native_unit_of_measurement=UnitOfTime.SECONDS,
-    ),
-    SensorEntityDescription(
-        key="bms1_design_energy",
-        state_class=SensorStateClass.MEASUREMENT,
-        device_class=SensorDeviceClass.ENERGY_STORAGE,
-        native_unit_of_measurement=UnitOfEnergy.WATT_HOUR,
-        entity_category=EntityCategory.DIAGNOSTIC,
-        suggested_display_precision=2,
-        suggested_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
     )
 )
 
