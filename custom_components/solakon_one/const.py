@@ -1,6 +1,8 @@
 """Constants for the Solakon ONE integration."""
 from typing import Final
 
+from homeassistant.const import Platform
+
 DOMAIN: Final = "solakon_one"
 DEFAULT_NAME: Final = "Solakon ONE"
 DEFAULT_PORT: Final = 502
@@ -8,6 +10,12 @@ DEFAULT_SLAVE_ID: Final = 1
 DEFAULT_SCAN_INTERVAL: Final = 30
 SCAN_INTERVAL: Final = 30
 
+PLATFORMS = [
+    Platform.BINARY_SENSOR,
+    Platform.NUMBER,
+    Platform.SELECT,
+    Platform.SENSOR,
+]
 
 # Register definitions
 REGISTERS = {
@@ -33,12 +41,11 @@ REGISTERS = {
     "max_active_power": {"address": 39055, "count": 2, "type": "i32", "scale": 1, "unit": "W"},
 
     # Status
-    "status_1": {"address": 39063, "count": 1, "type": "bitfield16"},
-    "status_3": {"address": 39065, "count": 2, "type": "u32"}, # bit 0: island mode
-    "status_3_0": {"address": 39065, "count": 2, "type": "bitfield32", "bit": 0}, # offgrid
-    "alarm_1": {"address": 39067, "count": 1, "type": "bitfield16"},
-    "alarm_2": {"address": 39068, "count": 1, "type": "bitfield16"},
-    "alarm_3": {"address": 39069, "count": 1, "type": "bitfield16"},
+    "status_1": {"address": 39063, "count": 1, "type": "u16"}, # bitfield16
+    "status_3": {"address": 39065, "count": 2, "type": "u32"}, # bitfield32
+    "alarm_1": {"address": 39067, "count": 1, "type": "u16"}, #bitfield16
+    "alarm_2": {"address": 39068, "count": 1, "type": "u16"}, #bitfield16
+    "alarm_3": {"address": 39069, "count": 1, "type": "u16"}, #bitfield16
     "grid_standard_code": {"address": 49079, "count": 1, "type": 'u16'},
 
     # PV Input
