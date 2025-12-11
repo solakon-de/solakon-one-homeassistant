@@ -1,11 +1,7 @@
 """Binary sensor platform for Solakon ONE integration."""
 from __future__ import annotations
 
-from collections.abc import Callable
-from dataclasses import dataclass
 import logging
-
-from bitflags import BitFlags
 
 from homeassistant.components.binary_sensor import (
     BinarySensorEntity,
@@ -22,24 +18,12 @@ from .entity import SolakonEntity
 _LOGGER = logging.getLogger(__name__)
 
 
-class Status3(BitFlags):
-    options = {
-        0: "island_mode",
-    }
-
-@dataclass(frozen=True)
-class SolakonBinarySensorEntityDescription(BinarySensorEntityDescription):
-    """Describes Solakon ONE binary sensor entity."""
-
-    value_fn: Callable[[dict], bool] | None = None
-
 # Binary sensor entity descriptions for Home Assistant
-BINARY_SENSOR_ENTITY_DESCRIPTIONS: tuple[SolakonBinarySensorEntityDescription, ...] = (
-    SolakonBinarySensorEntityDescription(
+BINARY_SENSOR_ENTITY_DESCRIPTIONS: tuple[BinarySensorEntityDescription, ...] = (
+    BinarySensorEntityDescription(
         key="island_mode",
         entity_category=EntityCategory.DIAGNOSTIC,
-        value_fn=lambda data: Status3(data.get("status_3", 0))["island_mode"] == 1,
-    )
+    ),
 )
 
 async def async_setup_entry(
@@ -56,15 +40,14 @@ async def async_setup_entry(
 
     entities = []
 
-#    entities.extend(
-    entities.append(
+    entities.extend(
         SolakonSensor(
             coordinator,
             config_entry,
             device_info,
-            BINARY_SENSOR_ENTITY_DESCRIPTIONS,
+            description,
         )
-#        for description in BINARY_SENSOR_ENTITY_DESCRIPTIONS
+        for description in BINARY_SENSOR_ENTITY_DESCRIPTIONS
     )
 
     async_add_entities(entities, True)
@@ -91,9 +74,8 @@ class SolakonSensor(SolakonEntity, BinarySensorEntity):
     def _handle_coordinator_update(self) -> None:
         """Handle updated data from the coordinator."""
 
-        if self.coordinator.data and self.entity_description.value_fn:
-            value = self.entity_description.value_fn(self.coordinator.data)
-            self._attr_is_on = bool(value) if isinstance(value, bool) else None
+        if self.coordinator.data and self.entity_description.key in self.coordinator.data:
+            self._attr_is_on = self.coordinator.data[self.entity_description.key]
         else:
             self._attr_is_on = None
 
