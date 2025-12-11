@@ -1,6 +1,7 @@
 """Constants for the Solakon ONE integration."""
 from typing import Final
 
+
 DOMAIN: Final = "solakon_one"
 
 CONF_DEVICE_ID: Final = "slave_id"
@@ -9,8 +10,6 @@ DEFAULT_NAME: Final = "Solakon ONE"
 DEFAULT_PORT: Final = 502
 DEFAULT_DEVICE_ID: Final = 1
 DEFAULT_SCAN_INTERVAL: Final = 30
-DEFAULT_MANUFACTURER: Final = "Solakon"
-DEFAULT_MODEL: Final = "One"
 
 # Register definitions
 REGISTERS = {

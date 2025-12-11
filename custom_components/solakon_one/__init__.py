@@ -13,7 +13,7 @@ from homeassistant.helpers.update_coordinator import DataUpdateCoordinator, Upda
 
 from .const import DOMAIN
 from .modbus import SolakonModbusHub
-from .utils import create_hub
+from .utils import getModbusHub
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -22,7 +22,7 @@ PLATFORMS: list[Platform] = [Platform.SENSOR, Platform.SELECT, Platform.NUMBER]
 
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     """Set up Solakon ONE from a config entry."""
-    hub = create_hub(hass, entry)
+    hub = getModbusHub(hass, entry)
 
     await hub.async_setup()
 

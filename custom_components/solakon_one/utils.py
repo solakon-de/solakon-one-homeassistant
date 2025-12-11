@@ -8,11 +8,11 @@ from homeassistant.core import HomeAssistant
 from .const import CONF_DEVICE_ID, DEFAULT_DEVICE_ID, DEFAULT_SCAN_INTERVAL
 from .modbus import SolakonModbusHub
 
-
 _LOGGER = logging.getLogger(__name__)
 
 
-def create_hub(hass : HomeAssistant, data: ConfigEntry) -> SolakonModbusHub:
+def getModbusHub(hass : HomeAssistant, data: ConfigEntry) -> SolakonModbusHub:
+    """Creates the hub to interact with the modbus."""
     return SolakonModbusHub(
         hass,
         data[CONF_HOST],
