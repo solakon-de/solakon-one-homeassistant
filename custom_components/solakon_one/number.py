@@ -223,29 +223,27 @@ class SolakonNumber(SolakonEntity, NumberEntity):
         """Initialize the number entity."""
         super().__init__(coordinator, config_entry, device_info, description.key)
         self._hub = hub
-        self._number_key = description.key
         self._register_config = REGISTERS[description.key]
-
+        # Set entity description
         self.entity_description = description
-
         # Set entity ID
         self.entity_id = f"number.solakon_one_{description.key}"
 
     @callback
     def _handle_coordinator_update(self) -> None:
         """Handle updated data from the coordinator."""
-        if self.coordinator.data and self._number_key in self.coordinator.data:
-            value = self.coordinator.data[self._number_key]
+        if self.coordinator.data and self.entity_description.key in self.coordinator.data:
+            value = self.coordinator.data[self.entity_description.key]
 
             # Value is already processed by modbus.py (scaled and converted)
             if isinstance(value, (int, float)):
                 self._attr_native_value = float(value)
                 _LOGGER.debug(
-                    f"{self._number_key}: Read value = {self._attr_native_value}"
+                    f"{self.entity_description.key}: Read value = {self._attr_native_value}"
                 )
             else:
                 _LOGGER.warning(
-                    f"Invalid value type for {self._number_key}: {type(value)}"
+                    f"Invalid value type for {self.entity_description.key}: {type(value)}"
                 )
                 self._attr_native_value = None
         else:
@@ -270,7 +268,7 @@ class SolakonNumber(SolakonEntity, NumberEntity):
             int_value = int(value * scale)
 
         _LOGGER.info(
-            f"Setting {self._number_key} at address {address} to {value} "
+            f"Setting {self.entity_description.key} at address {address} to {value} "
             f"(raw value: {int_value}, type: {data_type}, count: {count})"
         )
 
@@ -309,14 +307,14 @@ class SolakonNumber(SolakonEntity, NumberEntity):
             success = await self._hub.async_write_registers(address, values)
 
         if success:
-            _LOGGER.info(f"Successfully set {self._number_key} to {value}")
+            _LOGGER.info(f"Successfully set {self.entity_description.key} to {value}")
             # Update the state immediately (optimistic update)
             self._attr_native_value = float(value)
             self.async_write_ha_state()
             # Request coordinator to refresh data to confirm the change
             await self.coordinator.async_request_refresh()
         else:
-            _LOGGER.error(f"Failed to set {self._number_key} to {value}")
+            _LOGGER.error(f"Failed to set {self.entity_description.key} to {value}")
 
     @property
     def available(self) -> bool:
