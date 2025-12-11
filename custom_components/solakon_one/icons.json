@@ -41,16 +41,7 @@
       }
     },
     "sensor": {
-      "pv1_power": {
-        "default": "mdi:solar-power"
-      },
-      "pv2_power": {
-        "default": "mdi:solar-power"
-      },
-      "pv3_power": {
-        "default": "mdi:solar-power"
-      },
-      "pv4_power": {
+      "pvn_power": {
         "default": "mdi:solar-power"
       },
       "total_pv_power": {
@@ -65,16 +56,7 @@
       "grid_standard_code": {
         "default": "mdi:transmission-tower"
       },
-      "pv1_current": {
-        "default": "mdi:current-dc"
-      },
-      "pv2_current": {
-        "default": "mdi:current-dc"
-      },
-      "pv3_current": {
-        "default": "mdi:current-dc"
-      },
-      "pv4_current": {
+      "pvn_current": {
         "default": "mdi:current-dc"
       },
       "battery1_current": {

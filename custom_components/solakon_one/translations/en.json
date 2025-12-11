@@ -142,41 +142,14 @@
       "power_factor": {
         "name": "Power Factor"
       },
-      "pv1_current": {
-        "name": "PV1 Current"
+      "pvn_current": {
+        "name": "PV{n} Current"
       },
-      "pv1_power": {
-        "name": "PV1 Power"
+      "pvn_power": {
+        "name": "PV{n} Power"
       },
-      "pv1_voltage": {
-        "name": "PV1 Voltage"
-      },
-      "pv2_current": {
-        "name": "PV2 Current"
-      },
-      "pv2_power": {
-        "name": "PV2 Power"
-      },
-      "pv2_voltage": {
-        "name": "PV2 Voltage"
-      },
-      "pv3_current": {
-        "name": "PV3 Current"
-      },
-      "pv3_power": {
-        "name": "PV3 Power"
-      },
-      "pv3_voltage": {
-        "name": "PV3 Voltage"
-      },
-      "pv4_current": {
-        "name": "PV4 Current"
-      },
-      "pv4_power": {
-        "name": "PV4 Power"
-      },
-      "pv4_voltage": {
-        "name": "PV4 Voltage"
+      "pvn_voltage": {
+        "name": "PV{n} Voltage"
       },
       "reactive_power": {
         "name": "Reactive Power"

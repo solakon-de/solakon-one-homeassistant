@@ -66,24 +66,32 @@ SENSOR_ENTITY_DESCRIPTIONS: tuple[SensorEntityDescription, ...] = (
     ),
     SensorEntityDescription(
         key="pv1_power",
+        translation_key="pvn_power",
+        translation_placeholder={"n": "1"},
         state_class=SensorStateClass.MEASUREMENT,
         device_class=SensorDeviceClass.POWER,
         native_unit_of_measurement=UnitOfPower.WATT,
     ),
     SensorEntityDescription(
         key="pv2_power",
+        translation_key="pvn_power",
+        translation_placeholder={"n": "2"},
         state_class=SensorStateClass.MEASUREMENT,
         device_class=SensorDeviceClass.POWER,
         native_unit_of_measurement=UnitOfPower.WATT,
     ),
     SensorEntityDescription(
         key="pv3_power",
+        translation_key="pvn_power",
+        translation_placeholder={"n": "3"},
         state_class=SensorStateClass.MEASUREMENT,
         device_class=SensorDeviceClass.POWER,
         native_unit_of_measurement=UnitOfPower.WATT,
     ),
     SensorEntityDescription(
         key="pv4_power",
+        translation_key="pvn_power",
+        translation_placeholder={"n": "4"},
         state_class=SensorStateClass.MEASUREMENT,
         device_class=SensorDeviceClass.POWER,
         native_unit_of_measurement=UnitOfPower.WATT,
@@ -126,24 +134,32 @@ SENSOR_ENTITY_DESCRIPTIONS: tuple[SensorEntityDescription, ...] = (
     ),
     SensorEntityDescription(
         key="pv1_voltage",
+        translation_key="pvn_voltage",
+        translation_placeholder={"n": "1"},
         state_class=SensorStateClass.MEASUREMENT,
         device_class=SensorDeviceClass.VOLTAGE,
         native_unit_of_measurement=UnitOfElectricPotential.VOLT,
     ),
     SensorEntityDescription(
         key="pv2_voltage",
+        translation_key="pvn_voltage",
+        translation_placeholder={"n": "2"},
         state_class=SensorStateClass.MEASUREMENT,
         device_class=SensorDeviceClass.VOLTAGE,
         native_unit_of_measurement=UnitOfElectricPotential.VOLT,
     ),
     SensorEntityDescription(
         key="pv3_voltage",
+        translation_key="pvn_voltage",
+        translation_placeholder={"n": "3"},
         state_class=SensorStateClass.MEASUREMENT,
         device_class=SensorDeviceClass.VOLTAGE,
         native_unit_of_measurement=UnitOfElectricPotential.VOLT,
     ),
     SensorEntityDescription(
         key="pv4_voltage",
+        translation_key="pvn_voltage",
+        translation_placeholder={"n": "4"},
         state_class=SensorStateClass.MEASUREMENT,
         device_class=SensorDeviceClass.VOLTAGE,
         native_unit_of_measurement=UnitOfElectricPotential.VOLT,
@@ -168,24 +184,32 @@ SENSOR_ENTITY_DESCRIPTIONS: tuple[SensorEntityDescription, ...] = (
     ),
     SensorEntityDescription(
         key="pv1_current",
+        translation_key="pvn_current",
+        translation_placeholder={"n": "1"},
         state_class=SensorStateClass.MEASUREMENT,
         device_class=SensorDeviceClass.CURRENT,
         native_unit_of_measurement=UnitOfElectricCurrent.AMPERE,
     ),
     SensorEntityDescription(
         key="pv2_current",
+        translation_key="pvn_current",
+        translation_placeholder={"n": "2"},
         state_class=SensorStateClass.MEASUREMENT,
         device_class=SensorDeviceClass.CURRENT,
         native_unit_of_measurement=UnitOfElectricCurrent.AMPERE,
     ),
     SensorEntityDescription(
         key="pv3_current",
+        translation_key="pvn_current",
+        translation_placeholder={"n": "3"},
         state_class=SensorStateClass.MEASUREMENT,
         device_class=SensorDeviceClass.CURRENT,
         native_unit_of_measurement=UnitOfElectricCurrent.AMPERE,
     ),
     SensorEntityDescription(
         key="pv4_current",
+        translation_key="pvn_current",
+        translation_placeholder={"n": "4"},
         state_class=SensorStateClass.MEASUREMENT,
         device_class=SensorDeviceClass.CURRENT,
         native_unit_of_measurement=UnitOfElectricCurrent.AMPERE,
@@ -312,6 +336,10 @@ class SolakonSensor(SolakonEntity, SensorEntity):
         self._sensor_key = description.key
 
         self.entity_description = description
+
+        # Prioritize translation key from entity description
+        if self.entity_description.translation_key is not None:
+            self._attr_translation_key = self.entity_description.translation_key
 
         # Set entity ID
         self.entity_id = f"sensor.solakon_one_{description.key}"
