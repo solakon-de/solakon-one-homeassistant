@@ -5,6 +5,7 @@ import asyncio
 import logging
 from typing import Any
 
+from bitflags import BitFlags
 from pymodbus.client import AsyncModbusTcpClient
 from homeassistant.core import HomeAssistant
 
@@ -12,6 +13,12 @@ from .const import REGISTERS
 
 _LOGGER = logging.getLogger(__name__)
 
+
+class Bitfield16(BitFlags):
+    nbits = 16
+
+class Bitfield32(BitFlags):
+    nbits = 32
 
 class SolakonModbusHub:
     """Modbus hub for Solakon ONE device."""
@@ -202,17 +209,13 @@ class SolakonModbusHub:
         async with self._lock:
             for key, config in REGISTERS.items():
                 try:
-                    # Skip bitfield types for now
-                    if config.get("type") == "bitfield16":
-                        continue
-                    
                     # Read register with device_id parameter (like working script)
                     result = await self._client.read_holding_registers(
                         address=config["address"],
                         count=config.get("count", 1),
                         device_id=self._slave_id
                     )
-                    
+
                     if result.isError():
                         _LOGGER.debug(
                             f"Error reading register {key} at address {config['address']}: {result}"
@@ -233,7 +236,7 @@ class SolakonModbusHub:
                     )
                     
         return data
-    
+
     async def async_read_all_data(self) -> dict[str, Any]:
         """Read all data from the device."""
         return await self.async_read_registers()
@@ -244,10 +247,10 @@ class SolakonModbusHub:
         """Process register values based on their configuration."""
         if not registers:
             return None
-            
+
         data_type = config.get("type", "uint16")
         scale = config.get("scale", 1)
-        
+
         try:
             if data_type in ("uint16", "u16"):
                 value = registers[0]
@@ -265,6 +268,18 @@ class SolakonModbusHub:
                 value = (registers[0] << 16) | registers[1]
                 if value > 0x7FFFFFFF:  # Using same conversion as working script
                     value = value - 0x100000000
+            elif data_type in ("bitfield16"):
+                pos = config.get("bit", 0)
+                if pos > 15:
+                    return None
+                bitfield = Bitfield16(registers[0])
+                value = bool(bitfield[f"bit_{pos}"])
+            elif data_type in ("bitfield32"):
+                pos = config.get("bit", 0)
+                if len(registers) < 2 or pos > 31:
+                    return None
+                bitfield = Bitfield16((registers[0] << 16) | registers[1])
+                value = bool(bitfield[f"bit_{pos}"])
             elif data_type == "string":
                 # Convert registers to string (exactly like working script)
                 chars = []
@@ -279,7 +294,6 @@ class SolakonModbusHub:
             # Apply scaling if defined
             if scale != 1 and value is not None:
                 value = float(value) / scale
-                
             return value
             
         except Exception as err:
