@@ -267,6 +267,12 @@ SENSOR_ENTITY_DESCRIPTIONS: tuple[SensorEntityDescription, ...] = (
         device_class=SensorDeviceClass.POWER_FACTOR,
     ),
     SensorEntityDescription(
+        key="inverter_r_frequency",
+        state_class=SensorStateClass.MEASUREMENT,
+        device_class=SensorDeviceClass.FREQUENCY,
+        native_unit_of_measurement=UnitOfFrequency.HERTZ,
+    ),
+    SensorEntityDescription(
         key="grid_frequency",
         device_class=SensorDeviceClass.FREQUENCY,
         native_unit_of_measurement=UnitOfFrequency.HERTZ,

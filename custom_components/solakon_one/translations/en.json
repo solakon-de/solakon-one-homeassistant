@@ -123,6 +123,9 @@
       "eps_voltage": {
         "name": "EPS Voltage"
       },
+      "inverter_r_frequency": {
+        "name": "Inverter Frequency"
+      },
       "grid_frequency": {
         "name": "Grid Frequency"
       },
