@@ -216,6 +216,12 @@ SENSOR_ENTITY_DESCRIPTIONS: tuple[SensorEntityDescription, ...] = (
         native_unit_of_measurement=UnitOfElectricCurrent.AMPERE,
     ),
     SensorEntityDescription(
+        key="total_pv_energy",
+        state_class=SensorStateClass.TOTAL_INCREASING,
+        device_class=SensorDeviceClass.ENERGY,
+        native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
+    ),
+    SensorEntityDescription(
         key="cumulative_generation",
         state_class=SensorStateClass.TOTAL_INCREASING,
         device_class=SensorDeviceClass.ENERGY,
