@@ -117,6 +117,12 @@
       "daily_generation": {
         "name": "Tägliche Energie"
       },
+      "total_battery_charge_energy": {
+        "name": "Batterie Ladeenergie"
+      },
+      "total_battery_discharge_energy": {
+        "name": "Batterie Entladeenergie"
+      },
       "eps_current": {
         "name": "Steckdose Strom"
       },
