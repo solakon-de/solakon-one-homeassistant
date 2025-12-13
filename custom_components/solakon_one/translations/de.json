@@ -82,14 +82,14 @@
         "name": "Modus Fernsteuerung",
         "state": {
           "0": "Aus",
-          "1": "Inverter entladen (PV priorität)",
-          "3": "Inverter laden (PV priorität)",
+          "1": "Inverter export (PV priorität)",
+          "3": "Inverter import (PV priorität)",
           "5": "Batterie entladen",
-          "7": "Battery laden",
-          "9": "Netz entladen",
-          "11": "Netz laden",
-          "13": "Inverter entladen (Netz priorität)",
-          "15": "Inverter laden (Netz priorität)"
+          "7": "Batterie laden",
+          "9": "Netz export",
+          "11": "Netz import",  
+          "13": "Inverter export (Netz priorität)",
+          "15": "Inverter import (Netz priorität)"
         }
       }
     },
