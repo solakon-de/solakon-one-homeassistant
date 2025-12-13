@@ -108,7 +108,7 @@
       "bms1_soh": {
         "name": "Batterie Gesundheitszustand"
       },
-      "total_pv_energy": {
+      "pv_total_energy": {
         "name": "PV Energie"
       },
       "cumulative_generation": {
@@ -117,10 +117,10 @@
       "daily_generation": {
         "name": "Tägliche Energie"
       },
-      "total_battery_charge_energy": {
+      "battery_total_charge_energy": {
         "name": "Batterie Ladeenergie"
       },
-      "total_battery_discharge_energy": {
+      "battery_total_discharge_energy": {
         "name": "Batterie Entladeenergie"
       },
       "eps_current": {

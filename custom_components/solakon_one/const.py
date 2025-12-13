@@ -65,7 +65,7 @@ REGISTERS = {
     "pv4_current": {"address": 39077, "count": 1, "type": "i16", "scale": 100, "unit": "A"},
     "pv4_power": {"address": 39285, "count": 2, "type": "i32", "scale": 1, "unit": "W"},
     "total_pv_power": {"address": 39118, "count": 2, "type": "i32", "scale": 1, "unit": "W"},
-    "total_pv_energy": {"address": 39601, "count": 2, "type": "u32", "scale": 100, "unit": "kWh"},
+    "pv_total_energy": {"address": 39601, "count": 2, "type": "u32", "scale": 100, "unit": "kWh"},
 
     # EPS Information
     "eps_voltage": {"address": 39201, "count": 1, "type": "i16", "scale": 10, "unit": "V"},
@@ -108,8 +108,8 @@ REGISTERS = {
     "battery_soc": {"address": 39424, "count": 1, "type": "i16", "scale": 1, "unit": "%"},
     "battery_max_charge_current": {"address": 46607, "count": 1, "type": 'i16', "scale": 10, "unit": 'A', "rw": True},
     "battery_max_discharge_current": {"address": 46608, "count": 1, "type": 'i16', "scale": 10, "unit": 'A', "rw": True},
-    "total_battery_charge_energy": {"address": 39605, "count": 2, "type": "u32", "scale": 100, "unit": "kWh"},
-    "total_battery_discharge_energy": {"address": 39609, "count": 2, "type": "u32", "scale": 100, "unit": "kWh"},
+    "battery_total_charge_energy": {"address": 39605, "count": 2, "type": "u32", "scale": 100, "unit": "kWh"},
+    "battery_total_discharge_energy": {"address": 39609, "count": 2, "type": "u32", "scale": 100, "unit": "kWh"},
 
     # Remote Control Registers (Read/Write)
     "remote_control": {"address": 46001, "count": 1, "type": "u16", "scale": 1, "rw": True},
