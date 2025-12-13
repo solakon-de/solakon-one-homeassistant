@@ -108,6 +108,9 @@
       "bms1_soh": {
         "name": "Battery State of Health"
       },
+      "total_pv_energy": {
+        "name": "PV Energy"
+      },
       "cumulative_generation": {
         "name": "Total Energy"
       },
