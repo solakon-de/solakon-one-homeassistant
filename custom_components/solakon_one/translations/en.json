@@ -114,6 +114,12 @@
       "daily_generation": {
         "name": "Daily Energy"
       },
+      "total_battery_charge_energy": {
+        "name": "Battery charge Energie"
+      },
+      "total_battery_discharge_energy": {
+        "name": "Battery discharge Energie"
+      },
       "eps_current": {
         "name": "EPS Current"
       },
