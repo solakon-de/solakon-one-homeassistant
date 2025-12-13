@@ -64,10 +64,10 @@
       "total_pv_energy": {
         "default": "mdi:solar-power"
       },
-      "total_battery_charge_energy": {
+      "battery_total_charge_energy": {
         "default": "mdi:battery-arrow-up"
       },
-      "total_battery_discharge_energy": {
+      "battery_total_discharge_energy": {
         "default": "mdi:battery-arrow-down"
       },
       "reactive_power": {

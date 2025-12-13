@@ -108,8 +108,8 @@ REGISTERS = {
     "battery_soc": {"address": 39424, "count": 1, "type": "i16", "scale": 1, "unit": "%"},
     "battery_max_charge_current": {"address": 46607, "count": 1, "type": 'i16', "scale": 10, "unit": 'A', "rw": True},
     "battery_max_discharge_current": {"address": 46608, "count": 1, "type": 'i16', "scale": 10, "unit": 'A', "rw": True},
-    "total_battery_charge_energy": {"address": 39605, "count": 2, "type": "u32", "scale": 100, "unit": "kWh"},
-    "total_battery_discharge_energy": {"address": 39609, "count": 2, "type": "u32", "scale": 100, "unit": "kWh"},
+    "battery_total_charge_energy": {"address": 39605, "count": 2, "type": "u32", "scale": 100, "unit": "kWh"},
+    "battery_total_discharge_energy": {"address": 39609, "count": 2, "type": "u32", "scale": 100, "unit": "kWh"},
 
     # Remote Control Registers (Read/Write)
     "remote_control": {"address": 46001, "count": 1, "type": "u16", "scale": 1, "rw": True},
