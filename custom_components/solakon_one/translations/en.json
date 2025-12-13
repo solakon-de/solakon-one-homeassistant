@@ -115,10 +115,10 @@
         "name": "Daily Energy"
       },
       "total_battery_charge_energy": {
-        "name": "Battery charge Energie"
+        "name": "Battery charge energie"
       },
       "total_battery_discharge_energy": {
-        "name": "Battery discharge Energie"
+        "name": "Battery discharge energie"
       },
       "eps_current": {
         "name": "EPS Current"
