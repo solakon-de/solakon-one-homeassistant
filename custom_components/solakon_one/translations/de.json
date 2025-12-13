@@ -132,6 +132,9 @@
       "eps_voltage": {
         "name": "Steckdose Spannung"
       },
+      "inverter_r_frequency": {
+        "name": "Inverter Frequenz"
+      },
       "grid_frequency": {
         "name": "Netzfrequenz"
       },
