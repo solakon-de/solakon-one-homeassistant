@@ -29,6 +29,11 @@
     }
   },
   "entity": {
+    "binary_sensor": {
+      "island_mode": {
+        "name": "Island mode"
+      }
+    },
     "number": {
       "battery_max_charge_current": {
         "name": "Maximum Charge Current"
@@ -63,13 +68,34 @@
     },
     "select": {
       "eps_output": {
-        "name": "EPS Output Control"
+        "name": "Output",
+        "state": {
+          "0": "Disable",
+          "2": "Emergency power supply",
+          "3": "Uninterrupted power supply"
+        }
       },
       "force_mode": {
-        "name": "Force Mode"
+        "name": "Force Mode",
+        "state": {
+          "0": "Disabled",
+          "1": "Force Discharge",
+          "3": "Force Charge"
+        }
       },
       "remote_control_mode": {
-        "name": "Remote Control Mode"
+        "name": "Remote control mode",
+        "state": {
+          "0": "Disabled",
+          "1": "Inverter export (PV priority)",
+          "3": "Inverter import (PV priority)",
+          "5": "Battery discharge",
+          "7": "Battery charge",
+          "9": "Grid export",
+          "11": "Grid import",
+          "13": "Inverter export (AC priority)",
+          "15": "Inverter import (AC priority)"
+        }
       }
     },
     "sensor": {
@@ -91,6 +117,9 @@
       "bms1_ambient_temp": {
         "name": "Ambient Temperature"
       },
+      "bms1_design_energy": {
+        "name": "Battery Capacity"
+      },
       "bms1_max_temp": {
         "name": "BMS max Temperature"
       },
@@ -100,11 +129,20 @@
       "bms1_soh": {
         "name": "Battery State of Health"
       },
+      "pv_total_energy": {
+        "name": "PV Energy"
+      },
       "cumulative_generation": {
         "name": "Total Energy"
       },
       "daily_generation": {
         "name": "Daily Energy"
+      },
+      "battery_total_charge_energy": {
+        "name": "Battery charge energie"
+      },
+      "battery_total_discharge_energy": {
+        "name": "Battery discharge energie"
       },
       "eps_current": {
         "name": "EPS Current"
@@ -115,6 +153,9 @@
       "eps_voltage": {
         "name": "EPS Voltage"
       },
+      "inverter_r_frequency": {
+        "name": "Inverter Frequency"
+      },
       "grid_frequency": {
         "name": "Grid Frequency"
       },
@@ -122,7 +163,7 @@
         "name": "Grid R Voltage"
       },
       "grid_standard_code": {
-        "name": "Grid Standard Code",
+        "name": "Grid Standard",
         "state": {
           "6": "VDE0126",
           "7": "VDE4105_DE"
@@ -132,7 +173,7 @@
         "name": "Internal Temperature"
       },
       "network_status": {
-        "name": "Network Status",
+        "name": "Network",
         "state": {
           "0": "Disabled",
           "1": "Disconnected",
@@ -155,7 +196,7 @@
         "name": "Reactive Power"
       },
       "remote_control": {
-        "name": "Remote Control Status",
+        "name": "Remote Control",
         "state": {
           "0": "Disabled",
           "1": "Inverter Discharge (PV Priority)",

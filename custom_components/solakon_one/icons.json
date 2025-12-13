@@ -1,5 +1,10 @@
 {
   "entity": {
+    "binary_sensor": {
+      "island_mode": {
+        "default": "mdi:island"
+      }
+    },
     "number": {
       "minimum_soc": {
         "default": "mdi:battery-outline"
@@ -46,6 +51,15 @@
       },
       "total_pv_power": {
         "default": "mdi:solar-power"
+      },
+      "pv_total_energy": {
+        "default": "mdi:solar-power"
+      },
+      "battery_total_charge_energy": {
+        "default": "mdi:battery-arrow-up"
+      },
+      "battery_total_discharge_energy": {
+        "default": "mdi:battery-arrow-down"
       },
       "reactive_power": {
         "default": "mdi:flash-outline"
