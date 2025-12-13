@@ -29,6 +29,11 @@
     }
   },
   "entity": {
+    "binary_sensor": {
+      "island_mode": {
+        "name": "Inselbetrieb"
+      }
+    },
     "number": {
       "battery_max_charge_current": {
         "name": "Maximaler Ladestrom"
@@ -91,6 +96,9 @@
       "bms1_ambient_temp": {
         "name": "Umgebungstemperatur"
       },
+      "bms1_design_energy": {
+        "name": "Batteriekapazität"
+      },
       "bms1_max_temp": {
         "name": "BMS max. Temperatur"
       },
@@ -100,11 +108,20 @@
       "bms1_soh": {
         "name": "Batterie Gesundheitszustand"
       },
+      "pv_total_energy": {
+        "name": "PV Energie"
+      },
       "cumulative_generation": {
         "name": "Energie"
       },
       "daily_generation": {
         "name": "Tägliche Energie"
+      },
+      "battery_total_charge_energy": {
+        "name": "Batterie Ladeenergie"
+      },
+      "battery_total_discharge_energy": {
+        "name": "Batterie Entladeenergie"
       },
       "eps_current": {
         "name": "Steckdose Strom"
@@ -115,6 +132,9 @@
       "eps_voltage": {
         "name": "Steckdose Spannung"
       },
+      "inverter_r_frequency": {
+        "name": "Inverter Frequenz"
+      },
       "grid_frequency": {
         "name": "Netzfrequenz"
       },
@@ -122,7 +142,7 @@
         "name": "Netzspannung"
       },
       "grid_standard_code": {
-        "name": "Netzstandard Code",
+        "name": "Netzstandard",
         "state": {
           "6": "VDE0126",
           "7": "VDE4105_DE"
@@ -132,7 +152,7 @@
         "name": "Interne Temperatur"
       },
       "network_status": {
-        "name": "Netzwerk Status",
+        "name": "Netzwerk",
         "state": {
           "0": "Aus",
           "1": "Getrennt",
@@ -182,7 +202,7 @@
         "name": "Blindleistung"
       },
       "remote_control": {
-        "name": "Fernsteuerung Status",
+        "name": "Fernsteuerung",
         "state": {
           "0": "Aus",
           "1": "Inverter entladen (PV Priority)",

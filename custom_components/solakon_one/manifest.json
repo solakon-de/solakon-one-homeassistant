@@ -8,6 +8,6 @@
   "integration_type": "device",
   "iot_class": "local_polling",
   "issue_tracker": "https://github.com/solakon-de/solakon-one-homeassistant/issues",
-  "requirements": ["pymodbus>=3.11.1"],
+  "requirements": ["bitflags>=1.2.0", "pymodbus>=3.11.1"],
   "version": "1.2.0"
 }

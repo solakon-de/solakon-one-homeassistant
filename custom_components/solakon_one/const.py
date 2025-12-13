@@ -1,6 +1,7 @@
 """Constants for the Solakon ONE integration."""
 from typing import Final
 
+from homeassistant.const import Platform
 
 DOMAIN: Final = "solakon_one"
 
@@ -10,6 +11,14 @@ DEFAULT_NAME: Final = "Solakon ONE"
 DEFAULT_PORT: Final = 502
 DEFAULT_DEVICE_ID: Final = 1
 DEFAULT_SCAN_INTERVAL: Final = 30
+SCAN_INTERVAL: Final = 30
+
+PLATFORMS = [
+    Platform.BINARY_SENSOR,
+    Platform.NUMBER,
+    Platform.SELECT,
+    Platform.SENSOR,
+]
 
 # Register definitions
 REGISTERS = {
@@ -24,6 +33,8 @@ REGISTERS = {
     "manager_version": {"address": 36003, "count": 1, "type": "u16"},
 
     # Battery Version Information (Table 3-3)
+    "bms1_design_energy": {"address": 37635, "count": 1, "type": "i16", "scale": 0.1, "unit": "Wh"},
+
     "bms1_soh": {"address": 37624, "count": 1, "type": "u16", "scale": 1, "unit": "%"},
     "bms2_soh": {"address": 38322, "count": 1, "type": "u16", "scale": 1, "unit": "%"},
     "bms1_soc": {"address": 37612, "count": 1, "type": "i16", "scale": 1, "unit": "%"},
@@ -35,10 +46,12 @@ REGISTERS = {
     "max_active_power": {"address": 39055, "count": 2, "type": "i32", "scale": 1, "unit": "W"},
 
     # Status
-    "status_1": {"address": 39063, "count": 1, "type": "bitfield16"},
-    "alarm_1": {"address": 39067, "count": 1, "type": "bitfield16"},
-    "alarm_2": {"address": 39068, "count": 1, "type": "bitfield16"},
-    "alarm_3": {"address": 39069, "count": 1, "type": "bitfield16"},
+    "status_1": {"address": 39063, "count": 1, "type": "u16"}, # bitfield16
+    "status_3": {"address": 39065, "count": 2, "type": "u32"}, # bitfield32
+    "island_mode": {"address": 39065, "count": 2, "type": "bitfield32", "bit": 0}, # offgrid
+    "alarm_1": {"address": 39067, "count": 1, "type": "u16"}, #bitfield16
+    "alarm_2": {"address": 39068, "count": 1, "type": "u16"}, #bitfield16
+    "alarm_3": {"address": 39069, "count": 1, "type": "u16"}, #bitfield16
     "grid_standard_code": {"address": 49079, "count": 1, "type": 'u16'},
 
     # PV Input
@@ -55,6 +68,7 @@ REGISTERS = {
     "pv4_current": {"address": 39077, "count": 1, "type": "i16", "scale": 100, "unit": "A"},
     "pv4_power": {"address": 39285, "count": 2, "type": "i32", "scale": 1, "unit": "W"},
     "total_pv_power": {"address": 39118, "count": 2, "type": "i32", "scale": 1, "unit": "W"},
+    "pv_total_energy": {"address": 39601, "count": 2, "type": "u32", "scale": 100, "unit": "kWh"},
 
     # EPS Information
     "eps_voltage": {"address": 39201, "count": 1, "type": "i16", "scale": 10, "unit": "V"},
@@ -68,6 +82,9 @@ REGISTERS = {
     "inverter_r_current": {"address": 39126, "count": 2, "type": "i32", "scale": 1000, "unit": "A"},
     "inverter_s_current": {"address": 39128, "count": 2, "type": "i32", "scale": 1000, "unit": "A"},
     "inverter_t_current": {"address": 39130, "count": 2, "type": "i32", "scale": 1000, "unit": "A"},
+    "inverter_r_frequency": {"address": 39272, "count": 1, "type": "i16", "scale": 100, "unit": "Hz"},
+    "inverter_s_frequency": {"address": 39273, "count": 1, "type": "i16", "scale": 100, "unit": "Hz"},
+    "inverter_t_frequency": {"address": 39274, "count": 1, "type": "i16", "scale": 100, "unit": "Hz"},
     "active_power": {"address": 39134, "count": 2, "type": "i32", "scale": 1, "unit": "W"},
     "reactive_power": {"address": 39136, "count": 2, "type": "i32", "scale": 1000, "unit": "kvar"},
     "power_factor": {"address": 39138, "count": 1, "type": "i16", "scale": 1000},
@@ -94,6 +111,8 @@ REGISTERS = {
     "battery_soc": {"address": 39424, "count": 1, "type": "i16", "scale": 1, "unit": "%"},
     "battery_max_charge_current": {"address": 46607, "count": 1, "type": 'i16', "scale": 10, "unit": 'A', "rw": True},
     "battery_max_discharge_current": {"address": 46608, "count": 1, "type": 'i16', "scale": 10, "unit": 'A', "rw": True},
+    "battery_total_charge_energy": {"address": 39605, "count": 2, "type": "u32", "scale": 100, "unit": "kWh"},
+    "battery_total_discharge_energy": {"address": 39609, "count": 2, "type": "u32", "scale": 100, "unit": "kWh"},
 
     # Remote Control Registers (Read/Write)
     "remote_control": {"address": 46001, "count": 1, "type": "u16", "scale": 1, "rw": True},

@@ -68,24 +68,28 @@ SENSOR_ENTITY_DESCRIPTIONS: tuple[SensorEntityDescription, ...] = (
         key="pv1_power",
         state_class=SensorStateClass.MEASUREMENT,
         device_class=SensorDeviceClass.POWER,
+        entity_registry_enabled_default=False,
         native_unit_of_measurement=UnitOfPower.WATT,
     ),
     SensorEntityDescription(
         key="pv2_power",
         state_class=SensorStateClass.MEASUREMENT,
         device_class=SensorDeviceClass.POWER,
+        entity_registry_enabled_default=False,
         native_unit_of_measurement=UnitOfPower.WATT,
     ),
     SensorEntityDescription(
         key="pv3_power",
         state_class=SensorStateClass.MEASUREMENT,
         device_class=SensorDeviceClass.POWER,
+        entity_registry_enabled_default=False,
         native_unit_of_measurement=UnitOfPower.WATT,
     ),
     SensorEntityDescription(
         key="pv4_power",
         state_class=SensorStateClass.MEASUREMENT,
         device_class=SensorDeviceClass.POWER,
+        entity_registry_enabled_default=False,
         native_unit_of_measurement=UnitOfPower.WATT,
     ),
     SensorEntityDescription(
@@ -104,6 +108,7 @@ SENSOR_ENTITY_DESCRIPTIONS: tuple[SensorEntityDescription, ...] = (
         key="reactive_power",
         state_class=SensorStateClass.MEASUREMENT,
         device_class=SensorDeviceClass.REACTIVE_POWER,
+        entity_registry_enabled_default=False,
         native_unit_of_measurement=UnitOfReactivePower.KILO_VOLT_AMPERE_REACTIVE,
     ),
     SensorEntityDescription(
@@ -111,6 +116,18 @@ SENSOR_ENTITY_DESCRIPTIONS: tuple[SensorEntityDescription, ...] = (
         state_class=SensorStateClass.MEASUREMENT,
         device_class=SensorDeviceClass.POWER,
         native_unit_of_measurement=UnitOfPower.WATT,
+    ),
+    SensorEntityDescription(
+        key="battery_total_charge_energy",
+        state_class=SensorStateClass.TOTAL_INCREASING,
+        device_class=SensorDeviceClass.ENERGY,
+        native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
+    ),
+    SensorEntityDescription(
+        key="battery_total_discharge_energy",
+        state_class=SensorStateClass.TOTAL_INCREASING,
+        device_class=SensorDeviceClass.ENERGY,
+        native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
     ),
     SensorEntityDescription(
         key="battery_soc",
@@ -128,24 +145,28 @@ SENSOR_ENTITY_DESCRIPTIONS: tuple[SensorEntityDescription, ...] = (
         key="pv1_voltage",
         state_class=SensorStateClass.MEASUREMENT,
         device_class=SensorDeviceClass.VOLTAGE,
+        entity_registry_enabled_default=False,
         native_unit_of_measurement=UnitOfElectricPotential.VOLT,
     ),
     SensorEntityDescription(
         key="pv2_voltage",
         state_class=SensorStateClass.MEASUREMENT,
         device_class=SensorDeviceClass.VOLTAGE,
+        entity_registry_enabled_default=False,
         native_unit_of_measurement=UnitOfElectricPotential.VOLT,
     ),
     SensorEntityDescription(
         key="pv3_voltage",
         state_class=SensorStateClass.MEASUREMENT,
         device_class=SensorDeviceClass.VOLTAGE,
+        entity_registry_enabled_default=False,
         native_unit_of_measurement=UnitOfElectricPotential.VOLT,
     ),
     SensorEntityDescription(
         key="pv4_voltage",
         state_class=SensorStateClass.MEASUREMENT,
         device_class=SensorDeviceClass.VOLTAGE,
+        entity_registry_enabled_default=False,
         native_unit_of_measurement=UnitOfElectricPotential.VOLT,
     ),
     SensorEntityDescription(
@@ -170,24 +191,28 @@ SENSOR_ENTITY_DESCRIPTIONS: tuple[SensorEntityDescription, ...] = (
         key="pv1_current",
         state_class=SensorStateClass.MEASUREMENT,
         device_class=SensorDeviceClass.CURRENT,
+        entity_registry_enabled_default=False,
         native_unit_of_measurement=UnitOfElectricCurrent.AMPERE,
     ),
     SensorEntityDescription(
         key="pv2_current",
         state_class=SensorStateClass.MEASUREMENT,
         device_class=SensorDeviceClass.CURRENT,
+        entity_registry_enabled_default=False,
         native_unit_of_measurement=UnitOfElectricCurrent.AMPERE,
     ),
     SensorEntityDescription(
         key="pv3_current",
         state_class=SensorStateClass.MEASUREMENT,
         device_class=SensorDeviceClass.CURRENT,
+        entity_registry_enabled_default=False,
         native_unit_of_measurement=UnitOfElectricCurrent.AMPERE,
     ),
     SensorEntityDescription(
         key="pv4_current",
         state_class=SensorStateClass.MEASUREMENT,
         device_class=SensorDeviceClass.CURRENT,
+        entity_registry_enabled_default=False,
         native_unit_of_measurement=UnitOfElectricCurrent.AMPERE,
     ),
     SensorEntityDescription(
@@ -203,6 +228,12 @@ SENSOR_ENTITY_DESCRIPTIONS: tuple[SensorEntityDescription, ...] = (
         native_unit_of_measurement=UnitOfElectricCurrent.AMPERE,
     ),
     SensorEntityDescription(
+        key="pv_total_energy",
+        state_class=SensorStateClass.TOTAL_INCREASING,
+        device_class=SensorDeviceClass.ENERGY,
+        native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
+    ),
+    SensorEntityDescription(
         key="cumulative_generation",
         state_class=SensorStateClass.TOTAL_INCREASING,
         device_class=SensorDeviceClass.ENERGY,
@@ -212,6 +243,7 @@ SENSOR_ENTITY_DESCRIPTIONS: tuple[SensorEntityDescription, ...] = (
         key="daily_generation",
         state_class=SensorStateClass.TOTAL_INCREASING,
         device_class=SensorDeviceClass.ENERGY,
+        entity_registry_enabled_default=False,
         native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
     ),
     SensorEntityDescription(
@@ -225,6 +257,15 @@ SENSOR_ENTITY_DESCRIPTIONS: tuple[SensorEntityDescription, ...] = (
         state_class=SensorStateClass.MEASUREMENT,
         device_class=SensorDeviceClass.TEMPERATURE,
         native_unit_of_measurement=UnitOfTemperature.CELSIUS,
+    ),
+    SensorEntityDescription(
+        key="bms1_design_energy",
+        state_class=SensorStateClass.MEASUREMENT,
+        device_class=SensorDeviceClass.ENERGY_STORAGE,
+        entity_category=EntityCategory.DIAGNOSTIC,
+        native_unit_of_measurement=UnitOfEnergy.WATT_HOUR,
+        suggested_display_precision=2,
+        suggested_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
     ),
     SensorEntityDescription(
         key="bms1_max_temp",
@@ -244,7 +285,14 @@ SENSOR_ENTITY_DESCRIPTIONS: tuple[SensorEntityDescription, ...] = (
         device_class=SensorDeviceClass.POWER_FACTOR,
     ),
     SensorEntityDescription(
+        key="inverter_r_frequency",
+        state_class=SensorStateClass.MEASUREMENT,
+        device_class=SensorDeviceClass.FREQUENCY,
+        native_unit_of_measurement=UnitOfFrequency.HERTZ,
+    ),
+    SensorEntityDescription(
         key="grid_frequency",
+        state_class=SensorStateClass.MEASUREMENT,
         device_class=SensorDeviceClass.FREQUENCY,
         native_unit_of_measurement=UnitOfFrequency.HERTZ,
     ),
@@ -252,21 +300,25 @@ SENSOR_ENTITY_DESCRIPTIONS: tuple[SensorEntityDescription, ...] = (
         key="grid_standard_code",
         device_class=SensorDeviceClass.ENUM,
         entity_category=EntityCategory.DIAGNOSTIC,
+        entity_registry_enabled_default=False,
     ),
     SensorEntityDescription(
         key="network_status",
         device_class=SensorDeviceClass.ENUM,
         entity_category=EntityCategory.DIAGNOSTIC,
+        entity_registry_enabled_default=False,
     ),
     SensorEntityDescription(
         key="remote_control",
         device_class=SensorDeviceClass.ENUM,
+        entity_registry_enabled_default=False,
     ),
     SensorEntityDescription(
         key="remote_timeout_countdown",
         state_class=SensorStateClass.MEASUREMENT,
         device_class=SensorDeviceClass.DURATION,
         native_unit_of_measurement=UnitOfTime.SECONDS,
+        suggested_display_precision=0,
     )
 )
 
@@ -309,19 +361,16 @@ class SolakonSensor(SolakonEntity, SensorEntity):
     ) -> None:
         """Initialize the sensor."""
         super().__init__(coordinator, config_entry, device_info, description.key)
-        self._sensor_key = description.key
-
+        # Set entity description
         self.entity_description = description
-
         # Set entity ID
         self.entity_id = f"sensor.solakon_one_{description.key}"
-
 
     @callback
     def _handle_coordinator_update(self) -> None:
         """Handle updated data from the coordinator."""
-        if self.coordinator.data and self._sensor_key in self.coordinator.data:
-            value = self.coordinator.data[self._sensor_key]
+        if self.coordinator.data and self.entity_description.key in self.coordinator.data:
+            value = self.coordinator.data[self.entity_description.key]
 
             # Handle special cases
             if isinstance(value, dict):
