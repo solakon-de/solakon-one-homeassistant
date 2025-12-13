@@ -130,9 +130,8 @@ class SolakonSelect(SolakonEntity, SelectEntity):
         super().__init__(coordinator, config_entry, device_info, description.key)
         self._hub = hub
         self._register_config = REGISTERS[description.key]
-        
+        # Set entity description
         self.entity_description = description
-
         # Set entity ID
         self.entity_id = f"select.solakon_one_{description.key}"
 
