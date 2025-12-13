@@ -389,13 +389,11 @@ class SolakonSensor(SolakonEntity, SensorEntity):
         super().__init__(coordinator, config_entry, device_info, description.key)
         # Set entity description
         self.entity_description = description
-
+        # Set entity ID
+        self.entity_id = f"sensor.solakon_one_{description.key}"
         # Prioritize translation key from entity description
         if self.entity_description.translation_key is not None:
             self._attr_translation_key = self.entity_description.translation_key
-
-        # Set entity ID
-        self.entity_id = f"sensor.solakon_one_{description.key}"
 
     @callback
     def _handle_coordinator_update(self) -> None:
