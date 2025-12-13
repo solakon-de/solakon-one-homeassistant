@@ -10,21 +10,15 @@ from homeassistant.core import HomeAssistant
 from homeassistant.exceptions import ConfigEntryNotReady
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator, UpdateFailed
 
-from .const import DOMAIN, PLATFORMS, SCAN_INTERVAL
-from .modbus import SolakonModbusHub
+from .const import DOMAIN, PLATFORMS
+from .modbus import get_modbus_hub, SolakonModbusHub
 
 _LOGGER = logging.getLogger(__name__)
 
 
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     """Set up Solakon ONE from a config entry."""
-    hub = SolakonModbusHub(
-        hass,
-        entry.data["host"],
-        entry.data["port"],
-        entry.data.get("slave_id", 1),
-        entry.data.get("scan_interval", SCAN_INTERVAL),
-    )
+    hub = get_modbus_hub(hass, entry)
 
     await hub.async_setup()
 
