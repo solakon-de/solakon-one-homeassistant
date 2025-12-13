@@ -79,7 +79,7 @@
         }
       },
       "remote_control_mode": {
-        "name": "Modus Fernsteuerung",
+        "name": "Modus fernsteuern",
         "state": {
           "0": "Aus",
           "1": "Inverter export (PV priorität)",
