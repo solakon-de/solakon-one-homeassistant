@@ -65,6 +65,7 @@ REGISTERS = {
     "pv4_current": {"address": 39077, "count": 1, "type": "i16", "scale": 100, "unit": "A"},
     "pv4_power": {"address": 39285, "count": 2, "type": "i32", "scale": 1, "unit": "W"},
     "total_pv_power": {"address": 39118, "count": 2, "type": "i32", "scale": 1, "unit": "W"},
+    "total_pv_energy": {"address": 39601, "count": 2, "type": "u32", "scale": 100, "unit": "kWh"},
 
     # EPS Information
     "eps_voltage": {"address": 39201, "count": 1, "type": "i16", "scale": 10, "unit": "V"},
