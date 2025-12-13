@@ -74,8 +74,8 @@
         "name": "Modus überschreiben",
         "state": {
           "0": "Aus",
-          "1": "Entladen",
-          "3": "Laden"
+          "1": "Entladen erzwingen",
+          "3": "Laden erzwingen"
         }
       },
       "remote_control_mode": {
