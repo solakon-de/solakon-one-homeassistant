@@ -11,15 +11,14 @@ from homeassistant.exceptions import ConfigEntryNotReady
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator, UpdateFailed
 
 from .const import DOMAIN, PLATFORMS
-from .modbus import SolakonModbusHub
-from .utils import getModbusHub
+from .modbus import get_modbus_hub, SolakonModbusHub
 
 _LOGGER = logging.getLogger(__name__)
 
 
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     """Set up Solakon ONE from a config entry."""
-    hub = getModbusHub(hass, entry)
+    hub = get_modbus_hub(hass, entry)
 
     await hub.async_setup()
 

@@ -14,7 +14,7 @@ from homeassistant.exceptions import HomeAssistantError
 from homeassistant.helpers import config_validation as cv
 
 from .const import CONF_DEVICE_ID, DEFAULT_NAME, DEFAULT_PORT, DEFAULT_SCAN_INTERVAL, DEFAULT_DEVICE_ID, DOMAIN
-from .utils import getModbusHub
+from .modbus import get_modbus_hub
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -42,7 +42,7 @@ STEP_OPTIONS_DATA_SCHEMA = vol.Schema(
 
 async def validate_input(hass: HomeAssistant, data: dict[str, Any]) -> dict[str, Any]:
     """Validate the user input allows us to connect."""
-    hub = getModbusHub(hass, data)
+    hub = get_modbus_hub(hass, data)
 
     await hub.async_setup()
 
@@ -116,7 +116,6 @@ class OptionsFlowHandler(config_entries.OptionsFlow):
 
         return self.async_show_form(
             step_id="init",
-
             data_schema=self.add_suggested_values_to_schema(
                 STEP_OPTIONS_DATA_SCHEMA, self._config_entry.data
             ),
