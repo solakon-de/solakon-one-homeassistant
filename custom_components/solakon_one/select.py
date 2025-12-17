@@ -4,13 +4,13 @@ from __future__ import annotations
 import logging
 
 from homeassistant.components.select import SelectEntity, SelectEntityDescription
-from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant, callback
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
-from .const import DOMAIN, REGISTERS
+from .const import REGISTERS
 from .entity import SolakonEntity
 from .remote_control import mode_to_register_value, register_value_to_mode, RemoteControlMode
+from .types import SolakonConfigEntry
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -66,22 +66,16 @@ REMOTE_CONTROLL_MODE_SELECT_ENTITY_DESCRIPTION = SelectEntityDescription(
 
 async def async_setup_entry(
     hass: HomeAssistant,
-    config_entry: ConfigEntry,
+    config_entry: SolakonConfigEntry,
     async_add_entities: AddEntitiesCallback,
 ) -> None:
     """Set up Solakon ONE select entities."""
-    coordinator = hass.data[DOMAIN][config_entry.entry_id]["coordinator"]
-    hub = hass.data[DOMAIN][config_entry.entry_id]["hub"]
-
     # Get device info
-    device_info = await hub.async_get_device_info()
+    device_info = await config_entry.runtime_data.hub.async_get_device_info()
 
     entities = []
-
     entities.extend(
         SolakonSelect(
-            coordinator,
-            hub,
             config_entry,
             device_info,
             description,
@@ -93,8 +87,6 @@ async def async_setup_entry(
     # Special handling for remote_control_mode (virtual entity)
     entities.append(
         RemoteControlModeSelect(
-            coordinator,
-            hub,
             config_entry,
             device_info,
             REMOTE_CONTROLL_MODE_SELECT_ENTITY_DESCRIPTION,
@@ -103,14 +95,11 @@ async def async_setup_entry(
     # Special handling for force_mode (virtual entity)
     entities.append(
         ForceModeSelect(
-            coordinator,
-            hub,
             config_entry,
             device_info,
             FORCE_MODE_SELECT_ENTITY_DESCRIPTION,
         )
     )
-
     if entities:
         async_add_entities(entities, True)
 
@@ -120,19 +109,15 @@ class SolakonSelect(SolakonEntity, SelectEntity):
 
     def __init__(
         self,
-        coordinator,
-        hub,
-        config_entry: ConfigEntry,
+        config_entry: SolakonConfigEntry,
         device_info: dict,
         description: SelectEntityDescription,
     ) -> None:
         """Initialize the select entity."""
-        super().__init__(coordinator, config_entry, device_info, description.key)
-        self._hub = hub
+        super().__init__(config_entry, device_info, description.key)
         self._register_config = REGISTERS[description.key]
-        
+        # Set entity description
         self.entity_description = description
-
         # Set entity ID
         self.entity_id = f"select.solakon_one_{description.key}"
 
@@ -187,7 +172,7 @@ class SolakonSelect(SolakonEntity, SelectEntity):
         )
 
         # Write the value to the register (single register for selects)
-        success = await self._hub.async_write_register(address, numeric_value)
+        success = await self._config_entry.runtime_data.hub.async_write_register(address, numeric_value)
 
         if success:
             _LOGGER.info(f"Successfully set {self.entity_description.key} to '{option}'")
@@ -215,20 +200,16 @@ class RemoteControlModeSelect(SolakonEntity, SelectEntity):
 
     def __init__(
         self,
-        coordinator,
-        hub,
-        config_entry: ConfigEntry,
+        config_entry: SolakonConfigEntry,
         device_info: dict,
         description: SelectEntityDescription,
     ) -> None:
         """Initialize the remote control mode select entity."""
-        super().__init__(coordinator, config_entry, device_info, description.key)
-        self._hub = hub
+        super().__init__(config_entry, device_info, description.key)
         self._register_key = "remote_control"
         self._register_config = REGISTERS[self._register_key]
-
+        # Set entity description
         self.entity_description = description
-
         # Set entity ID
         self.entity_id = f"select.solakon_one_{description.key}"
 
@@ -294,7 +275,7 @@ class RemoteControlModeSelect(SolakonEntity, SelectEntity):
         )
 
         # Write the value to the register
-        success = await self._hub.async_write_register(address, register_value)
+        success = await self._config_entry.runtime_data.hub.async_write_register(address, register_value)
 
         if success:
             _LOGGER.info(f"Successfully set remote_control_mode to '{option}'")
@@ -321,20 +302,16 @@ class ForceModeSelect(SolakonEntity, SelectEntity):
 
     def __init__(
         self,
-        coordinator,
-        hub,
-        config_entry: ConfigEntry,
+        config_entry: SolakonConfigEntry,
         device_info: dict,
         description: SelectEntityDescription,
     ) -> None:
         """Initialize the force mode select entity."""
-        super().__init__(coordinator, config_entry, device_info, description.key)
-        self._hub = hub
+        super().__init__(config_entry, device_info, description.key)
         self._register_key = "remote_control"
         self._register_config = REGISTERS[self._register_key]
-
+        # Set entity description
         self.entity_description = description
-
         # Set entity ID
         self.entity_id = "select.solakon_one_{description.key}"
 
@@ -395,7 +372,7 @@ class ForceModeSelect(SolakonEntity, SelectEntity):
         )
 
         # Write the value to the register
-        success = await self._hub.async_write_register(address, mode_value)
+        success = await self._config_entry.runtime_data.hub.async_write_register(address, mode_value)
 
         if success:
             _LOGGER.info(f"Successfully set force_mode to '{option}'")
