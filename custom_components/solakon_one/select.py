@@ -42,9 +42,9 @@ SELECT_ENTITY_DESCRIPTIONS: tuple[SelectEntityDescription, ...] = (
 FORCE_MODE_SELECT_ENTITY_DESCRIPTION = SelectEntityDescription(
     key="force_mode",
     options=[
-        "0" # Disabled
-        "1" # Force Discharge
-        "3" # Force Charge
+        "0", # Disabled
+        "1", # Force Discharge
+        "3", # Force Charge
     ],
 )
 
