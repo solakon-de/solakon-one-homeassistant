@@ -3,18 +3,18 @@ from __future__ import annotations
 
 import logging
 
-from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
 from homeassistant.exceptions import ConfigEntryNotReady
 
-from .const import DOMAIN, PLATFORMS, SCAN_INTERVAL
+from .const import PLATFORMS, SCAN_INTERVAL
 from .coordinator import SolakonDataCoordinator
 from .modbus import SolakonModbusHub
+from .types import SolakonConfigEntry
 
 _LOGGER = logging.getLogger(__name__)
 
 
-async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
+async def async_setup_entry(hass: HomeAssistant, entry: SolakonConfigEntry) -> bool:
     """Set up Solakon ONE from a config entry."""
     hub = SolakonModbusHub(
         hass,
@@ -35,11 +35,8 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     # for coordinators that are created with a config entry.
     await coordinator.async_refresh()
 
-    hass.data.setdefault(DOMAIN, {})
-    hass.data[DOMAIN][entry.entry_id] = {
-        "hub": hub,
-        "coordinator": coordinator,
-    }
+    entry.runtime_data.hub = hub
+    entry.runtime_data.coordinator = coordinator
 
     await hass.config_entries.async_forward_entry_setups(entry, PLATFORMS)
 
@@ -48,17 +45,16 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     return True
 
 
-async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
+async def async_unload_entry(hass: HomeAssistant, entry: SolakonConfigEntry) -> bool:
     """Unload a config entry."""
     if unload_ok := await hass.config_entries.async_unload_platforms(entry, PLATFORMS):
-        hub = hass.data[DOMAIN][entry.entry_id]["hub"]
+        hub = entry.runtime_data.hub
         await hub.async_close()
-        hass.data[DOMAIN].pop(entry.entry_id)
 
     return unload_ok
 
 
-async def async_reload_entry(hass: HomeAssistant, entry: ConfigEntry) -> None:
+async def async_reload_entry(hass: HomeAssistant, entry: SolakonConfigEntry) -> None:
     """Reload config entry."""
     await async_unload_entry(hass, entry)
     await async_setup_entry(hass, entry)

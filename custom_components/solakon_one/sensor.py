@@ -9,7 +9,6 @@ from homeassistant.components.sensor import (
     SensorEntityDescription,
     SensorStateClass,
 )
-from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import (
     EntityCategory,
     PERCENTAGE,
@@ -25,8 +24,8 @@ from homeassistant.const import (
 from homeassistant.core import HomeAssistant, callback
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
-from .const import DOMAIN
 from .entity import SolakonEntity
+from .types import SolakonConfigEntry
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -326,12 +325,11 @@ SENSOR_ENTITY_DESCRIPTIONS: tuple[SensorEntityDescription, ...] = (
 
 async def async_setup_entry(
     hass: HomeAssistant,
-    config_entry: ConfigEntry,
+    config_entry: SolakonConfigEntry,
     async_add_entities: AddEntitiesCallback,
 ) -> None:
     """Set up Solakon ONE sensor entities."""
-    coordinator = hass.data[DOMAIN][config_entry.entry_id]["coordinator"]
-    hub = hass.data[DOMAIN][config_entry.entry_id]["hub"]
+    hub = config_entry.runtime_data.hub
 
     # Get device info for all sensors
     device_info = await hub.async_get_device_info()
@@ -340,7 +338,6 @@ async def async_setup_entry(
 
     entities.extend(
         SolakonSensor(
-            coordinator,
             config_entry,
             device_info,
             description,
@@ -356,13 +353,12 @@ class SolakonSensor(SolakonEntity, SensorEntity):
 
     def __init__(
         self,
-        coordinator,
-        config_entry: ConfigEntry,
+        config_entry: SolakonConfigEntry,
         device_info: dict,
         description: SensorEntityDescription,
     ) -> None:
         """Initialize the sensor."""
-        super().__init__(coordinator, config_entry, device_info, description.key)
+        super().__init__(config_entry, device_info, description.key)
         # Set entity description
         self.entity_description = description
         # Set entity ID
