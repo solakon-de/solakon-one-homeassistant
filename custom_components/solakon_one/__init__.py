@@ -26,10 +26,13 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
         entry.data.get("scan_interval", SCAN_INTERVAL),
     )
 
-    await hub.async_setup()
+    try:
+        await hub.async_setup()
 
-    if not await hub.async_test_connection():
-        raise ConfigEntryNotReady("Cannot connect to Solakon ONE device")
+        if not await hub.async_test_connection():
+            raise ConfigEntryNotReady("Cannot connect to Solakon ONE device")
+    except Exception as err:
+        raise ConfigEntryNotReady(err) from err
 
     coordinator = SolakonDataCoordinator(hass, hub)
     # Coordinator isn't tied to a config entry object, so call a regular refresh
