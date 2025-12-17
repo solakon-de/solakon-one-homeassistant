@@ -325,9 +325,8 @@ class ForceDurationNumber(SolakonEntity, NumberEntity):
     ) -> None:
         """Initialize the force duration number entity."""
         super().__init__(config_entry, device_info, description.key)
-
+        # Set entity description
         self.entity_description = description
-
         # Set entity ID
         self.entity_id = f"number.solakon_one_{description.key}"
 
@@ -406,9 +405,8 @@ class ForcePowerNumber(SolakonEntity, NumberEntity):
     ) -> None:
         """Initialize the force power number entity."""
         super().__init__(config_entry, device_info, description.key)
-
+        # Set entity description
         self.entity_description = description
-
         # Set entity ID
         self.entity_id = f"number.solakon_one_{description.key}"
 
