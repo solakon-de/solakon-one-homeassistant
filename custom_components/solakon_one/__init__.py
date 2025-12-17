@@ -2,21 +2,19 @@
 from __future__ import annotations
 
 import logging
-from datetime import timedelta
-from typing import Any
 
-from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
 from homeassistant.exceptions import ConfigEntryNotReady
-from homeassistant.helpers.update_coordinator import DataUpdateCoordinator, UpdateFailed
 
-from .const import DOMAIN, PLATFORMS, SCAN_INTERVAL
+from .const import PLATFORMS, SCAN_INTERVAL
+from .coordinator import SolakonDataCoordinator
 from .modbus import SolakonModbusHub
+from .types import SolakonConfigEntry, SolakonData
 
 _LOGGER = logging.getLogger(__name__)
 
 
-async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
+async def async_setup_entry(hass: HomeAssistant, entry: SolakonConfigEntry) -> bool:
     """Set up Solakon ONE from a config entry."""
     hub = SolakonModbusHub(
         hass,
@@ -40,11 +38,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     # for coordinators that are created with a config entry.
     await coordinator.async_refresh()
 
-    hass.data.setdefault(DOMAIN, {})
-    hass.data[DOMAIN][entry.entry_id] = {
-        "hub": hub,
-        "coordinator": coordinator,
-    }
+    entry.runtime_data = SolakonData(hub=hub, coordinator=coordinator)
 
     await hass.config_entries.async_forward_entry_setups(entry, PLATFORMS)
 
@@ -53,41 +47,17 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     return True
 
 
-async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
+async def async_unload_entry(hass: HomeAssistant, entry: SolakonConfigEntry) -> bool:
     """Unload a config entry."""
     if unload_ok := await hass.config_entries.async_unload_platforms(entry, PLATFORMS):
-        hub = hass.data[DOMAIN][entry.entry_id]["hub"]
+        hub = entry.runtime_data.hub
         await hub.async_close()
-        hass.data[DOMAIN].pop(entry.entry_id)
 
     return unload_ok
 
 
-async def async_reload_entry(hass: HomeAssistant, entry: ConfigEntry) -> None:
+async def async_reload_entry(hass: HomeAssistant, entry: SolakonConfigEntry) -> None:
     """Reload config entry."""
     await async_unload_entry(hass, entry)
     await async_setup_entry(hass, entry)
 
-
-class SolakonDataCoordinator(DataUpdateCoordinator):
-    """Class to manage fetching data from Solakon ONE."""
-
-    def __init__(self, hass: HomeAssistant, hub: SolakonModbusHub) -> None:
-        """Initialize coordinator."""
-        super().__init__(
-            hass,
-            _LOGGER,
-            name="Solakon ONE",
-            update_interval=timedelta(seconds=hub.scan_interval),
-        )
-        self.hub = hub
-
-    async def _async_update_data(self) -> dict[str, Any]:
-        """Fetch data from Solakon ONE."""
-        try:
-            data = await self.hub.async_read_all_data()
-            if not data:
-                raise UpdateFailed("Failed to fetch data from device")
-            return data
-        except Exception as err:
-            raise UpdateFailed(f"Error communicating with device: {err}") from err
