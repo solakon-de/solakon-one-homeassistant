@@ -9,7 +9,7 @@ from homeassistant.exceptions import ConfigEntryNotReady
 from .const import PLATFORMS, SCAN_INTERVAL
 from .coordinator import SolakonDataCoordinator
 from .modbus import SolakonModbusHub
-from .types import SolakonConfigEntry
+from .types import SolakonConfigEntry, SolakonData
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -35,8 +35,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: SolakonConfigEntry) -> b
     # for coordinators that are created with a config entry.
     await coordinator.async_refresh()
 
-    entry.runtime_data.hub = hub
-    entry.runtime_data.coordinator = coordinator
+    entry.runtime_data = SolakonData(hub=hub, coordinator=coordinator)
 
     await hass.config_entries.async_forward_entry_setups(entry, PLATFORMS)
 
