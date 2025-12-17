@@ -120,7 +120,7 @@ class SolakonSelect(SolakonEntity, SelectEntity):
         """Initialize the select entity."""
         super().__init__(config_entry, device_info, description.key)
         self._register_config = REGISTERS[description.key]
-        
+
         self.entity_description = description
 
         # Set entity ID
