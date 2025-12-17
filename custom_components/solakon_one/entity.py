@@ -1,11 +1,11 @@
 """Entities for the Solakon ONE integration."""
 
-from homeassistant.config_entries import ConfigEntry
 from homeassistant.helpers.device_registry import DeviceInfo
 from homeassistant.helpers.entity import Entity
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
 
 from .const import DOMAIN
+from .types import SolakonConfigEntry
 
 class SolakonEntity(CoordinatorEntity, Entity):
     """Base class for Solakon ONE entities."""
@@ -14,13 +14,12 @@ class SolakonEntity(CoordinatorEntity, Entity):
 
     def __init__(
         self,
-        coordinator,
-        config_entry: ConfigEntry,
+        config_entry: SolakonConfigEntry,
         device_info: dict,
         key: str,
     ) -> None:
         """Initialize the solakon ONE entity."""
-        super().__init__(coordinator)
+        super().__init__(config_entry.runtime_data.coordinator)
         self._config_entry = config_entry
 
         # Set unique ID

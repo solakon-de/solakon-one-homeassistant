@@ -4,7 +4,6 @@ from __future__ import annotations
 import logging
 
 from homeassistant.components.number import NumberEntity, NumberMode, NumberDeviceClass, NumberEntityDescription
-from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import (
     EntityCategory,
     PERCENTAGE,
@@ -16,8 +15,9 @@ from homeassistant.const import (
 from homeassistant.core import HomeAssistant, callback
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
-from .const import DOMAIN, REGISTERS
+from .const import REGISTERS
 from .entity import SolakonEntity
+from .types import SolakonConfigEntry
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -160,22 +160,16 @@ FORCE_POWER_NUMBER_ENTITY_DESCRIPTION = NumberEntityDescription(
 
 async def async_setup_entry(
     hass: HomeAssistant,
-    config_entry: ConfigEntry,
+    config_entry: SolakonConfigEntry,
     async_add_entities: AddEntitiesCallback,
 ) -> None:
     """Set up Solakon ONE number entities."""
-    coordinator = hass.data[DOMAIN][config_entry.entry_id]["coordinator"]
-    hub = hass.data[DOMAIN][config_entry.entry_id]["hub"]
-
     # Get device info
-    device_info = await hub.async_get_device_info()
+    device_info = await config_entry.runtime_data.hub.async_get_device_info()
 
     entities = []
-
     entities.extend(
         SolakonNumber(
-            coordinator,
-            hub,
             config_entry,
             device_info,
             description,
@@ -187,8 +181,6 @@ async def async_setup_entry(
     # Special handling for force_duration (virtual entity with minutes<->seconds conversion)
     entities.append(
         ForceDurationNumber(
-            coordinator,
-            hub,
             config_entry,
             device_info,
             FORCE_DURATION_NUMBER_ENTITY_DESCRIPTION,
@@ -197,14 +189,11 @@ async def async_setup_entry(
     # Special handling for force_power (writes to both 46003 and 46005)
     entities.append(
         ForcePowerNumber(
-            coordinator,
-            hub,
             config_entry,
             device_info,
             FORCE_POWER_NUMBER_ENTITY_DESCRIPTION,
         )
     )
-
     if entities:
         async_add_entities(entities, True)
 
@@ -214,15 +203,12 @@ class SolakonNumber(SolakonEntity, NumberEntity):
 
     def __init__(
         self,
-        coordinator,
-        hub,
-        config_entry: ConfigEntry,
+        config_entry: SolakonConfigEntry,
         device_info: dict,
         description: NumberEntityDescription,
     ) -> None:
         """Initialize the number entity."""
-        super().__init__(coordinator, config_entry, device_info, description.key)
-        self._hub = hub
+        super().__init__(config_entry, device_info, description.key)
         self._register_config = REGISTERS[description.key]
         # Set entity description
         self.entity_description = description
@@ -281,7 +267,7 @@ class SolakonNumber(SolakonEntity, NumberEntity):
             elif int_value > 0xFFFF:
                 int_value = 0xFFFF
 
-            success = await self._hub.async_write_register(address, int_value)
+            success = await self._config_entry.runtime_data.hub.async_write_register(address, int_value)
         else:
             # Multi-register write (32-bit)
             # Handle signed/unsigned conversion
@@ -304,7 +290,7 @@ class SolakonNumber(SolakonEntity, NumberEntity):
                 f"Writing 32-bit value: {int_value:#x} = [{high_word:#x}, {low_word:#x}]"
             )
 
-            success = await self._hub.async_write_registers(address, values)
+            success = await self._config_entry.runtime_data.hub.async_write_registers(address, values)
 
         if success:
             _LOGGER.info(f"Successfully set {self.entity_description.key} to {value}")
@@ -333,18 +319,14 @@ class ForceDurationNumber(SolakonEntity, NumberEntity):
 
     def __init__(
         self,
-        coordinator,
-        hub,
-        config_entry: ConfigEntry,
+        config_entry: SolakonConfigEntry,
         device_info: dict,
         description: NumberEntityDescription,
     ) -> None:
         """Initialize the force duration number entity."""
-        super().__init__(coordinator, config_entry, device_info, description.key)
-        self._hub = hub
-
+        super().__init__(config_entry, device_info, description.key)
+        # Set entity description
         self.entity_description = description
-
         # Set entity ID
         self.entity_id = f"number.solakon_one_{description.key}"
 
@@ -389,7 +371,7 @@ class ForceDurationNumber(SolakonEntity, NumberEntity):
         )
 
         # Write to register 46002
-        success = await self._hub.async_write_register(address, value_seconds)
+        success = await self._config_entry.runtime_data.hub.async_write_register(address, value_seconds)
 
         if success:
             _LOGGER.info(f"Successfully set force_duration to {value} min ({value_seconds}s)")
@@ -417,18 +399,14 @@ class ForcePowerNumber(SolakonEntity, NumberEntity):
 
     def __init__(
         self,
-        coordinator,
-        hub,
-        config_entry: ConfigEntry,
+        config_entry: SolakonConfigEntry,
         device_info: dict,
         description: NumberEntityDescription,
     ) -> None:
         """Initialize the force power number entity."""
-        super().__init__(coordinator, config_entry, device_info, description.key)
-        self._hub = hub
-
+        super().__init__(config_entry, device_info, description.key)
+        # Set entity description
         self.entity_description = description
-
         # Set entity ID
         self.entity_id = f"number.solakon_one_{description.key}"
 
@@ -482,8 +460,8 @@ class ForcePowerNumber(SolakonEntity, NumberEntity):
         )
 
         # Write to both registers
-        success_46003 = await self._hub.async_write_registers(address_46003, values)
-        success_46005 = await self._hub.async_write_registers(address_46005, values)
+        success_46003 = await self._config_entry.runtime_data.hub.async_write_registers(address_46003, values)
+        success_46005 = await self._config_entry.runtime_data.hub.async_write_registers(address_46005, values)
 
         if success_46003 and success_46005:
             _LOGGER.info(f"Successfully set force_power to {int_value}W")
