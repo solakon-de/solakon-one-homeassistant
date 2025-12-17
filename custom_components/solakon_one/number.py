@@ -164,13 +164,10 @@ async def async_setup_entry(
     async_add_entities: AddEntitiesCallback,
 ) -> None:
     """Set up Solakon ONE number entities."""
-    hub = config_entry.runtime_data.hub
-
     # Get device info
-    device_info = await hub.async_get_device_info()
+    device_info = await config_entry.runtime_data.hub.async_get_device_info()
 
     entities = []
-
     entities.extend(
         SolakonNumber(
             config_entry,
@@ -197,7 +194,6 @@ async def async_setup_entry(
             FORCE_POWER_NUMBER_ENTITY_DESCRIPTION,
         )
     )
-
     if entities:
         async_add_entities(entities, True)
 
