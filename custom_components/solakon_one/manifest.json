@@ -8,6 +8,10 @@
     {
       "hostname": "INVERTER_*",
       "macaddress": "441D64*"
+    },
+    {
+      "hostname": "INVERTER_*",
+      "macaddress": "140808*"
     }
   ],
   "documentation": "https://github.com/solakon-de/solakon-one-homeassistant",
