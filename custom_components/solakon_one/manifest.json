@@ -7,7 +7,7 @@
   "dhcp": [
     {
       "hostname": "INVERTER_*",
-      "macaddress": "441d64*"
+      "macaddress": "441D64*"
     }
   ],
   "documentation": "https://github.com/solakon-de/solakon-one-homeassistant",
