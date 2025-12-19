@@ -76,6 +76,12 @@
       "bms1_soh": {
         "default": "mdi:hospital-box-outline"
       },
+      "grid_total_export_energy": {
+        "default": "mdi:transmission-tower-import"
+      },
+      "grid_total_import_energy": {
+        "default": "mdi:transmission-tower-export"
+      },
       "grid_standard_code": {
         "default": "mdi:transmission-tower"
       },
