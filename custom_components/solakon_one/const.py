@@ -76,16 +76,20 @@ REGISTERS = {
     "grid_r_voltage": {"address": 39123, "count": 1, "type": "i16", "scale": 10, "unit": "V"},
     "grid_s_voltage": {"address": 39124, "count": 1, "type": "i16", "scale": 10, "unit": "V"},
     "grid_t_voltage": {"address": 39125, "count": 1, "type": "i16", "scale": 10, "unit": "V"},
+    "grid_frequency": {"address": 39139, "count": 1, "type": "i16", "scale": 100, "unit": "Hz"},
+    "active_power": {"address": 39134, "count": 2, "type": "i32", "scale": 1, "unit": "W"},
+    "reactive_power": {"address": 39136, "count": 2, "type": "i32", "scale": 1000, "unit": "kvar"},
+    "power_factor": {"address": 39138, "count": 1, "type": "i16", "scale": 1000},
+    "grid_total_export_energy": {"address": 39621, "count": 2, "type": "u32", "scale": 100, "unit": "kWh"},
+    "grid_total_import_energy": {"address": 39625, "count": 2, "type": "u32", "scale": 100, "unit": "kWh"},
+
+    # Inverter Information
     "inverter_r_current": {"address": 39126, "count": 2, "type": "i32", "scale": 1000, "unit": "A"},
     "inverter_s_current": {"address": 39128, "count": 2, "type": "i32", "scale": 1000, "unit": "A"},
     "inverter_t_current": {"address": 39130, "count": 2, "type": "i32", "scale": 1000, "unit": "A"},
     "inverter_r_frequency": {"address": 39272, "count": 1, "type": "i16", "scale": 100, "unit": "Hz"},
     "inverter_s_frequency": {"address": 39273, "count": 1, "type": "i16", "scale": 100, "unit": "Hz"},
     "inverter_t_frequency": {"address": 39274, "count": 1, "type": "i16", "scale": 100, "unit": "Hz"},
-    "active_power": {"address": 39134, "count": 2, "type": "i32", "scale": 1, "unit": "W"},
-    "reactive_power": {"address": 39136, "count": 2, "type": "i32", "scale": 1000, "unit": "kvar"},
-    "power_factor": {"address": 39138, "count": 1, "type": "i16", "scale": 1000},
-    "grid_frequency": {"address": 39139, "count": 1, "type": "i16", "scale": 100, "unit": "Hz"},
 
     # Temperature
     "internal_temp": {"address": 39141, "count": 1, "type": "i16", "scale": 10, "unit": "°C"},

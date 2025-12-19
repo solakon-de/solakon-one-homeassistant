@@ -156,6 +156,12 @@
       "inverter_r_frequency": {
         "name": "Inverter Frequency"
       },
+      "grid_total_export_energy": {
+        "name": "Grid Export Energy"
+      },
+      "grid_total_import_energy": {
+        "name": "Grid Import Energy"
+      },
       "grid_frequency": {
         "name": "Grid Frequency"
       },
