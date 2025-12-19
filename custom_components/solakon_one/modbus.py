@@ -30,14 +30,14 @@ class SolakonModbusHub:
         hass: HomeAssistant,
         host: str,
         port: int,
-        slave_id: int,
+        device_id: int,
         scan_interval: int,
     ) -> None:
         """Initialize the Modbus hub."""
         self._hass = hass
         self._host = host
         self._port = port
-        self._slave_id = slave_id
+        self._device_id = device_id
         self.scan_interval = scan_interval
         self._client = None
         self._lock = asyncio.Lock()
@@ -71,13 +71,13 @@ class SolakonModbusHub:
                     test_result = await self._client.read_holding_registers(
                         address=30000,
                         count=1,
-                        device_id=self._slave_id  # Using device_id like your working script
+                        device_id=self._device_id  # Using device_id like your working script
                     )
                     
                     if test_result.isError():
                         _LOGGER.warning(f"Test read returned error: {test_result}")
                     else:
-                        _LOGGER.info(f"Test read successful, slave_id={self._slave_id}")
+                        _LOGGER.info(f"Test read successful, device_id={self._device_id}")
                 except Exception as e:
                     _LOGGER.warning(f"Test read exception: {e}")
             else:
@@ -107,12 +107,12 @@ class SolakonModbusHub:
                 return False
             
             # Test with device_id parameter (like your working script)
-            _LOGGER.debug(f"Testing connection to {self._host}:{self._port} with slave_id={self._slave_id}")
+            _LOGGER.debug(f"Testing connection to {self._host}:{self._port} with device_id={self._device_id}")
             
             result = await self._client.read_holding_registers(
                 address=30000,  # Model name register
                 count=1,
-                device_id=self._slave_id  # Using device_id
+                device_id=self._device_id  # Using device_id
             )
 
             if not result.isError():
@@ -147,14 +147,14 @@ class SolakonModbusHub:
                 model_result = await self._client.read_holding_registers(
                     address=30000,
                     count=16,
-                    device_id=self._slave_id
+                    device_id=self._device_id
                 )
                 
                 # Read serial number
                 serial_result = await self._client.read_holding_registers(
                     address=30016,
                     count=16,
-                    device_id=self._slave_id
+                    device_id=self._device_id
                 )
                 
                 if not model_result.isError():
@@ -215,7 +215,7 @@ class SolakonModbusHub:
                     result = await self._client.read_holding_registers(
                         address=config["address"],
                         count=config.get("count", 1),
-                        device_id=self._slave_id
+                        device_id=self._device_id
                     )
 
                     if result.isError():
@@ -315,7 +315,7 @@ class SolakonModbusHub:
                 result = await self._client.write_register(
                     address=address,
                     value=value,
-                    device_id=self._slave_id
+                    device_id=self._device_id
                 )
                 
                 return not result.isError()
@@ -337,7 +337,7 @@ class SolakonModbusHub:
                 result = await self._client.write_registers(
                     address=address,
                     values=values,
-                    device_id=self._slave_id
+                    device_id=self._device_id
                 )
                 
                 return not result.isError()

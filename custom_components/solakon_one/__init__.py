@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import logging
 
+from homeassistant.const import CONF_HOST, CONF_PORT, CONF_SCAN_INTERVAL
 from homeassistant.core import HomeAssistant
 from homeassistant.exceptions import ConfigEntryNotReady
 
@@ -18,10 +19,13 @@ async def async_setup_entry(hass: HomeAssistant, entry: SolakonConfigEntry) -> b
     """Set up Solakon ONE from a config entry."""
     hub = get_modbus_hub(hass, entry)
 
-    await hub.async_setup()
+    try:
+        await hub.async_setup()
 
-    if not await hub.async_test_connection():
-        raise ConfigEntryNotReady("Cannot connect to Solakon ONE device")
+        if not await hub.async_test_connection():
+            raise ConfigEntryNotReady("Cannot connect to Solakon ONE device")
+    except Exception as err:
+        raise ConfigEntryNotReady(err) from err
 
     coordinator = SolakonDataCoordinator(hass, hub)
     # Coordinator isn't tied to a config entry object, so call a regular refresh
