@@ -6,7 +6,7 @@ import logging
 from homeassistant.core import HomeAssistant
 from homeassistant.exceptions import ConfigEntryNotReady
 
-from .const import PLATFORMS, SCAN_INTERVAL
+from .const import CONF_DEVICE_ID, DEFAULT_DEVICE_ID, PLATFORMS, SCAN_INTERVAL
 from .coordinator import SolakonDataCoordinator
 from .modbus import SolakonModbusHub
 from .types import SolakonConfigEntry, SolakonData
@@ -20,7 +20,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: SolakonConfigEntry) -> b
         hass,
         entry.data["host"],
         entry.data["port"],
-        entry.data.get("slave_id", 1),
+        entry.data.get(CONF_DEVICE_ID, DEFAULT_DEVICE_ID),
         entry.data.get("scan_interval", SCAN_INTERVAL),
     )
 
