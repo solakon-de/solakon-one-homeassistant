@@ -137,7 +137,7 @@ These sensors display the current values of controllable parameters:
    - **Host**: IP address of your Solakon ONE device
    - **Port**: Modbus TCP port (default: 502)
    - **Device Name**: Friendly name for your device
-   - **Modbus Slave ID**: Usually 1 (range: 1-247)
+   - **Modbus Device ID**: Usually 1 (range: 1-247)
    - **Update Interval**: How often to poll (1-300 seconds)
 
 ### Network Requirements
@@ -209,7 +209,7 @@ The integration provides control entities to manage your Solakon ONE device dire
 ### Common Issues
 
 - **Cannot connect**: Verify IP address and port are correct
-- **No data**: Check Modbus slave ID (usually 1)
+- **No data**: Check Modbus device ID (usually 1)
 - **Intermittent data**: Increase update interval if network is slow
 - **Missing sensors**: Some sensors only appear if hardware is present (e.g., battery sensors)
 

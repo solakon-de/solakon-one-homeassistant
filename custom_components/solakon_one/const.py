@@ -3,12 +3,13 @@ from typing import Final
 
 from homeassistant.const import Platform
 
+CONF_DEVICE_ID: Final = "slave_id"
+
 DOMAIN: Final = "solakon_one"
 DEFAULT_NAME: Final = "Solakon ONE"
 DEFAULT_PORT: Final = 502
-DEFAULT_SLAVE_ID: Final = 1
+DEFAULT_DEVICE_ID: Final = 1
 DEFAULT_SCAN_INTERVAL: Final = 30
-SCAN_INTERVAL: Final = 30
 
 PLATFORMS = [
     Platform.BINARY_SENSOR,
