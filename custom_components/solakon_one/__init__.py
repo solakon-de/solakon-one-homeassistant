@@ -7,7 +7,7 @@ from homeassistant.const import CONF_HOST, CONF_PORT, CONF_SCAN_INTERVAL
 from homeassistant.core import HomeAssistant
 from homeassistant.exceptions import ConfigEntryNotReady
 
-from .const import CONF_DEVICE_ID, DEFAULT_DEVICE_ID, DEFAULT_SCAN_INTERVAL, PLATFORMS, SCAN_INTERVAL
+from .const import CONF_DEVICE_ID, DEFAULT_DEVICE_ID, DEFAULT_SCAN_INTERVAL, PLATFORMS
 from .coordinator import SolakonDataCoordinator
 from .modbus import SolakonModbusHub
 from .types import SolakonConfigEntry, SolakonData
