@@ -9,7 +9,7 @@ from homeassistant.exceptions import ConfigEntryNotReady
 
 from .const import PLATFORMS
 from .coordinator import SolakonDataCoordinator
-from .modbus import get_modbus_hub, SolakonModbusHub
+from .modbus import get_modbus_hub
 from .types import SolakonConfigEntry, SolakonData
 
 _LOGGER = logging.getLogger(__name__)

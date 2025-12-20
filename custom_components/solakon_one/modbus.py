@@ -7,6 +7,7 @@ from typing import Any
 
 from bitflags import BitFlags
 from pymodbus.client import AsyncModbusTcpClient
+
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import CONF_HOST, CONF_PORT, CONF_SCAN_INTERVAL
 from homeassistant.core import HomeAssistant
