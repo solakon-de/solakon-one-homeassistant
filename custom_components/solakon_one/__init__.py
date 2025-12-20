@@ -22,7 +22,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: SolakonConfigEntry) -> b
         entry.data[CONF_HOST],
         entry.data[CONF_PORT],
         entry.data.get(CONF_DEVICE_ID, DEFAULT_DEVICE_ID),
-        entry.data.get(CONF_SCAN_INTERVAL, DEFAULT_SCAN_INTERVAL),
+        entry.options.get(CONF_SCAN_INTERVAL, entry.data.get(CONF_SCAN_INTERVAL, DEFAULT_SCAN_INTERVAL)),
     )
 
     try:
