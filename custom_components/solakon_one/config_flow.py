@@ -16,6 +16,7 @@ from homeassistant.helpers import config_validation as cv
 from .const import CONF_DEVICE_ID, DEFAULT_DEVICE_ID, DEFAULT_PORT, DEFAULT_SCAN_INTERVAL, DOMAIN
 from .modbus import get_modbus_hub
 
+
 _LOGGER = logging.getLogger(__name__)
 
 
@@ -86,7 +87,12 @@ class ConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
                 return self.async_create_entry(title=DEFAULT_NAME, data=user_input)
 
         return self.async_show_form(
-            step_id="user", data_schema=STEP_USER_DATA_SCHEMA, errors=errors
+            step_id="user",
+            errors=errors,
+            data_schema=self.add_suggested_values_to_schema(
+                STEP_USER_DATA_SCHEMA,
+                user_input or {}
+            ),
         )
 
     @staticmethod
@@ -98,7 +104,7 @@ class ConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
         return OptionsFlowHandler(config_entry)
 
 
-class OptionsFlowHandler(config_entries.OptionsFlow):
+class OptionsFlowHandler(config_entries.OptionsFlowWithReload):
     """Handle options flow for Solakon ONE."""
 
     def __init__(self, config_entry: config_entries.ConfigEntry) -> None:
@@ -117,7 +123,8 @@ class OptionsFlowHandler(config_entries.OptionsFlow):
         return self.async_show_form(
             step_id="init",
             data_schema=self.add_suggested_values_to_schema(
-                STEP_OPTIONS_DATA_SCHEMA, self._config_entry.data
+                STEP_OPTIONS_DATA_SCHEMA,
+                self._config_entry.options or self._config_entry.data,
             ),
         )
 
