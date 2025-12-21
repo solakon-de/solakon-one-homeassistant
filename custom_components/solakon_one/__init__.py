@@ -22,7 +22,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: SolakonConfigEntry) -> b
         entry.data[CONF_HOST],
         entry.data[CONF_PORT],
         entry.data.get(CONF_DEVICE_ID, DEFAULT_DEVICE_ID),
-        entry.data.get(CONF_SCAN_INTERVAL, DEFAULT_SCAN_INTERVAL),
+        entry.options.get(CONF_SCAN_INTERVAL, entry.data.get(CONF_SCAN_INTERVAL, DEFAULT_SCAN_INTERVAL)),
     )
 
     try:
@@ -43,16 +43,13 @@ async def async_setup_entry(hass: HomeAssistant, entry: SolakonConfigEntry) -> b
 
     await hass.config_entries.async_forward_entry_setups(entry, PLATFORMS)
 
-    entry.async_on_unload(entry.add_update_listener(async_reload_entry))
-
     return True
 
 
 async def async_unload_entry(hass: HomeAssistant, entry: SolakonConfigEntry) -> bool:
     """Unload a config entry."""
     if unload_ok := await hass.config_entries.async_unload_platforms(entry, PLATFORMS):
-        hub = entry.runtime_data.hub
-        await hub.async_close()
+        await entry.runtime_data.hub.async_close()
 
     return unload_ok
 
@@ -61,4 +58,3 @@ async def async_reload_entry(hass: HomeAssistant, entry: SolakonConfigEntry) -> 
     """Reload config entry."""
     await async_unload_entry(hass, entry)
     await async_setup_entry(hass, entry)
-
