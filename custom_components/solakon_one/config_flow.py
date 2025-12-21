@@ -94,7 +94,10 @@ class ConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
         return self.async_show_form(
             step_id="user",
             errors=errors,
-            data_schema=self.add_suggested_values_to_schema(STEP_USER_DATA_SCHEMA, user_input or {}),
+            data_schema=self.add_suggested_values_to_schema(
+                STEP_USER_DATA_SCHEMA,
+                user_input or {}
+            ),
         )
 
     @staticmethod
@@ -120,21 +123,14 @@ class OptionsFlowHandler(config_entries.OptionsFlowWithReload):
     ) -> FlowResult:
         """Manage the options."""
         if user_input is not None:
-            # Persist options
-            # self.hass.config_entries.async_update_entry(
-            #     self._config_entry, options=user_input
-            # )
-            # # Try to reload the config entry so options take effect immediately
-            # # Run as a background task so the UI isn't blocked
-            # self.hass.async_create_task(
-            #     self.hass.config_entries.async_reload(self._config_entry.entry_id)
-            # )
-            # # Finish options flow
             return self.async_create_entry(data=user_input)
 
         return self.async_show_form(
             step_id="init",
-            data_schema=self.add_suggested_values_to_schema(STEP_OPTIONS_DATA_SCHEMA, self._config_entry.options or self._config_entry.data)
+            data_schema=self.add_suggested_values_to_schema(
+                STEP_OPTIONS_DATA_SCHEMA,
+                self._config_entry.options or self._config_entry.data
+            )
         )
 
 
