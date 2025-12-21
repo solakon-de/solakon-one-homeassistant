@@ -17,7 +17,7 @@ _LOGGER = logging.getLogger(__name__)
 
 async def async_setup_entry(hass: HomeAssistant, entry: SolakonConfigEntry) -> bool:
     """Set up Solakon ONE from a config entry."""
-    hub = get_modbus_hub(hass, entry)
+    hub = get_modbus_hub(hass, entry.options | entry.data)
 
     try:
         await hub.async_setup()
