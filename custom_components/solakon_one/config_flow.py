@@ -106,7 +106,7 @@ class ConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
         return OptionsFlowHandler(config_entry)
 
 
-class OptionsFlowHandler(config_entries.OptionsFlow):
+class OptionsFlowHandler(config_entries.OptionsFlowWithReload):
     """Handle options flow for Solakon ONE."""
 
     def __init__(self, config_entry: config_entries.ConfigEntry) -> None:
@@ -120,6 +120,16 @@ class OptionsFlowHandler(config_entries.OptionsFlow):
     ) -> FlowResult:
         """Manage the options."""
         if user_input is not None:
+            # Persist options
+            # self.hass.config_entries.async_update_entry(
+            #     self._config_entry, options=user_input
+            # )
+            # # Try to reload the config entry so options take effect immediately
+            # # Run as a background task so the UI isn't blocked
+            # self.hass.async_create_task(
+            #     self.hass.config_entries.async_reload(self._config_entry.entry_id)
+            # )
+            # # Finish options flow
             return self.async_create_entry(data=user_input)
 
         return self.async_show_form(
