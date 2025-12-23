@@ -65,7 +65,7 @@ REMOTE_CONTROLL_MODE_SELECT_ENTITY_DESCRIPTION = SelectEntityDescription(
 
 
 async def async_setup_entry(
-    hass: HomeAssistant,
+    _: HomeAssistant,
     config_entry: SolakonConfigEntry,
     async_add_entities: AddEntitiesCallback,
 ) -> None:
