@@ -159,7 +159,7 @@ FORCE_POWER_NUMBER_ENTITY_DESCRIPTION = NumberEntityDescription(
 )
 
 async def async_setup_entry(
-    hass: HomeAssistant,
+    _: HomeAssistant,
     config_entry: SolakonConfigEntry,
     async_add_entities: AddEntitiesCallback,
 ) -> None:

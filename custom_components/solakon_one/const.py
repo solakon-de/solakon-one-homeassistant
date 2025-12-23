@@ -6,6 +6,9 @@ from homeassistant.const import Platform
 CONF_DEVICE_ID: Final = "slave_id"
 
 DOMAIN: Final = "solakon_one"
+
+CONF_DEVICE_ID: Final = "slave_id"
+
 DEFAULT_NAME: Final = "Solakon ONE"
 DEFAULT_PORT: Final = 502
 DEFAULT_DEVICE_ID: Final = 1
