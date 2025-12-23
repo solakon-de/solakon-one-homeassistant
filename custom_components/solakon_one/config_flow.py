@@ -14,10 +14,10 @@ from homeassistant.exceptions import HomeAssistantError
 from homeassistant.helpers import config_validation as cv
 
 from .const import CONF_DEVICE_ID, DEFAULT_DEVICE_ID, DEFAULT_NAME, DEFAULT_PORT, DEFAULT_SCAN_INTERVAL, DOMAIN
-from .modbus import SolakonModbusHub
-
+from .modbus import get_modbus_hub
 
 _LOGGER = logging.getLogger(__name__)
+
 
 STEP_USER_DATA_SCHEMA = vol.Schema(
     {
@@ -42,16 +42,10 @@ STEP_OPTIONS_DATA_SCHEMA = vol.Schema(
 
 async def validate_input(hass: HomeAssistant, data: dict[str, Any]) -> dict[str, Any]:
     """Validate the user input allows us to connect."""
-    hub = SolakonModbusHub(
-        hass,
-        data[CONF_HOST],
-        data[CONF_PORT],
-        data.get(CONF_DEVICE_ID, DEFAULT_DEVICE_ID),
-        data.get(CONF_SCAN_INTERVAL, DEFAULT_SCAN_INTERVAL),
-    )
+    hub = get_modbus_hub(hass, data)
 
     await hub.async_setup()
-    
+
     if not await hub.async_test_connection():
         await hub.async_close()
         raise CannotConnect("Cannot connect to device")
@@ -129,8 +123,8 @@ class OptionsFlowHandler(config_entries.OptionsFlowWithReload):
             step_id="init",
             data_schema=self.add_suggested_values_to_schema(
                 STEP_OPTIONS_DATA_SCHEMA,
-                self._config_entry.options or self._config_entry.data
-            )
+                self._config_entry.options or self._config_entry.data,
+            ),
         )
 
 
