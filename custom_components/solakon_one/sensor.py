@@ -321,7 +321,13 @@ SENSOR_ENTITY_DESCRIPTIONS: tuple[SensorEntityDescription, ...] = (
         entity_category=EntityCategory.DIAGNOSTIC,
         native_unit_of_measurement=UnitOfTime.SECONDS,
         suggested_display_precision=0,
-    )
+    ),
+    SensorEntityDescription(
+        key="operating_mode",
+        device_class=SensorDeviceClass.ENUM,
+        entity_category=EntityCategory.DIAGNOSTIC,
+        options=["1", "2", "3", "4", "6", "7"],
+    ),
 )
 
 async def async_setup_entry(

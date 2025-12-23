@@ -241,6 +241,17 @@
       },
       "total_pv_power": {
         "name": "PV Power"
+      },
+      "operating_mode": {
+        "name": "Operating Mode",
+        "state": {
+          "1": "Self Use",
+          "2": "Feed In Priority",
+          "3": "Backup",
+          "4": "Peak Shaving",
+          "6": "Force Charge",
+          "7": "Force Discharge"
+        }
       }
     }
   },
