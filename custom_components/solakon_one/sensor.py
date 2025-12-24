@@ -326,7 +326,7 @@ SENSOR_ENTITY_DESCRIPTIONS: tuple[SensorEntityDescription, ...] = (
         key="operating_mode",
         device_class=SensorDeviceClass.ENUM,
         entity_category=EntityCategory.DIAGNOSTIC,
-        options=["1", "2", "3", "4", "6", "7"],
+        options=[1, 2, 3, 4, 6, 7],
     ),
 )
 
