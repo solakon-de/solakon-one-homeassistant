@@ -240,13 +240,6 @@ SENSOR_ENTITY_DESCRIPTIONS: tuple[SensorEntityDescription, ...] = (
         native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
     ),
     SensorEntityDescription(
-        key="daily_generation",
-        state_class=SensorStateClass.TOTAL_INCREASING,
-        device_class=SensorDeviceClass.ENERGY,
-        entity_registry_enabled_default=False,
-        native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
-    ),
-    SensorEntityDescription(
         key="internal_temp",
         state_class=SensorStateClass.MEASUREMENT,
         device_class=SensorDeviceClass.TEMPERATURE,
