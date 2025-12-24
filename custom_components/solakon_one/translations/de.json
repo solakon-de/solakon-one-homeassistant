@@ -243,14 +243,14 @@
         "name": "PV Leistung"
       },
       "operating_mode": {
-        "name": "Betriebsmodus",
+        "name": "Betriebsart",
         "state": {
           "1": "Eigenverbrauch",
           "2": "Einspeisepriorität",
           "3": "Backup",
           "4": "Spitzenlastkappung",
-          "6": "Ladung erzwingen",
-          "7": "Entladung erzwingen"
+          "6": "Laden erzwingen",
+          "7": "Entladen erzwingen"
         }
       }
     }

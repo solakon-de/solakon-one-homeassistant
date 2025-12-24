@@ -245,12 +245,12 @@
       "operating_mode": {
         "name": "Operating Mode",
         "state": {
-          "1": "Self Use",
-          "2": "Feed In Priority",
+          "1": "Self use",
+          "2": "Feed-in priority",
           "3": "Backup",
-          "4": "Peak Shaving",
-          "6": "Force Charge",
-          "7": "Force Discharge"
+          "4": "Peak shaving",
+          "6": "Force charge",
+          "7": "Force discharge"
         }
       }
     }
