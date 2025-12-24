@@ -243,7 +243,7 @@
         "name": "PV Power"
       },
       "operating_mode": {
-        "name": "Operating Mode",
+        "name": "Operating mode",
         "state": {
           "1": "Self use",
           "2": "Feed-in priority",
