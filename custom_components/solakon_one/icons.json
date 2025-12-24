@@ -106,6 +106,9 @@
       },
       "remote_timeout_countdown": {
         "default": "mdi:timer-sand"
+      },
+      "operating_mode": {
+        "default": "mdi:car-shift-pattern"
       }
     }
   }
