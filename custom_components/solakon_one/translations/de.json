@@ -14,7 +14,7 @@
           "host": "IP Adresse des Gerätes",
           "port": "Modbus TCP Port (normalerweise 502)",
           "slave_id": "Modbus Geräte Adresse (1-247)",
-          "scan_interval": "In welchem Zeitintervall am Gerät Aktualisierungen abgefragt werden sollen (1-300 Sekunden)."
+          "scan_interval": "Zeitintervall in dem Aktualisierungen am Gerät abgefragt werden sollen (1-300 Sekunden)"
         }
       }
     },
@@ -268,7 +268,7 @@
           "scan_interval": "Aktualisierungsintervall (Sekunden)"
         },
         "data_description": {
-          "scan_interval": "In welchem Zeitintervall am Gerät Aktualisierungen abgefragt werden sollen (1-300 Sekunden)."
+          "scan_interval": "Zeitintervall in dem Aktualisierungen am Gerät abgefragt werden sollen (1-300 Sekunden)"
         }
       }
     }
