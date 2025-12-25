@@ -3,7 +3,7 @@
     "step": {
       "user": {
         "title": "Solakon ONE konfigurieren",
-        "description": "Set up your Solakon ONE device for integration with Home Assistant.",
+        "description": "Richte dein Solakon ONE Gerät für die Integration in Home Assistant ein.",
         "data": {
           "host": "Gerät",
           "port": "Port",
@@ -12,15 +12,15 @@
         },
         "data_description": {
           "host": "IP Adresse des Gerätes",
-          "port": "Modbus TCP Port",
+          "port": "Modbus TCP Port (normalerweise 502)",
           "slave_id": "Modbus Geräte Adresse (1-247)",
-          "scan_interval": "How often to poll the device (1-300 seconds)"
+          "scan_interval": "Zeitintervall in dem Aktualisierungen am Gerät abgefragt werden sollen (1-300 Sekunden)"
         }
       }
     },
     "error": {
-      "cannot_connect": "Failed to connect to the device",
-      "unknown": "Unexpected error occurred"
+      "cannot_connect": "Verbindung zum Gerät fehlgeschlagen",
+      "unknown": "Unerwarteter Fehler ist aufgetreten"
     },
     "abort": {
       "already_configured": "Gerät ist schon konfiguriert"
@@ -40,10 +40,10 @@
         "name": "Maximaler Entladestrom"
       },
       "force_duration": {
-        "name": "Force Mode Dauer"
+        "name": "Modus überschreiben Dauer"
       },
       "force_power": {
-        "name": "Force Mode Power"
+        "name": "Modus überschreiben Leistung"
       },
       "maximum_soc": {
         "name": "Maximaler Ladestand"
@@ -52,7 +52,7 @@
         "name": "Minimaler Ladestand"
       },
       "minimum_soc_ongrid": {
-        "name": "Minimaler Ladestand OnGrid"
+        "name": "Minimaler Ladestand (Netzbetrieb)"
       },
       "remote_active_power": {
         "name": "Fernsteuerung Leistung"
@@ -263,12 +263,12 @@
     "step": {
       "init": {
         "title": "Einstellungen anpassen",
-        "description": "Passe die Einstellungen für dein Solakon ONE an.",
+        "description": "Passe die Einstellungen für dein Solakon ONE Gerät an.",
         "data": {
           "scan_interval": "Aktualisierungsintervall (Sekunden)"
         },
         "data_description": {
-          "scan_interval": "In welchem Zeitintervall am Gerät Aktualisierungen abgefragt werden sollen (1-300 Sekunden)"
+          "scan_interval": "Zeitintervall in dem Aktualisierungen am Gerät abgefragt werden sollen (1-300 Sekunden)"
         }
       }
     }
