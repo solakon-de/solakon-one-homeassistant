@@ -7,14 +7,12 @@
         "data": {
           "host": "Gerät",
           "port": "Port",
-          "name": "Gerätename",
           "slave_id": "Modbus Geräte ID",
           "scan_interval": "Update Interval (Sekunden)"
         },
         "data_description": {
           "host": "IP Adresse des Gerätes",
           "port": "Modbus TCP Port",
-          "name": "Anzeigename für dein Gerät",
           "slave_id": "Modbus Geräte Adresse (1-247)",
           "scan_interval": "How often to poll the device (1-300 seconds)"
         }
