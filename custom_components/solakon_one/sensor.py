@@ -30,30 +30,6 @@ from .types import SolakonConfigEntry
 _LOGGER = logging.getLogger(__name__)
 
 
-def invert_value(value):
-    """Invert a numeric value.
-
-    - For int/float: return -value
-    - For numeric strings: try to parse to float and invert
-    - Otherwise return the value unchanged
-    """
-    try:
-        if isinstance(value, (int, float)):
-            return -value
-        if isinstance(value, str):
-            # try parse numeric string
-            try:
-                num = float(value)
-            except ValueError:
-                return value
-            # preserve integerness if applicable
-            if num.is_integer():
-                return int(-num)
-            return -num
-    except Exception:
-        return value
-    return value
-
     # Control Status Sensors (showing current values of controllable parameters)
     # "export_power_limit": {
     #     "name": "Export Power Limit",
