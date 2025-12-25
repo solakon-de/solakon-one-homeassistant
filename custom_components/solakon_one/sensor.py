@@ -29,7 +29,6 @@ from .types import SolakonConfigEntry
 
 _LOGGER = logging.getLogger(__name__)
 
-
     # Control Status Sensors (showing current values of controllable parameters)
     # "export_power_limit": {
     #     "name": "Export Power Limit",
@@ -52,7 +51,6 @@ _LOGGER = logging.getLogger(__name__)
     #     "unit": "W",
     #     "icon": "mdi:transmission-tower-export",
     # },
-
 
 # Sensor entity descriptions for Home Assistant
 SENSOR_ENTITY_DESCRIPTIONS: tuple[SensorEntityDescription, ...] = (
