@@ -8,13 +8,13 @@
           "host": "Host",
           "port": "Port",
           "slave_id": "Modbus device ID",
-          "scan_interval": "Update Interval (seconds)"
+          "scan_interval": "Update interval (seconds)"
         },
         "data_description": {
           "host": "IP address of your Solakon ONE device",
           "port": "Modbus TCP port (usually 502)",
           "slave_id": "Modbus device address (1-247)",
-          "scan_interval": "How often to poll the device (1-300 seconds)"
+          "scan_interval": "Interval to poll device for updates (1-300 seconds)"
         }
       }
     },
@@ -34,34 +34,34 @@
     },
     "number": {
       "battery_max_charge_current": {
-        "name": "Maximum Charge Current"
+        "name": "Maximum charge current"
       },
       "battery_max_discharge_current": {
-        "name": "Maximum Discharge Current"
+        "name": "Maximum discharge current"
       },
       "force_duration": {
-        "name": "Force Mode Duration"
+        "name": "Force mode duration"
       },
       "force_power": {
-        "name": "Force Mode Power"
+        "name": "Force mode power"
       },
       "maximum_soc": {
-        "name": "Maximum SoC Control"
+        "name": "Maximum state of charge"
       },
       "minimum_soc": {
-        "name": "Minimum SoC Control"
+        "name": "Minimum state of charge"
       },
       "minimum_soc_ongrid": {
-        "name": "Minimum SoC OnGrid Control"
+        "name": "Minimum state of charge (on-grid)"
       },
       "remote_active_power": {
-        "name": "Remote Active Power Control"
+        "name": "Remote control power"
       },
       "remote_reactive_power": {
-        "name": "Remote Reactive Power Control"
+        "name": "Remote control reactive power"
       },
       "remote_timeout_set": {
-        "name": "Remote Timeout Control"
+        "name": "Remote control timeout"
       }
     },
     "select": {
@@ -74,11 +74,11 @@
         }
       },
       "force_mode": {
-        "name": "Force Mode",
+        "name": "Force mode",
         "state": {
           "0": "Disabled",
-          "1": "Force Discharge",
-          "3": "Force Charge"
+          "1": "Force discharge",
+          "3": "Force charge"
         }
       },
       "remote_control_mode": {
@@ -91,90 +91,90 @@
           "7": "Battery charge",
           "9": "Grid export",
           "11": "Grid import",
-          "13": "Inverter export (AC priority)",
-          "15": "Inverter import (AC priority)"
+          "13": "Inverter export (Grid priority)",
+          "15": "Inverter import (Grid priority)"
         }
       }
     },
     "sensor": {
       "active_power": {
-        "name": "Active Power"
+        "name": "Active power"
       },
       "battery1_current": {
-        "name": "Battery Current"
+        "name": "Battery current"
       },
       "battery1_voltage": {
-        "name": "Battery Voltage"
+        "name": "Battery voltage"
       },
       "battery_combined_power": {
-        "name": "Battery Power"
+        "name": "Battery power"
       },
       "battery_soc": {
-        "name": "Battery State of Charge"
+        "name": "Battery state of charge"
       },
       "bms1_ambient_temp": {
-        "name": "Ambient Temperature"
+        "name": "Ambient temperature"
       },
       "bms1_design_energy": {
-        "name": "Battery Capacity"
+        "name": "Battery capacity"
       },
       "bms1_max_temp": {
-        "name": "BMS max Temperature"
+        "name": "BMS max temperature"
       },
       "bms1_min_temp": {
-        "name": "BMS min Temperature"
+        "name": "BMS min temperature"
       },
       "bms1_soh": {
-        "name": "Battery State of Health"
+        "name": "Battery state of health"
       },
       "pv_total_energy": {
-        "name": "PV Energy"
+        "name": "PV energy"
       },
       "cumulative_generation": {
-        "name": "Total Energy"
+        "name": "Total energy"
       },
       "daily_generation": {
-        "name": "Daily Energy"
+        "name": "Daily energy"
       },
       "battery_total_charge_energy": {
-        "name": "Battery charge energie"
+        "name": "Battery charge energy"
       },
       "battery_total_discharge_energy": {
-        "name": "Battery discharge energie"
+        "name": "Battery discharge energy"
       },
       "eps_current": {
-        "name": "EPS Current"
+        "name": "EPS current"
       },
       "eps_power": {
-        "name": "EPS Power"
+        "name": "EPS power"
       },
       "eps_voltage": {
-        "name": "EPS Voltage"
+        "name": "EPS voltage"
       },
       "inverter_r_frequency": {
-        "name": "Inverter Frequency"
+        "name": "Inverter frequency"
       },
       "grid_total_export_energy": {
-        "name": "Grid Export Energy"
+        "name": "Grid export energy"
       },
       "grid_total_import_energy": {
-        "name": "Grid Import Energy"
+        "name": "Grid import energy"
       },
       "grid_frequency": {
-        "name": "Grid Frequency"
+        "name": "Grid frequency"
       },
       "grid_r_voltage": {
-        "name": "Grid R Voltage"
+        "name": "Grid voltage"
       },
       "grid_standard_code": {
-        "name": "Grid Standard",
+        "name": "Grid standard",
         "state": {
           "6": "VDE0126",
           "7": "VDE4105_DE"
         }
       },
       "internal_temp": {
-        "name": "Internal Temperature"
+        "name": "Internal temperature"
       },
       "network_status": {
         "name": "Network",
@@ -185,66 +185,66 @@
         }
       },
       "power_factor": {
-        "name": "Power Factor"
+        "name": "Power factor"
       },
       "pv1_current": {
-        "name": "PV1 Current"
+        "name": "PV1 current"
       },
       "pv1_power": {
-        "name": "PV1 Power"
+        "name": "PV1 power"
       },
       "pv1_voltage": {
-        "name": "PV1 Voltage"
+        "name": "PV1 voltage"
       },
       "pv2_current": {
-        "name": "PV2 Current"
+        "name": "PV2 current"
       },
       "pv2_power": {
-        "name": "PV2 Power"
+        "name": "PV2 power"
       },
       "pv2_voltage": {
-        "name": "PV2 Voltage"
+        "name": "PV2 voltage"
       },
       "pv3_current": {
-        "name": "PV3 Current"
+        "name": "PV3 current"
       },
       "pv3_power": {
-        "name": "PV3 Power"
+        "name": "PV3 power"
       },
       "pv3_voltage": {
-        "name": "PV3 Voltage"
+        "name": "PV3 voltage"
       },
       "pv4_current": {
-        "name": "PV4 Current"
+        "name": "PV4 current"
       },
       "pv4_power": {
-        "name": "PV4 Power"
+        "name": "PV4 power"
       },
       "pv4_voltage": {
-        "name": "PV4 Voltage"
+        "name": "PV4 voltage"
       },
       "reactive_power": {
-        "name": "Reactive Power"
+        "name": "Reactive power"
       },
       "remote_control": {
-        "name": "Remote Control",
+        "name": "Remote control",
         "state": {
           "0": "Disabled",
-          "1": "Inverter Discharge (PV Priority)",
-          "3": "Inverter Charge (PV Priority)",
-          "5": "Battery Discharge",
-          "7": "Battery Charge",
-          "9": "Grid Discharge",
-          "11": "Grid Charge",
-          "13": "Inverter Discharge (AC First)",
-          "15": "Inverter Charge (AC First)"
+          "1": "Inverter export (PV priority)",
+          "3": "Inverter import (PV priority)",
+          "5": "Battery discharge",
+          "7": "Battery charge",
+          "9": "Grid export",
+          "11": "Grid import",
+          "13": "Inverter export (Grid priority)",
+          "15": "Inverter import (Grid priority)"
         }
       },
       "remote_timeout_countdown": {
-        "name": "Remote Timeout Countdown"
+        "name": "Remote timeout countdown"
       },
       "total_pv_power": {
-        "name": "PV Power"
+        "name": "PV power"
       },
       "operating_mode": {
         "name": "Operating mode",
@@ -262,13 +262,13 @@
   "options": {
     "step": {
       "init": {
-        "title": "Configure Options",
+        "title": "Configure options",
         "description": "Adjust settings for your Solakon ONE device.",
         "data": {
-          "scan_interval": "Update Interval (seconds)"
+          "scan_interval": "Update interval (seconds)"
         },
         "data_description": {
-          "scan_interval": "How often to poll the device for updates (1-300 seconds)"
+          "scan_interval": "Interval to poll device for updates (1-300 seconds)"
         }
       }
     }
