@@ -29,6 +29,31 @@ from .types import SolakonConfigEntry
 
 _LOGGER = logging.getLogger(__name__)
 
+
+def invert_value(value):
+    """Invert a numeric value.
+
+    - For int/float: return -value
+    - For numeric strings: try to parse to float and invert
+    - Otherwise return the value unchanged
+    """
+    try:
+        if isinstance(value, (int, float)):
+            return -value
+        if isinstance(value, str):
+            # try parse numeric string
+            try:
+                num = float(value)
+            except ValueError:
+                return value
+            # preserve integerness if applicable
+            if num.is_integer():
+                return int(-num)
+            return -num
+    except Exception:
+        return value
+    return value
+
     # Control Status Sensors (showing current values of controllable parameters)
     # "export_power_limit": {
     #     "name": "Export Power Limit",
@@ -116,6 +141,7 @@ SENSOR_ENTITY_DESCRIPTIONS: tuple[SensorEntityDescription, ...] = (
         state_class=SensorStateClass.MEASUREMENT,
         device_class=SensorDeviceClass.POWER,
         native_unit_of_measurement=UnitOfPower.WATT,
+        invert=True,
     ),
     SensorEntityDescription(
         key="battery_total_charge_energy",
@@ -386,6 +412,23 @@ class SolakonSensor(SolakonEntity, SensorEntity):
         """Handle updated data from the coordinator."""
         if self.coordinator.data and self.entity_description.key in self.coordinator.data:
             value = self.coordinator.data[self.entity_description.key]
+
+            # Apply optional description-level transforms
+            try:
+                # boolean `invert` attribute convenience
+                if getattr(self.entity_description, "invert", False):
+                    value = invert_value(value)
+
+                # `value_fn` callable on the description to transform the raw value
+                value_fn = getattr(self.entity_description, "value_fn", None)
+                if callable(value_fn):
+                    value = value_fn(value)
+            except Exception as err:  # guard against faulty user-provided transforms
+                _LOGGER.warning(
+                    "Error applying value transform for %s: %s",
+                    self.entity_description.key,
+                    err,
+                )
 
             # Handle special cases
             if isinstance(value, dict):
