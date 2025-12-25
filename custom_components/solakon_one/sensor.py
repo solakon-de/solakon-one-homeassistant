@@ -81,210 +81,215 @@ def invert_value(value):
     #     "icon": "mdi:cog",
     # },
 
+class SolakonSensorEntityDescription(SensorEntityDescription):
+    """Extends SolakonSensorEntityDescription to add an invert option."""
+
+    invert: bool = False
+
 # Sensor entity descriptions for Home Assistant
-SENSOR_ENTITY_DESCRIPTIONS: tuple[SensorEntityDescription, ...] = (
-    SensorEntityDescription(
+SENSOR_ENTITY_DESCRIPTIONS: tuple[SolakonSensorEntityDescription, ...] = (
+    SolakonSensorEntityDescription(
         key="bms1_soh",
         state_class=SensorStateClass.MEASUREMENT,
         entity_category=EntityCategory.DIAGNOSTIC,
         native_unit_of_measurement=PERCENTAGE,
     ),
-    SensorEntityDescription(
+    SolakonSensorEntityDescription(
         key="pv1_power",
         state_class=SensorStateClass.MEASUREMENT,
         device_class=SensorDeviceClass.POWER,
         entity_registry_enabled_default=False,
         native_unit_of_measurement=UnitOfPower.WATT,
     ),
-    SensorEntityDescription(
+    SolakonSensorEntityDescription(
         key="pv2_power",
         state_class=SensorStateClass.MEASUREMENT,
         device_class=SensorDeviceClass.POWER,
         entity_registry_enabled_default=False,
         native_unit_of_measurement=UnitOfPower.WATT,
     ),
-    SensorEntityDescription(
+    SolakonSensorEntityDescription(
         key="pv3_power",
         state_class=SensorStateClass.MEASUREMENT,
         device_class=SensorDeviceClass.POWER,
         entity_registry_enabled_default=False,
         native_unit_of_measurement=UnitOfPower.WATT,
     ),
-    SensorEntityDescription(
+    SolakonSensorEntityDescription(
         key="pv4_power",
         state_class=SensorStateClass.MEASUREMENT,
         device_class=SensorDeviceClass.POWER,
         entity_registry_enabled_default=False,
         native_unit_of_measurement=UnitOfPower.WATT,
     ),
-    SensorEntityDescription(
+    SolakonSensorEntityDescription(
         key="total_pv_power",
         state_class=SensorStateClass.MEASUREMENT,
         device_class=SensorDeviceClass.POWER,
         native_unit_of_measurement=UnitOfPower.WATT,
     ),
-    SensorEntityDescription(
+    SolakonSensorEntityDescription(
         key="active_power",
         state_class=SensorStateClass.MEASUREMENT,
         device_class=SensorDeviceClass.POWER,
         native_unit_of_measurement=UnitOfPower.WATT,
     ),
-    SensorEntityDescription(
+    SolakonSensorEntityDescription(
         key="reactive_power",
         state_class=SensorStateClass.MEASUREMENT,
         device_class=SensorDeviceClass.REACTIVE_POWER,
         entity_registry_enabled_default=False,
         native_unit_of_measurement=UnitOfReactivePower.KILO_VOLT_AMPERE_REACTIVE,
     ),
-    SensorEntityDescription(
+    SolakonSensorEntityDescription(
         key="battery_combined_power",
         state_class=SensorStateClass.MEASUREMENT,
         device_class=SensorDeviceClass.POWER,
         native_unit_of_measurement=UnitOfPower.WATT,
         invert=True,
     ),
-    SensorEntityDescription(
+    SolakonSensorEntityDescription(
         key="battery_total_charge_energy",
         state_class=SensorStateClass.TOTAL_INCREASING,
         device_class=SensorDeviceClass.ENERGY,
         native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
     ),
-    SensorEntityDescription(
+    SolakonSensorEntityDescription(
         key="battery_total_discharge_energy",
         state_class=SensorStateClass.TOTAL_INCREASING,
         device_class=SensorDeviceClass.ENERGY,
         native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
     ),
-    SensorEntityDescription(
+    SolakonSensorEntityDescription(
         key="battery_soc",
         state_class=SensorStateClass.MEASUREMENT,
         device_class=SensorDeviceClass.BATTERY,
         native_unit_of_measurement=PERCENTAGE,
     ),
-    SensorEntityDescription(
+    SolakonSensorEntityDescription(
         key="eps_power",
         state_class=SensorStateClass.MEASUREMENT,
         device_class=SensorDeviceClass.POWER,
         native_unit_of_measurement=UnitOfPower.WATT,
     ),
-    SensorEntityDescription(
+    SolakonSensorEntityDescription(
         key="pv1_voltage",
         state_class=SensorStateClass.MEASUREMENT,
         device_class=SensorDeviceClass.VOLTAGE,
         entity_registry_enabled_default=False,
         native_unit_of_measurement=UnitOfElectricPotential.VOLT,
     ),
-    SensorEntityDescription(
+    SolakonSensorEntityDescription(
         key="pv2_voltage",
         state_class=SensorStateClass.MEASUREMENT,
         device_class=SensorDeviceClass.VOLTAGE,
         entity_registry_enabled_default=False,
         native_unit_of_measurement=UnitOfElectricPotential.VOLT,
     ),
-    SensorEntityDescription(
+    SolakonSensorEntityDescription(
         key="pv3_voltage",
         state_class=SensorStateClass.MEASUREMENT,
         device_class=SensorDeviceClass.VOLTAGE,
         entity_registry_enabled_default=False,
         native_unit_of_measurement=UnitOfElectricPotential.VOLT,
     ),
-    SensorEntityDescription(
+    SolakonSensorEntityDescription(
         key="pv4_voltage",
         state_class=SensorStateClass.MEASUREMENT,
         device_class=SensorDeviceClass.VOLTAGE,
         entity_registry_enabled_default=False,
         native_unit_of_measurement=UnitOfElectricPotential.VOLT,
     ),
-    SensorEntityDescription(
+    SolakonSensorEntityDescription(
         key="grid_r_voltage",
         state_class=SensorStateClass.MEASUREMENT,
         device_class=SensorDeviceClass.VOLTAGE,
         native_unit_of_measurement=UnitOfElectricPotential.VOLT,
     ),
-    SensorEntityDescription(
+    SolakonSensorEntityDescription(
         key="battery1_voltage",
         state_class=SensorStateClass.MEASUREMENT,
         device_class=SensorDeviceClass.VOLTAGE,
         native_unit_of_measurement=UnitOfElectricPotential.VOLT,
     ),
-    SensorEntityDescription(
+    SolakonSensorEntityDescription(
         key="eps_voltage",
         state_class=SensorStateClass.MEASUREMENT,
         device_class=SensorDeviceClass.VOLTAGE,
         native_unit_of_measurement=UnitOfElectricPotential.VOLT,
     ),
-    SensorEntityDescription(
+    SolakonSensorEntityDescription(
         key="pv1_current",
         state_class=SensorStateClass.MEASUREMENT,
         device_class=SensorDeviceClass.CURRENT,
         entity_registry_enabled_default=False,
         native_unit_of_measurement=UnitOfElectricCurrent.AMPERE,
     ),
-    SensorEntityDescription(
+    SolakonSensorEntityDescription(
         key="pv2_current",
         state_class=SensorStateClass.MEASUREMENT,
         device_class=SensorDeviceClass.CURRENT,
         entity_registry_enabled_default=False,
         native_unit_of_measurement=UnitOfElectricCurrent.AMPERE,
     ),
-    SensorEntityDescription(
+    SolakonSensorEntityDescription(
         key="pv3_current",
         state_class=SensorStateClass.MEASUREMENT,
         device_class=SensorDeviceClass.CURRENT,
         entity_registry_enabled_default=False,
         native_unit_of_measurement=UnitOfElectricCurrent.AMPERE,
     ),
-    SensorEntityDescription(
+    SolakonSensorEntityDescription(
         key="pv4_current",
         state_class=SensorStateClass.MEASUREMENT,
         device_class=SensorDeviceClass.CURRENT,
         entity_registry_enabled_default=False,
         native_unit_of_measurement=UnitOfElectricCurrent.AMPERE,
     ),
-    SensorEntityDescription(
+    SolakonSensorEntityDescription(
         key="battery1_current",
         state_class=SensorStateClass.MEASUREMENT,
         device_class=SensorDeviceClass.CURRENT,
         native_unit_of_measurement=UnitOfElectricCurrent.AMPERE,
     ),
-    SensorEntityDescription(
+    SolakonSensorEntityDescription(
         key="eps_current",
         state_class=SensorStateClass.MEASUREMENT,
         device_class=SensorDeviceClass.CURRENT,
         native_unit_of_measurement=UnitOfElectricCurrent.AMPERE,
     ),
-    SensorEntityDescription(
+    SolakonSensorEntityDescription(
         key="pv_total_energy",
         state_class=SensorStateClass.TOTAL_INCREASING,
         device_class=SensorDeviceClass.ENERGY,
         native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
     ),
-    SensorEntityDescription(
+    SolakonSensorEntityDescription(
         key="cumulative_generation",
         state_class=SensorStateClass.TOTAL_INCREASING,
         device_class=SensorDeviceClass.ENERGY,
         native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
     ),
-    SensorEntityDescription(
+    SolakonSensorEntityDescription(
         key="daily_generation",
         state_class=SensorStateClass.TOTAL_INCREASING,
         device_class=SensorDeviceClass.ENERGY,
         entity_registry_enabled_default=False,
         native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
     ),
-    SensorEntityDescription(
+    SolakonSensorEntityDescription(
         key="internal_temp",
         state_class=SensorStateClass.MEASUREMENT,
         device_class=SensorDeviceClass.TEMPERATURE,
         native_unit_of_measurement=UnitOfTemperature.CELSIUS,
     ),
-    SensorEntityDescription(
+    SolakonSensorEntityDescription(
         key="bms1_ambient_temp",
         state_class=SensorStateClass.MEASUREMENT,
         device_class=SensorDeviceClass.TEMPERATURE,
         native_unit_of_measurement=UnitOfTemperature.CELSIUS,
     ),
-    SensorEntityDescription(
+    SolakonSensorEntityDescription(
         key="bms1_design_energy",
         state_class=SensorStateClass.MEASUREMENT,
         device_class=SensorDeviceClass.ENERGY_STORAGE,
@@ -293,66 +298,66 @@ SENSOR_ENTITY_DESCRIPTIONS: tuple[SensorEntityDescription, ...] = (
         suggested_display_precision=2,
         suggested_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
     ),
-    SensorEntityDescription(
+    SolakonSensorEntityDescription(
         key="bms1_max_temp",
         state_class=SensorStateClass.MEASUREMENT,
         device_class=SensorDeviceClass.TEMPERATURE,
         native_unit_of_measurement=UnitOfTemperature.CELSIUS,
     ),
-    SensorEntityDescription(
+    SolakonSensorEntityDescription(
         key="bms1_min_temp",
         state_class=SensorStateClass.MEASUREMENT,
         device_class=SensorDeviceClass.TEMPERATURE,
         native_unit_of_measurement=UnitOfTemperature.CELSIUS,
     ),
-    SensorEntityDescription(
+    SolakonSensorEntityDescription(
         key="power_factor",
         state_class=SensorStateClass.MEASUREMENT,
         device_class=SensorDeviceClass.POWER_FACTOR,
     ),
-    SensorEntityDescription(
+    SolakonSensorEntityDescription(
         key="inverter_r_frequency",
         state_class=SensorStateClass.MEASUREMENT,
         device_class=SensorDeviceClass.FREQUENCY,
         native_unit_of_measurement=UnitOfFrequency.HERTZ,
     ),
-    SensorEntityDescription(
+    SolakonSensorEntityDescription(
         key="grid_total_export_energy",
         state_class=SensorStateClass.TOTAL_INCREASING,
         device_class=SensorDeviceClass.ENERGY,
         native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
     ),
-    SensorEntityDescription(
+    SolakonSensorEntityDescription(
         key="grid_total_import_energy",
         state_class=SensorStateClass.TOTAL_INCREASING,
         device_class=SensorDeviceClass.ENERGY,
         native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
     ),
-    SensorEntityDescription(
+    SolakonSensorEntityDescription(
         key="grid_frequency",
         state_class=SensorStateClass.MEASUREMENT,
         device_class=SensorDeviceClass.FREQUENCY,
         native_unit_of_measurement=UnitOfFrequency.HERTZ,
     ),
-    SensorEntityDescription(
+    SolakonSensorEntityDescription(
         key="grid_standard_code",
         device_class=SensorDeviceClass.ENUM,
         entity_category=EntityCategory.DIAGNOSTIC,
         entity_registry_enabled_default=False,
     ),
-    SensorEntityDescription(
+    SolakonSensorEntityDescription(
         key="network_status",
         device_class=SensorDeviceClass.ENUM,
         entity_category=EntityCategory.DIAGNOSTIC,
         entity_registry_enabled_default=False,
     ),
-    SensorEntityDescription(
+    SolakonSensorEntityDescription(
         key="remote_control",
         device_class=SensorDeviceClass.ENUM,
         entity_category=EntityCategory.DIAGNOSTIC,
         entity_registry_enabled_default=False,
     ),
-    SensorEntityDescription(
+    SolakonSensorEntityDescription(
         key="remote_timeout_countdown",
         state_class=SensorStateClass.MEASUREMENT,
         device_class=SensorDeviceClass.DURATION,
@@ -360,7 +365,7 @@ SENSOR_ENTITY_DESCRIPTIONS: tuple[SensorEntityDescription, ...] = (
         native_unit_of_measurement=UnitOfTime.SECONDS,
         suggested_display_precision=0,
     ),
-    SensorEntityDescription(
+    SolakonSensorEntityDescription(
         key="operating_mode",
         device_class=SensorDeviceClass.ENUM,
         entity_category=EntityCategory.DIAGNOSTIC,
@@ -398,7 +403,7 @@ class SolakonSensor(SolakonEntity, SensorEntity):
         self,
         config_entry: SolakonConfigEntry,
         device_info: dict,
-        description: SensorEntityDescription,
+        description: SolakonSensorEntityDescription,
     ) -> None:
         """Initialize the sensor."""
         super().__init__(config_entry, device_info, description.key)
