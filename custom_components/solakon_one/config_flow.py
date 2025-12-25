@@ -19,6 +19,14 @@ from .modbus import get_modbus_hub
 _LOGGER = logging.getLogger(__name__)
 
 
+SCAN_INTERVAL_NUMBER_SELECTOR = selector.NumberSelector(
+    selector.NumberSelectorConfig(
+        mode=selector.NumberSelectorMode.BOX,
+        min=1, max=300, step=1,
+        unit_of_measurement=UnitOfTime.SECONDS,
+    ),
+)
+
 STEP_USER_DATA_SCHEMA = vol.Schema(
     {
         vol.Required(CONF_HOST): str,
@@ -29,25 +37,13 @@ STEP_USER_DATA_SCHEMA = vol.Schema(
                 min=1, max=247, step=1,
             ),
         ),
-        vol.Optional(CONF_SCAN_INTERVAL, default=DEFAULT_SCAN_INTERVAL): selector.NumberSelector(
-            selector.NumberSelectorConfig(
-                mode=selector.NumberSelectorMode.BOX,
-                min=1, max=300, step=1,
-                unit_of_measurement=UnitOfTime.SECONDS,
-            ),
-        ),
+        vol.Optional(CONF_SCAN_INTERVAL, default=DEFAULT_SCAN_INTERVAL): SCAN_INTERVAL_NUMBER_SELECTOR,
     }
 )
 
 STEP_OPTIONS_DATA_SCHEMA = vol.Schema(
     {
-        vol.Optional(CONF_SCAN_INTERVAL, default=DEFAULT_SCAN_INTERVAL): selector.NumberSelector(
-            selector.NumberSelectorConfig(
-                mode=selector.NumberSelectorMode.BOX,
-                min=1, max=300, step=1,
-                unit_of_measurement=UnitOfTime.SECONDS,
-            ),
-        ),
+        vol.Optional(CONF_SCAN_INTERVAL, default=DEFAULT_SCAN_INTERVAL): SCAN_INTERVAL_NUMBER_SELECTOR,
     }
 )
 
