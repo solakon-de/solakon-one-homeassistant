@@ -157,10 +157,10 @@
         "name": "Inverter Frequenz"
       },
       "grid_total_export_energy": {
-        "name": "Netz Energieexport"
+        "name": "Netz Exportenergie"
       },
       "grid_total_import_energy": {
-        "name": "Netz Energieimport"
+        "name": "Netz Importenergie"
       },
       "grid_frequency": {
         "name": "Netzfrequenz"
