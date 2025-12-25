@@ -21,7 +21,7 @@ _LOGGER = logging.getLogger(__name__)
 
 SCAN_INTERVAL_NUMBER_SELECTOR = selector.NumberSelector(
     selector.NumberSelectorConfig(
-        mode=selector.NumberSelectorMode.BOX,
+        mode=selector.NumberSelectorMode.SLIDER,
         min=1, max=300, step=1,
         unit_of_measurement=UnitOfTime.SECONDS,
     ),
@@ -33,7 +33,7 @@ STEP_USER_DATA_SCHEMA = vol.Schema(
         vol.Required(CONF_PORT, default=DEFAULT_PORT): cv.port,
         vol.Optional(CONF_DEVICE_ID, default=DEFAULT_DEVICE_ID): selector.NumberSelector(
             selector.NumberSelectorConfig(
-                mode=selector.NumberSelectorMode.SLIDER,
+                mode=selector.NumberSelectorMode.BOX,
                 min=1, max=247, step=1,
             ),
         ),
