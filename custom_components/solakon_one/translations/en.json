@@ -48,22 +48,22 @@
         "name": "Force mode power"
       },
       "maximum_soc": {
-        "name": "Maximum SoC control"
+        "name": "Maximum state of charge"
       },
       "minimum_soc": {
-        "name": "Minimum SoC control"
+        "name": "Minimum state of charge"
       },
       "minimum_soc_ongrid": {
-        "name": "Minimum SoC OnGrid control"
+        "name": "Minimum state of charge (on-grid)"
       },
       "remote_active_power": {
-        "name": "Remote active power control"
+        "name": "Remote control power"
       },
       "remote_reactive_power": {
-        "name": "Remote reactive power control"
+        "name": "Remote control reactive power"
       },
       "remote_timeout_set": {
-        "name": "Remote timeout control"
+        "name": "Remote control timeout"
       }
     },
     "select": {
