@@ -14,7 +14,7 @@
           "host": "IP address of your Solakon ONE device",
           "port": "Modbus TCP port (usually 502)",
           "slave_id": "Modbus device address (1-247)",
-          "scan_interval": "How often to poll the device for updates (1-300 seconds)."
+          "scan_interval": "Interval to poll device for updates (1-300 seconds)"
         }
       }
     },
@@ -268,7 +268,7 @@
           "scan_interval": "Update interval (seconds)"
         },
         "data_description": {
-          "scan_interval": "How often to poll the device for updates (1-300 seconds)."
+          "scan_interval": "Interval to poll device for updates (1-300 seconds)"
         }
       }
     }
