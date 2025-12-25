@@ -67,6 +67,12 @@
       "bms1_soh": {
         "default": "mdi:hospital-box-outline"
       },
+      "grid_total_export_energy": {
+        "default": "mdi:transmission-tower-import"
+      },
+      "grid_total_import_energy": {
+        "default": "mdi:transmission-tower-export"
+      },
       "grid_standard_code": {
         "default": "mdi:transmission-tower"
       },
@@ -88,6 +94,9 @@
       },
       "remote_timeout_countdown": {
         "default": "mdi:timer-sand"
+      },
+      "operating_mode": {
+        "default": "mdi:car-shift-pattern"
       }
     }
   }

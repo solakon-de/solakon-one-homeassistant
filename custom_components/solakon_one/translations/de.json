@@ -8,14 +8,14 @@
           "host": "Gerät",
           "port": "Port",
           "name": "Gerätename",
-          "slave_id": "Modbus Node ID",
+          "slave_id": "Modbus Geräte ID",
           "scan_interval": "Update Interval (Sekunden)"
         },
         "data_description": {
           "host": "IP Adresse des Gerätes",
           "port": "Modbus TCP Port",
           "name": "Anzeigename für dein Gerät",
-          "slave_id": "Modbus slave address (1-247)",
+          "slave_id": "Modbus Geräte Adresse (1-247)",
           "scan_interval": "How often to poll the device (1-300 seconds)"
         }
       }
@@ -156,6 +156,12 @@
       "inverter_r_frequency": {
         "name": "Inverter Frequenz"
       },
+      "grid_total_export_energy": {
+        "name": "Netz Exportenergie"
+      },
+      "grid_total_import_energy": {
+        "name": "Netz Importenergie"
+      },
       "grid_frequency": {
         "name": "Netzfrequenz"
       },
@@ -214,6 +220,17 @@
       },
       "total_pv_power": {
         "name": "PV Leistung"
+      },
+      "operating_mode": {
+        "name": "Betriebsart",
+        "state": {
+          "1": "Eigenverbrauch",
+          "2": "Einspeisepriorität",
+          "3": "Backup",
+          "4": "Spitzenlastkappung",
+          "6": "Laden erzwingen",
+          "7": "Entladen erzwingen"
+        }
       }
     }
   },

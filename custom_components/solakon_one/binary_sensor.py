@@ -7,13 +7,12 @@ from homeassistant.components.binary_sensor import (
     BinarySensorEntity,
     BinarySensorEntityDescription,
 )
-from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import EntityCategory
 from homeassistant.core import HomeAssistant, callback
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
-from .const import DOMAIN
 from .entity import SolakonEntity
+from .types import SolakonConfigEntry
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -28,30 +27,25 @@ BINARY_SENSOR_ENTITY_DESCRIPTIONS: tuple[BinarySensorEntityDescription, ...] = (
 )
 
 async def async_setup_entry(
-    hass: HomeAssistant,
-    config_entry: ConfigEntry,
+    _: HomeAssistant,
+    config_entry: SolakonConfigEntry,
     async_add_entities: AddEntitiesCallback,
 ) -> None:
     """Set up Solakon ONE sensor entities."""
-    coordinator = hass.data[DOMAIN][config_entry.entry_id]["coordinator"]
-    hub = hass.data[DOMAIN][config_entry.entry_id]["hub"]
-
     # Get device info for all binary sensors
-    device_info = await hub.async_get_device_info()
+    device_info = await config_entry.runtime_data.hub.async_get_device_info()
 
     entities = []
-
     entities.extend(
         SolakonSensor(
-            coordinator,
             config_entry,
             device_info,
             description,
         )
         for description in BINARY_SENSOR_ENTITY_DESCRIPTIONS
     )
-
-    async_add_entities(entities, True)
+    if entities:
+        async_add_entities(entities, True)
 
 
 class SolakonSensor(SolakonEntity, BinarySensorEntity):
@@ -59,13 +53,12 @@ class SolakonSensor(SolakonEntity, BinarySensorEntity):
 
     def __init__(
         self,
-        coordinator,
-        config_entry: ConfigEntry,
+        config_entry: SolakonConfigEntry,
         device_info: dict,
         description: BinarySensorEntityDescription,
     ) -> None:
         """Initialize the binary sensor."""
-        super().__init__(coordinator, config_entry, device_info, description.key)
+        super().__init__(config_entry, device_info, description.key)
         # Set entity description
         self.entity_description = description
         # Set entity ID
