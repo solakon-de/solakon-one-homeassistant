@@ -51,10 +51,6 @@ _LOGGER = logging.getLogger(__name__)
     #     "unit": "W",
     #     "icon": "mdi:transmission-tower-export",
     # },
-    # "work_mode": {
-    #     "name": "Work Mode",
-    #     "icon": "mdi:cog",
-    # },
 
 # Sensor entity descriptions for Home Assistant
 SENSOR_ENTITY_DESCRIPTIONS: tuple[SensorEntityDescription, ...] = (
@@ -116,6 +112,7 @@ SENSOR_ENTITY_DESCRIPTIONS: tuple[SensorEntityDescription, ...] = (
         state_class=SensorStateClass.MEASUREMENT,
         device_class=SensorDeviceClass.POWER,
         native_unit_of_measurement=UnitOfPower.WATT,
+        entity_registry_enabled_default=False,
     ),
     SensorEntityDescription(
         key="battery_total_charge_energy",
@@ -343,6 +340,15 @@ SENSOR_ENTITY_DESCRIPTIONS: tuple[SensorEntityDescription, ...] = (
     ),
 )
 
+INVERTED_SENSOR_ENTITY_DESCRIPTIONS: tuple[SensorEntityDescription, ...] = (
+    SensorEntityDescription(
+        key="battery_power",
+        state_class=SensorStateClass.MEASUREMENT,
+        device_class=SensorDeviceClass.POWER,
+        native_unit_of_measurement=UnitOfPower.WATT,
+    ),
+)
+
 async def async_setup_entry(
     _: HomeAssistant,
     config_entry: SolakonConfigEntry,
@@ -360,6 +366,14 @@ async def async_setup_entry(
             description,
         )
         for description in SENSOR_ENTITY_DESCRIPTIONS
+    )
+    entities.extend(
+        SolakonInvertedSensor(
+            config_entry,
+            device_info,
+            description,
+        )
+        for description in INVERTED_SENSOR_ENTITY_DESCRIPTIONS
     )
     if entities:
         async_add_entities(entities, True)
@@ -381,9 +395,8 @@ class SolakonSensor(SolakonEntity, SensorEntity):
         # Set entity ID
         self.entity_id = f"sensor.solakon_one_{description.key}"
 
-    @callback
-    def _handle_coordinator_update(self) -> None:
-        """Handle updated data from the coordinator."""
+    def _update_value(self) -> None:
+        """Update the sensor value from coordinator data."""
         if self.coordinator.data and self.entity_description.key in self.coordinator.data:
             value = self.coordinator.data[self.entity_description.key]
 
@@ -408,9 +421,28 @@ class SolakonSensor(SolakonEntity, SensorEntity):
             self._attr_native_value = None
             self._attr_extra_state_attributes = {}
 
+    @callback
+    def _handle_coordinator_update(self) -> None:
+        """Handle updated data from the coordinator."""
+        self._update_value()
+
         self.async_write_ha_state()
 
     @property
     def available(self) -> bool:
         """Return if entity is available."""
         return self.coordinator.last_update_success and self._attr_native_value is not None
+
+
+class SolakonInvertedSensor(SolakonSensor):
+    """Representation of a Solakon ONE inverted sensor."""
+
+    @callback
+    def _handle_coordinator_update(self) -> None:
+        """Handle updated data from the coordinator."""
+        self._update_value()
+        # Invert the native value if it's numeric
+        if isinstance(self._attr_native_value, (int, float)):
+            self._attr_native_value = -self._attr_native_value
+
+        self.async_write_ha_state()
