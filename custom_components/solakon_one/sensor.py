@@ -112,6 +112,7 @@ SENSOR_ENTITY_DESCRIPTIONS: tuple[SensorEntityDescription, ...] = (
         state_class=SensorStateClass.MEASUREMENT,
         device_class=SensorDeviceClass.POWER,
         native_unit_of_measurement=UnitOfPower.WATT,
+        entity_registry_enabled_default=False,
     ),
     SensorEntityDescription(
         key="battery_total_charge_energy",
