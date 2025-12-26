@@ -177,7 +177,7 @@
         }
       },
       "internal_temp": {
-        "name": "Internal temperature"
+        "name": "Inverter temperature"
       },
       "network_status": {
         "name": "Network",
