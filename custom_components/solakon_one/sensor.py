@@ -108,6 +108,12 @@ SENSOR_ENTITY_DESCRIPTIONS: tuple[SensorEntityDescription, ...] = (
         native_unit_of_measurement=UnitOfReactivePower.KILO_VOLT_AMPERE_REACTIVE,
     ),
     SensorEntityDescription(
+        key="battery_combined_power",
+        state_class=SensorStateClass.MEASUREMENT,
+        device_class=SensorDeviceClass.POWER,
+        native_unit_of_measurement=UnitOfPower.WATT,
+    ),
+    SensorEntityDescription(
         key="battery_total_charge_energy",
         state_class=SensorStateClass.TOTAL_INCREASING,
         device_class=SensorDeviceClass.ENERGY,
@@ -335,7 +341,7 @@ SENSOR_ENTITY_DESCRIPTIONS: tuple[SensorEntityDescription, ...] = (
 
 INVERTED_SENSOR_ENTITY_DESCRIPTIONS: tuple[SensorEntityDescription, ...] = (
     SensorEntityDescription(
-        key="battery_combined_power",
+        key="battery_power",
         state_class=SensorStateClass.MEASUREMENT,
         device_class=SensorDeviceClass.POWER,
         native_unit_of_measurement=UnitOfPower.WATT,
