@@ -353,6 +353,6 @@ def get_modbus_hub(hass: HomeAssistant, data: ConfigEntry) -> SolakonModbusHub:
         hass,
         data[CONF_HOST],
         data[CONF_PORT],
-        data.get(CONF_DEVICE_ID, DEFAULT_DEVICE_ID),
+        int(data.get(CONF_DEVICE_ID, DEFAULT_DEVICE_ID)),
         data.get(CONF_SCAN_INTERVAL, DEFAULT_SCAN_INTERVAL),
     )
