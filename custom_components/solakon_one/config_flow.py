@@ -7,11 +7,11 @@ from typing import Any
 import voluptuous as vol
 
 from homeassistant import config_entries
-from homeassistant.const import CONF_HOST, CONF_PORT, CONF_SCAN_INTERVAL
+from homeassistant.const import CONF_HOST, CONF_PORT, CONF_SCAN_INTERVAL, UnitOfTime
 from homeassistant.core import HomeAssistant, callback
 from homeassistant.data_entry_flow import FlowResult
 from homeassistant.exceptions import HomeAssistantError
-from homeassistant.helpers import config_validation as cv
+from homeassistant.helpers import config_validation as cv, selector
 
 from .const import CONF_DEVICE_ID, DEFAULT_DEVICE_ID, DEFAULT_NAME, DEFAULT_PORT, DEFAULT_SCAN_INTERVAL, DOMAIN
 from .modbus import get_modbus_hub
@@ -19,24 +19,34 @@ from .modbus import get_modbus_hub
 _LOGGER = logging.getLogger(__name__)
 
 
+SCAN_INTERVAL_NUMBER_SELECTOR = selector.NumberSelector(
+    selector.NumberSelectorConfig(
+        mode=selector.NumberSelectorMode.SLIDER,
+        min=1, max=300, step=1,
+        unit_of_measurement=UnitOfTime.SECONDS,
+    ),
+)
+
 STEP_USER_DATA_SCHEMA = vol.Schema(
     {
         vol.Required(CONF_HOST): str,
         vol.Required(CONF_PORT, default=DEFAULT_PORT): cv.port,
         vol.Optional(CONF_DEVICE_ID, default=DEFAULT_DEVICE_ID): vol.All(
-            vol.Coerce(int), vol.Range(min=1, max=247)
+            selector.NumberSelector(
+                selector.NumberSelectorConfig(
+                    mode=selector.NumberSelectorMode.BOX,
+                    min=1, max=247, step=1,
+                ),
+            ),
+            vol.Coerce(int),
         ),
-        vol.Optional(CONF_SCAN_INTERVAL, default=DEFAULT_SCAN_INTERVAL): vol.All(
-            vol.Coerce(int), vol.Range(min=1, max=300)
-        ),
+        vol.Optional(CONF_SCAN_INTERVAL, default=DEFAULT_SCAN_INTERVAL): SCAN_INTERVAL_NUMBER_SELECTOR,
     }
 )
 
 STEP_OPTIONS_DATA_SCHEMA = vol.Schema(
     {
-        vol.Optional(CONF_SCAN_INTERVAL, default=DEFAULT_SCAN_INTERVAL): vol.All(
-            vol.Coerce(int), vol.Range(min=1, max=300)
-        ),
+        vol.Optional(CONF_SCAN_INTERVAL, default=DEFAULT_SCAN_INTERVAL): SCAN_INTERVAL_NUMBER_SELECTOR,
     }
 )
 
