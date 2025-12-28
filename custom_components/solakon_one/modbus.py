@@ -32,7 +32,7 @@ class SolakonModbusHub:
         host: str,
         port: int,
         device_id: int,
-        scan_interval: float,
+        scan_interval: int,
     ) -> None:
         """Initialize the Modbus hub."""
         self._hass = hass
