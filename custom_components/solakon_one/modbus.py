@@ -335,7 +335,7 @@ def convert_bitfield32(registers: list[int], bit: int) -> bool | None:
     """Convert bitfield32 registers to boolean."""
     if len(registers) < 2 or bit > 31:
         return None
-    bitfield = Bitfield16((registers[0] << 16) | registers[1])
+    bitfield = Bitfield32((registers[0] << 16) | registers[1])
     return bool(bitfield[f"bit_{bit}"])
 
 def convert_string(registers: list[int]) -> str | None:
