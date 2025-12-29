@@ -142,21 +142,22 @@ class SolakonModbusHub:
             serial_number = None
 
             try:
-                model_name_result = await self._client.read_holding_registers(
+                model_result = await self._client.read_holding_registers(
                     address=30000,
                     count=16,
                     device_id=self._device_id
                 )
-                if not model_name_result.isError():
-                    model_name = convert_string(model_name_result.registers)
 
-                serial_number_result = await self._client.read_holding_registers(
+                serial_result = await self._client.read_holding_registers(
                     address=30016,
                     count=16,
                     device_id=self._device_id
                 )
-                if not serial_number_result.isError():
-                    serial_number = convert_string(serial_number_result.registers)
+
+                if not model_result.isError():
+                    model_name = convert_string(model_result.registers)
+                if not serial_result.isError():
+                    serial_number = convert_string(serial_result.registers)
 
             except Exception as e:
                 _LOGGER.debug(f"Device info read error: {e}")
