@@ -74,7 +74,6 @@ class SolakonModbusHub:
                         count=1,
                         device_id=self._device_id  # Using device_id like your working script
                     )
-                    
                     if test_result.isError():
                         _LOGGER.warning(f"Test read returned error: {test_result}")
                     else:
@@ -115,7 +114,6 @@ class SolakonModbusHub:
                 count=1,
                 device_id=self._device_id  # Using device_id
             )
-
             if not result.isError():
                 _LOGGER.info("Connection test successful")
                 return True
@@ -144,8 +142,24 @@ class SolakonModbusHub:
             serial_number = None
 
             try:
-                model_name = await self.async_read_model_name()
-                serial_number = await self.async_read_serial_number()    
+                model_name_result = await self._client.read_holding_registers(
+                    address=30000,
+                    count=16,
+                    device_id=self._device_id
+                )
+                if model_name_result.isError():
+                    return None
+                model_name = convert_string(model_name_result.registers)
+
+                serial_number_result = await self._client.read_holding_registers(
+                    address=30016,
+                    count=16,
+                    device_id=self._device_id
+                )
+                if serial_number_result.isError():
+                    return None
+                serial_number = convert_string(serial_number_result.registers)
+
             except Exception as e:
                 _LOGGER.debug(f"Device info read error: {e}")
             
@@ -301,26 +315,6 @@ class SolakonModbusHub:
             except Exception as err:
                 _LOGGER.error(f"Failed to write registers at {address}: {err}")
                 return False
-
-    async def async_read_model_name(self) -> str | None:
-        result = await self._client.read_holding_registers(
-            address=30000,
-            count=16,
-            device_id=self._device_id
-        )
-        if result.isError():
-            return None
-        return convert_string(result.registers)
-
-    async def async_read_serial_number(self) -> str | None:
-        result = await self._client.read_holding_registers(
-            address=30016,
-            count=16,
-            device_id=self._device_id
-        )
-        if result.isError():
-            return None
-        return convert_string(result.registers)
 
 def get_modbus_hub(hass: HomeAssistant, data: ConfigEntry) -> SolakonModbusHub:
     """Creates the hub to interact with the modbus."""
