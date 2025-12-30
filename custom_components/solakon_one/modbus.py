@@ -115,6 +115,7 @@ class SolakonModbusHub:
                 count=1,
                 device_id=self._device_id  # Using device_id
             )
+
             if not result.isError():
                 _LOGGER.info("Connection test successful")
                 return True
