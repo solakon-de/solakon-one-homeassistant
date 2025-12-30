@@ -144,14 +144,12 @@ class SolakonModbusHub:
             serial_number = None
 
             try:
-                # Read model name - using device_id like working script
                 model_result = await self._client.read_holding_registers(
                     address=30000,
                     count=16,
                     device_id=self._device_id
                 )
 
-                # Read serial number
                 serial_result = await self._client.read_holding_registers(
                     address=30016,
                     count=16,
@@ -159,23 +157,9 @@ class SolakonModbusHub:
                 )
 
                 if not model_result.isError():
-                    # Convert registers to string (matching your working script)
-                    chars = []
-                    for val in model_result.registers:
-                        chars.append(chr((val >> 8) & 0xFF))
-                        chars.append(chr(val & 0xFF))
-                    decoded = ''.join(chars).rstrip('\x00').strip()
-                    if decoded:
-                        model_name = decoded
-
+                    model_name = convert_string(model_result.registers)
                 if not serial_result.isError():
-                    chars = []
-                    for val in serial_result.registers:
-                        chars.append(chr((val >> 8) & 0xFF))
-                        chars.append(chr(val & 0xFF))
-                    decoded = ''.join(chars).rstrip('\x00').strip()
-                    if decoded:
-                        serial_number = decoded
+                    serial_number = convert_string(serial_result.registers)
 
             except Exception as e:
                 _LOGGER.debug(f"Device info read error: {e}")
@@ -272,25 +256,11 @@ class SolakonModbusHub:
                 if value > 0x7FFFFFFF:  # Using same conversion as working script
                     value = value - 0x100000000
             elif data_type in ("bitfield16"):
-                pos = config.get("bit", 0)
-                if pos > 15:
-                    return None
-                bitfield = Bitfield16(registers[0])
-                value = bool(bitfield[f"bit_{pos}"])
+                value = convert_bitfield16(registers, config.get("bit", 0))
             elif data_type in ("bitfield32"):
-                pos = config.get("bit", 0)
-                if len(registers) < 2 or pos > 31:
-                    return None
-                bitfield = Bitfield16((registers[0] << 16) | registers[1])
-                value = bool(bitfield[f"bit_{pos}"])
+                value = convert_bitfield32(registers, config.get("bit", 0))
             elif data_type == "string":
-                # Convert registers to string (exactly like working script)
-                chars = []
-                for val in registers:
-                    chars.append(chr((val >> 8) & 0xFF))
-                    chars.append(chr(val & 0xFF))
-                text = ''.join(chars).rstrip('\x00').strip()
-                return text if text else None
+                return convert_string(registers)
             else:
                 value = registers[0]
 
@@ -356,3 +326,26 @@ def get_modbus_hub(hass: HomeAssistant, data: ConfigEntry) -> SolakonModbusHub:
         data.get(CONF_DEVICE_ID, DEFAULT_DEVICE_ID),
         data.get(CONF_SCAN_INTERVAL, DEFAULT_SCAN_INTERVAL),
     )
+
+def convert_bitfield16(registers: list[int], bit: int) -> bool | None:
+    """Convert bitfield16 registers to boolean."""
+    if bit > 15:
+        return None
+    bitfield = Bitfield16(registers[0])
+    return bool(bitfield[f"bit_{bit}"])
+
+def convert_bitfield32(registers: list[int], bit: int) -> bool | None:
+    """Convert bitfield32 registers to boolean."""
+    if len(registers) < 2 or bit > 31:
+        return None
+    bitfield = Bitfield32((registers[0] << 16) | registers[1])
+    return bool(bitfield[f"bit_{bit}"])
+
+def convert_string(registers: list[int]) -> str | None:
+    """Convert registers to string."""
+    chars = []
+    for val in registers:
+        chars.append(chr((val >> 8) & 0xFF))
+        chars.append(chr(val & 0xFF))
+    text = ''.join(chars).rstrip('\x00').strip()
+    return text if text else None
