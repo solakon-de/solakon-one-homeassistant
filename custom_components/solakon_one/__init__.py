@@ -23,6 +23,21 @@ from .types import IRMeterData, SolakonData
 _LOGGER = logging.getLogger(__name__)
 
 
+async def async_migrate_entry(hass: HomeAssistant, config_entry: ConfigEntry) -> bool:
+    """Migrate old entry."""
+    _LOGGER.debug("Migrating from version %s", config_entry.version)
+
+    if config_entry.version == 1:
+        new_data = {**config_entry.data}
+        # Old entries are always for Solakon ONE
+        new_data[CONF_DEVICE_TYPE] = DEVICE_TYPE_SOLAKON_ONE
+
+        hass.config_entries.async_update_entry(config_entry, data=new_data, version=2)
+
+    _LOGGER.info("Migration to version %s successful", config_entry.version)
+    return True
+
+
 def _get_device_type(entry: ConfigEntry) -> str:
     """Get the device type from config entry."""
     # Check options first, then data for backwards compatibility
@@ -53,7 +68,7 @@ async def _async_setup_solakon_one_entry(hass: HomeAssistant, entry: ConfigEntry
         raise ConfigEntryNotReady(err) from err
 
     coordinator = SolakonDataCoordinator(hass, hub)
-    await coordinator.async_refresh()
+    await coordinator.async_config_entry_first_refresh()
 
     entry.runtime_data = SolakonData(hub=hub, coordinator=coordinator)
 
@@ -75,7 +90,7 @@ async def _async_setup_ir_meter_entry(hass: HomeAssistant, entry: ConfigEntry[IR
         raise ConfigEntryNotReady(err) from err
 
     coordinator = IRMeterDataCoordinator(hass, hub)
-    await coordinator.async_refresh()
+    await coordinator.async_config_entry_first_refresh()
 
     entry.runtime_data = IRMeterData(hub=hub, coordinator=coordinator)
 

@@ -613,9 +613,6 @@ class IRMeterSensor(CoordinatorEntity, SensorEntity):
         self._attr_unique_id = f"{config_entry.entry_id}_{description.key}"
         self._attr_translation_key = description.key
 
-        # Set entity ID
-        self.entity_id = f"sensor.solakon_ir_meter_{description.key}"
-
         self._attr_device_info = DeviceInfo(
             identifiers={(DOMAIN, config_entry.entry_id)},
             name=config_entry.data.get("name", "Solakon IR Meter"),

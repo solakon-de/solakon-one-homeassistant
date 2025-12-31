@@ -13,7 +13,7 @@
       },
       "solakon_one": {
         "title": "Configure Solakon ONE",
-        "description": "Set up your Solakon ONE inverter for integration with Home Assistant.",
+        "description": "Set up your Solakon ONE device for integration with Home Assistant.",
         "data": {
           "host": "Host",
           "port": "Port",
