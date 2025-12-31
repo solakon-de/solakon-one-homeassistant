@@ -4,22 +4,36 @@ from typing import Final
 from homeassistant.const import Platform
 
 CONF_DEVICE_ID: Final = "slave_id"
+CONF_DEVICE_TYPE: Final = "device_type"
 
 DOMAIN: Final = "solakon_one"
 
-CONF_DEVICE_ID: Final = "slave_id"
+# Device types
+DEVICE_TYPE_SOLAKON_ONE: Final = "solakon_one"
+DEVICE_TYPE_IR_METER: Final = "ir_meter"
 
 DEFAULT_NAME: Final = "Solakon ONE"
+DEFAULT_NAME_IR_METER: Final = "Solakon IR Meter"
 DEFAULT_PORT: Final = 502
+DEFAULT_IR_METER_PORT: Final = 80
 DEFAULT_DEVICE_ID: Final = 1
 DEFAULT_SCAN_INTERVAL: Final = 30
 
-PLATFORMS = [
+# Platforms for Solakon ONE (Modbus)
+PLATFORMS_SOLAKON_ONE = [
     Platform.BINARY_SENSOR,
     Platform.NUMBER,
     Platform.SELECT,
     Platform.SENSOR,
 ]
+
+# Platforms for IR Meter (HTTP API) - only sensors
+PLATFORMS_IR_METER = [
+    Platform.SENSOR,
+]
+
+# Legacy - for backwards compatibility
+PLATFORMS = PLATFORMS_SOLAKON_ONE
 
 # Register definitions
 REGISTERS = {

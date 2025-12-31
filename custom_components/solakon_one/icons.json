@@ -115,6 +115,60 @@
       },
       "operating_mode": {
         "default": "mdi:car-shift-pattern"
+      },
+      "instantaneous_power": {
+        "default": "mdi:flash"
+      },
+      "energy_total": {
+        "default": "mdi:lightning-bolt"
+      },
+      "voltage_l1": {
+        "default": "mdi:sine-wave"
+      },
+      "voltage_l2": {
+        "default": "mdi:sine-wave"
+      },
+      "voltage_l3": {
+        "default": "mdi:sine-wave"
+      },
+      "current_l1": {
+        "default": "mdi:current-ac"
+      },
+      "current_l2": {
+        "default": "mdi:current-ac"
+      },
+      "current_l3": {
+        "default": "mdi:current-ac"
+      },
+      "total_energy": {
+        "default": "mdi:counter"
+      },
+      "total_energy_tariff1": {
+        "default": "mdi:counter"
+      },
+      "total_energy_tariff2": {
+        "default": "mdi:counter"
+      },
+      "wifi_rssi": {
+        "default": "mdi:wifi"
+      },
+      "uptime": {
+        "default": "mdi:clock-outline"
+      },
+      "wifi_channel": {
+        "default": "mdi:wifi-settings"
+      },
+      "ip_address": {
+        "default": "mdi:ip-network"
+      },
+      "meter_protocol": {
+        "default": "mdi:protocol"
+      },
+      "meter_manufacturer": {
+        "default": "mdi:factory"
+      },
+      "meter_identification": {
+        "default": "mdi:identifier"
       }
     }
   }

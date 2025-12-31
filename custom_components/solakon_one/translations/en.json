@@ -2,8 +2,18 @@
   "config": {
     "step": {
       "user": {
+        "title": "Select Device Type",
+        "description": "Choose the type of Solakon device you want to add.",
+        "data": {
+          "device_type": "Device type"
+        },
+        "data_description": {
+          "device_type": "Select the Solakon device you want to configure"
+        }
+      },
+      "solakon_one": {
         "title": "Configure Solakon ONE",
-        "description": "Set up your Solakon ONE device for integration with Home Assistant.",
+        "description": "Set up your Solakon ONE inverter for integration with Home Assistant.",
         "data": {
           "host": "Host",
           "port": "Port",
@@ -14,6 +24,20 @@
           "host": "IP address of your Solakon ONE device",
           "port": "Modbus TCP port (usually 502)",
           "slave_id": "Modbus device address (1-247)",
+          "scan_interval": "Interval to poll device for updates (1-300 seconds)"
+        }
+      },
+      "ir_meter": {
+        "title": "Configure Solakon IR Meter",
+        "description": "Set up your Solakon IR Meter for integration with Home Assistant.",
+        "data": {
+          "host": "Host",
+          "port": "Port",
+          "scan_interval": "Update interval (seconds)"
+        },
+        "data_description": {
+          "host": "IP address of your Solakon IR Meter",
+          "port": "HTTP port (usually 80)",
           "scan_interval": "Interval to poll device for updates (1-300 seconds)"
         }
       }
@@ -257,6 +281,60 @@
           "6": "Force charge",
           "7": "Force discharge"
         }
+      },
+      "instantaneous_power": {
+        "name": "Power"
+      },
+      "energy_total": {
+        "name": "Total energy"
+      },
+      "voltage_l1": {
+        "name": "Voltage L1"
+      },
+      "voltage_l2": {
+        "name": "Voltage L2"
+      },
+      "voltage_l3": {
+        "name": "Voltage L3"
+      },
+      "current_l1": {
+        "name": "Current L1"
+      },
+      "current_l2": {
+        "name": "Current L2"
+      },
+      "current_l3": {
+        "name": "Current L3"
+      },
+      "total_energy": {
+        "name": "Meter total energy"
+      },
+      "total_energy_tariff1": {
+        "name": "Total energy tariff 1"
+      },
+      "total_energy_tariff2": {
+        "name": "Total energy tariff 2"
+      },
+      "wifi_rssi": {
+        "name": "WiFi signal strength"
+      },
+      "uptime": {
+        "name": "Uptime"
+      },
+      "wifi_channel": {
+        "name": "WiFi channel"
+      },
+      "ip_address": {
+        "name": "IP address"
+      },
+      "meter_protocol": {
+        "name": "Meter protocol"
+      },
+      "meter_manufacturer": {
+        "name": "Meter manufacturer"
+      },
+      "meter_identification": {
+        "name": "Meter identification"
       }
     }
   },
