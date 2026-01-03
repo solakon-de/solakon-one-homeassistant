@@ -386,7 +386,10 @@ class SolakonSensor(SolakonEntity, SensorEntity):
     @callback
     def _handle_coordinator_update(self) -> None:
         """Handle updated data from the coordinator."""
-        if self.coordinator.data and self.entity_description.key in self.coordinator.data:
+        if (
+            self.coordinator.data
+            and self.entity_description.key in self.coordinator.data
+        ):
             self._attr_native_value = self.coordinator.data[self.entity_description.key]
         else:
             self._attr_native_value = None
