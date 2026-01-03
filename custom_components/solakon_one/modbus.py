@@ -52,20 +52,20 @@ class SolakonModbusHub:
         """Set up the Modbus connection."""
         try:
             _LOGGER.info(f"Attempting to connect to Modbus TCP at {self._host}:{self._port}")
-            
+
             # Create client exactly like the working script
             self._client = AsyncModbusTcpClient(
                 host=self._host,
                 port=self._port,
                 timeout=5  # Same timeout as working script
             )
-            
+
             # Connect to the device
             await self._client.connect()
-            
+
             if self._client.connected:
                 _LOGGER.info(f"Successfully connected to {self._host}:{self._port}")
-                
+
                 # Test the connection with a simple read
                 # Using device_id parameter like the working script
                 try:
@@ -74,7 +74,7 @@ class SolakonModbusHub:
                         count=1,
                         device_id=self._device_id  # Using device_id like your working script
                     )
-                    
+
                     if test_result.isError():
                         _LOGGER.warning(f"Test read returned error: {test_result}")
                     else:
@@ -84,7 +84,7 @@ class SolakonModbusHub:
             else:
                 _LOGGER.error(f"Failed to connect to {self._host}:{self._port}")
                 raise ConnectionError(f"Failed to connect to {self._host}:{self._port}")
-                
+
         except Exception as err:
             _LOGGER.error(f"Connection setup error: {err}")
             raise
@@ -102,14 +102,14 @@ class SolakonModbusHub:
         try:
             if not self._client:
                 await self.async_setup()
-            
+
             if not self.connected:
                 _LOGGER.error("Client not connected for test")
                 return False
-            
+
             # Test with device_id parameter (like your working script)
             _LOGGER.debug(f"Testing connection to {self._host}:{self._port} with device_id={self._device_id}")
-            
+
             result = await self._client.read_holding_registers(
                 address=30000,  # Model name register
                 count=1,
@@ -119,10 +119,10 @@ class SolakonModbusHub:
             if not result.isError():
                 _LOGGER.info("Connection test successful")
                 return True
-            
+
             _LOGGER.error(f"Connection test failed: {result}")
             return False
-                
+
         except Exception as err:
             _LOGGER.error(f"Connection test error: {err}")
             return False
@@ -132,61 +132,45 @@ class SolakonModbusHub:
         try:
             if not self.connected:
                 await self.async_setup()
-                
+
             if not self._client or not self.connected:
                 return {
                     "manufacturer": "Solakon",
                     "model": "Solakon ONE",
                     "name": "Solakon ONE",
                 }
-            
+
             model_name = "Solakon ONE"
             serial_number = None
 
             try:
-                # Read model name - using device_id like working script
                 model_result = await self._client.read_holding_registers(
                     address=30000,
                     count=16,
                     device_id=self._device_id
                 )
-                
-                # Read serial number
+
                 serial_result = await self._client.read_holding_registers(
                     address=30016,
                     count=16,
                     device_id=self._device_id
                 )
-                
+
                 if not model_result.isError():
-                    # Convert registers to string (matching your working script)
-                    chars = []
-                    for val in model_result.registers:
-                        chars.append(chr((val >> 8) & 0xFF))
-                        chars.append(chr(val & 0xFF))
-                    decoded = ''.join(chars).rstrip('\x00').strip()
-                    if decoded:
-                        model_name = decoded
-                        
+                    model_name = convert_string(model_result.registers)
                 if not serial_result.isError():
-                    chars = []
-                    for val in serial_result.registers:
-                        chars.append(chr((val >> 8) & 0xFF))
-                        chars.append(chr(val & 0xFF))
-                    decoded = ''.join(chars).rstrip('\x00').strip()
-                    if decoded:
-                        serial_number = decoded
-                    
+                    serial_number = convert_string(serial_result.registers)
+
             except Exception as e:
                 _LOGGER.debug(f"Device info read error: {e}")
-            
+
             return {
                 "manufacturer": "Solakon",
                 "model": model_name,
                 "name": model_name,
                 "serial_number": serial_number,
             }
-            
+
         except Exception as err:
             _LOGGER.error(f"Failed to get device info: {err}")
             return {
@@ -198,13 +182,13 @@ class SolakonModbusHub:
     async def async_read_registers(self) -> dict[str, Any]:
         """Read all configured registers."""
         data = {}
-        
+
         if not self._client or not self.connected:
             try:
                 await self.async_setup()
             except Exception:
                 return data
-                
+
         if not self.connected:
             _LOGGER.error("Client not connected for register read")
             return data
@@ -224,20 +208,20 @@ class SolakonModbusHub:
                             f"Error reading register {key} at address {config['address']}: {result}"
                         )
                         continue
-                    
+
                     # Process the register value
                     value = self._process_register_value(
                         result.registers, config
                     )
-                    
+
                     if value is not None:
                         data[key] = value
-                        
+
                 except Exception as err:
                     _LOGGER.debug(
                         f"Failed to read register {key} at address {config.get('address', 'unknown')}: {err}"
                     )
-                    
+
         return data
 
     async def async_read_all_data(self) -> dict[str, Any]:
@@ -272,33 +256,19 @@ class SolakonModbusHub:
                 if value > 0x7FFFFFFF:  # Using same conversion as working script
                     value = value - 0x100000000
             elif data_type in ("bitfield16"):
-                pos = config.get("bit", 0)
-                if pos > 15:
-                    return None
-                bitfield = Bitfield16(registers[0])
-                value = bool(bitfield[f"bit_{pos}"])
+                value = convert_bitfield16(registers, config.get("bit", 0))
             elif data_type in ("bitfield32"):
-                pos = config.get("bit", 0)
-                if len(registers) < 2 or pos > 31:
-                    return None
-                bitfield = Bitfield16((registers[0] << 16) | registers[1])
-                value = bool(bitfield[f"bit_{pos}"])
+                value = convert_bitfield32(registers, config.get("bit", 0))
             elif data_type == "string":
-                # Convert registers to string (exactly like working script)
-                chars = []
-                for val in registers:
-                    chars.append(chr((val >> 8) & 0xFF))
-                    chars.append(chr(val & 0xFF))
-                text = ''.join(chars).rstrip('\x00').strip()
-                return text if text else None
+                return convert_string(registers)
             else:
                 value = registers[0]
-                
+
             # Apply scaling if defined
             if scale != 1 and value is not None:
                 value = float(value) / scale
             return value
-            
+
         except Exception as err:
             _LOGGER.debug(f"Failed to process register value: {err}")
             return None
@@ -318,9 +288,9 @@ class SolakonModbusHub:
                     value=value,
                     device_id=self._device_id
                 )
-                
+
                 return not result.isError()
-                
+
             except Exception as err:
                 _LOGGER.error(f"Failed to write register at {address}: {err}")
                 return False
@@ -340,9 +310,9 @@ class SolakonModbusHub:
                     values=values,
                     device_id=self._device_id
                 )
-                
+
                 return not result.isError()
-                
+
             except Exception as err:
                 _LOGGER.error(f"Failed to write registers at {address}: {err}")
                 return False
@@ -356,3 +326,26 @@ def get_modbus_hub(hass: HomeAssistant, data: ConfigEntry) -> SolakonModbusHub:
         data.get(CONF_DEVICE_ID, DEFAULT_DEVICE_ID),
         data.get(CONF_SCAN_INTERVAL, DEFAULT_SCAN_INTERVAL),
     )
+
+def convert_bitfield16(registers: list[int], bit: int) -> bool | None:
+    """Convert bitfield16 registers to boolean."""
+    if bit > 15:
+        return None
+    bitfield = Bitfield16(registers[0])
+    return bool(bitfield[f"bit_{bit}"])
+
+def convert_bitfield32(registers: list[int], bit: int) -> bool | None:
+    """Convert bitfield32 registers to boolean."""
+    if len(registers) < 2 or bit > 31:
+        return None
+    bitfield = Bitfield32((registers[0] << 16) | registers[1])
+    return bool(bitfield[f"bit_{bit}"])
+
+def convert_string(registers: list[int]) -> str | None:
+    """Convert registers to string."""
+    chars = []
+    for val in registers:
+        chars.append(chr((val >> 8) & 0xFF))
+        chars.append(chr(val & 0xFF))
+    text = ''.join(chars).rstrip('\x00').strip()
+    return text if text else None
