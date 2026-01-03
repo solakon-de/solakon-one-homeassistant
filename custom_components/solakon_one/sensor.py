@@ -398,15 +398,8 @@ class SolakonSensor(SolakonEntity, SensorEntity):
                     self._attr_native_value = str(value)
             else:
                 self._attr_native_value = value
-
-            # Add extra state attributes for complex values
-            if isinstance(value, dict):
-                self._attr_extra_state_attributes = value
-            else:
-                self._attr_extra_state_attributes = {}
         else:
             self._attr_native_value = None
-            self._attr_extra_state_attributes = {}
 
         self.async_write_ha_state()
 
