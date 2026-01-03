@@ -28,6 +28,9 @@
   },
   "entity": {
     "binary_sensor": {
+      "grid_status": {
+        "name": "Grid"
+      },
       "island_mode": {
         "name": "Island mode"
       }
@@ -107,6 +110,9 @@
         "name": "Battery voltage"
       },
       "battery_combined_power": {
+        "name": "Battery power"
+      },
+      "battery_power": {
         "name": "Battery power"
       },
       "battery_soc": {
@@ -249,6 +255,7 @@
       "operating_mode": {
         "name": "Operating mode",
         "state": {
+          "0": "Not set",
           "1": "Self use",
           "2": "Feed-in priority",
           "3": "Backup",
