@@ -90,7 +90,7 @@
           "5": "Batterie entladen",
           "7": "Batterie laden",
           "9": "Netz export",
-          "11": "Netz import",  
+          "11": "Netz import",
           "13": "Inverter export (Netz priorität)",
           "15": "Inverter import (Netz priorität)"
         }
@@ -249,6 +249,7 @@
       "operating_mode": {
         "name": "Betriebsart",
         "state": {
+          "0": "Nicht festgelegt",
           "1": "Eigenverbrauch",
           "2": "Einspeisepriorität",
           "3": "Backup",
