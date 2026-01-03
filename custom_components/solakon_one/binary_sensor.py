@@ -37,7 +37,7 @@ async def async_setup_entry(
 
     entities = []
     entities.extend(
-        SolakonSensor(
+        SolakonBinarySensor(
             config_entry,
             device_info,
             description,
@@ -48,7 +48,7 @@ async def async_setup_entry(
         async_add_entities(entities, True)
 
 
-class SolakonSensor(SolakonEntity, BinarySensorEntity):
+class SolakonBinarySensor(SolakonEntity, BinarySensorEntity):
     """Representation of a Solakon ONE binary sensor."""
 
     def __init__(
