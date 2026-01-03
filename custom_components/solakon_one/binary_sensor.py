@@ -1,9 +1,12 @@
 """Binary sensor platform for Solakon ONE integration."""
 from __future__ import annotations
 
+from collections.abc import Callable
+from dataclasses import dataclass
 import logging
 
 from homeassistant.components.binary_sensor import (
+    BinarySensorDeviceClass,
     BinarySensorEntity,
     BinarySensorEntityDescription,
 )
@@ -17,9 +20,21 @@ from .types import SolakonConfigEntry
 _LOGGER = logging.getLogger(__name__)
 
 
+@dataclass(frozen=True, kw_only=True)
+class SolakonBinarySensorDescription(BinarySensorEntityDescription):
+    """Solakon binary sensor entity description."""
+
+    value_fn: Callable[[bool], bool | None]
+
 # Binary sensor entity descriptions for Home Assistant
-BINARY_SENSOR_ENTITY_DESCRIPTIONS: tuple[BinarySensorEntityDescription, ...] = (
-    BinarySensorEntityDescription(
+BINARY_SENSOR_ENTITY_DESCRIPTIONS: tuple[SolakonBinarySensorDescription, ...] = (
+    SolakonBinarySensorDescription(
+        key="grid_status",
+        device_class=BinarySensorDeviceClass.CONNECTIVITY,
+        entity_category=EntityCategory.DIAGNOSTIC,
+        value_fn=lambda val: not val,
+    ),
+    SolakonBinarySensorDescription(
         key="island_mode",
         entity_category=EntityCategory.DIAGNOSTIC,
         entity_registry_enabled_default=False,
@@ -37,7 +52,7 @@ async def async_setup_entry(
 
     entities = []
     entities.extend(
-        SolakonSensor(
+        SolakonBinarySensor(
             config_entry,
             device_info,
             description,
@@ -48,14 +63,14 @@ async def async_setup_entry(
         async_add_entities(entities, True)
 
 
-class SolakonSensor(SolakonEntity, BinarySensorEntity):
+class SolakonBinarySensor(SolakonEntity, BinarySensorEntity):
     """Representation of a Solakon ONE binary sensor."""
 
     def __init__(
         self,
         config_entry: SolakonConfigEntry,
         device_info: dict,
-        description: BinarySensorEntityDescription,
+        description: SolakonBinarySensorDescription,
     ) -> None:
         """Initialize the binary sensor."""
         super().__init__(config_entry, device_info, description.key)
@@ -69,7 +84,11 @@ class SolakonSensor(SolakonEntity, BinarySensorEntity):
         """Handle updated data from the coordinator."""
 
         if self.coordinator.data and self.entity_description.key in self.coordinator.data:
-            self._attr_is_on = self.coordinator.data[self.entity_description.key]
+            value = self.coordinator.data[self.entity_description.key]
+            if self.entity_description.value_fn and value is not None:
+                self._attr_is_on = self.entity_description.value_fn(value)
+            else:
+                self._attr_is_on = value
         else:
             self._attr_is_on = None
 
