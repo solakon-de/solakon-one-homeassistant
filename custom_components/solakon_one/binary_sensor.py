@@ -21,20 +21,20 @@ _LOGGER = logging.getLogger(__name__)
 
 
 @dataclass(frozen=True, kw_only=True)
-class SolakonBinarySensorDescription(BinarySensorEntityDescription):
+class SolakonBinarySensorEntityDescription(BinarySensorEntityDescription):
     """Solakon binary sensor entity description."""
 
     value_fn: Callable[[bool], bool | None] | None = None
 
 # Binary sensor entity descriptions for Home Assistant
-BINARY_SENSOR_ENTITY_DESCRIPTIONS: tuple[SolakonBinarySensorDescription, ...] = (
-    SolakonBinarySensorDescription(
+BINARY_SENSOR_ENTITY_DESCRIPTIONS: tuple[SolakonBinarySensorEntityDescription, ...] = (
+    SolakonBinarySensorEntityDescription(
         key="grid_status",
         device_class=BinarySensorDeviceClass.CONNECTIVITY,
         entity_category=EntityCategory.DIAGNOSTIC,
         value_fn=lambda val: not val,
     ),
-    SolakonBinarySensorDescription(
+    SolakonBinarySensorEntityDescription(
         key="island_mode",
         entity_category=EntityCategory.DIAGNOSTIC,
         entity_registry_enabled_default=False,
@@ -70,7 +70,7 @@ class SolakonBinarySensor(SolakonEntity, BinarySensorEntity):
         self,
         config_entry: SolakonConfigEntry,
         device_info: dict,
-        description: SolakonBinarySensorDescription,
+        description: SolakonBinarySensorEntityDescription,
     ) -> None:
         """Initialize the binary sensor."""
         super().__init__(config_entry, device_info, description.key)
