@@ -1,0 +1,27 @@
+name: Home Assistant
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+  hassfest:
+    name: Hassfest
+    runs-on: ubuntu-latest
+    steps:
+      - name: ⤵️ Checkout repository
+        uses: actions/checkout@v6
+      - name: 🔎 Analyse with Hassfest
+        uses: home-assistant/actions/hassfest@master
+  hacs:
+    name: HACS
+    runs-on: ubuntu-latest
+    steps:
+      - name: ⤵️ Checkout repository
+        uses: actions/checkout@v6
+      - name: 🔎 Analyse with hacs
+        uses: hacs/action@main
+        with:
+          category: integration
