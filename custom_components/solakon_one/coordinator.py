@@ -35,3 +35,29 @@ class SolakonDataCoordinator(DataUpdateCoordinator):
             return data
         except Exception as err:
             raise UpdateFailed(f"Error communicating with device: {err}") from err
+
+
+class IRMeterDataCoordinator(DataUpdateCoordinator):
+    """Class to manage fetching data from Solakon IR Meter."""
+
+    def __init__(self, hass: HomeAssistant, hub: Any) -> None:
+        """Initialize coordinator."""
+        from .ir_meter import IRMeterHub
+
+        self.hub: IRMeterHub = hub
+        super().__init__(
+            hass,
+            _LOGGER,
+            name="Solakon IR Meter",
+            update_interval=timedelta(seconds=hub.scan_interval),
+        )
+
+    async def _async_update_data(self) -> dict[str, Any]:
+        """Fetch data from IR Meter."""
+        try:
+            data = await self.hub.async_read_all_data()
+            if not data:
+                raise UpdateFailed("Failed to fetch data from IR Meter")
+            return data
+        except Exception as err:
+            raise UpdateFailed(f"Error communicating with IR Meter: {err}") from err
