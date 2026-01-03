@@ -24,7 +24,7 @@ _LOGGER = logging.getLogger(__name__)
 class SolakonBinarySensorDescription(BinarySensorEntityDescription):
     """Solakon binary sensor entity description."""
 
-    value_fn: Callable[[bool], bool | None]
+    value_fn: Callable[[bool], bool | None] | None = None
 
 # Binary sensor entity descriptions for Home Assistant
 BINARY_SENSOR_ENTITY_DESCRIPTIONS: tuple[SolakonBinarySensorDescription, ...] = (

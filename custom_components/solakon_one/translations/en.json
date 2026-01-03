@@ -112,9 +112,6 @@
       "battery_combined_power": {
         "name": "Battery power"
       },
-      "battery_power": {
-        "name": "Battery power"
-      },
       "battery_soc": {
         "name": "Battery state of charge"
       },
@@ -255,7 +252,6 @@
       "operating_mode": {
         "name": "Operating mode",
         "state": {
-          "0": "Not set",
           "1": "Self use",
           "2": "Feed-in priority",
           "3": "Backup",
