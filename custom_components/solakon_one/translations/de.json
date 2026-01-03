@@ -252,6 +252,7 @@
       "operating_mode": {
         "name": "Betriebsart",
         "state": {
+          "0": "Nicht festgelegt",
           "1": "Eigenverbrauch",
           "2": "Einspeisepriorität",
           "3": "Backup",
