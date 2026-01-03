@@ -24,6 +24,7 @@ _LOGGER = logging.getLogger(__name__)
 class SolakonBinarySensorEntityDescription(BinarySensorEntityDescription):
     """Solakon binary sensor entity description."""
 
+    data_key: str | None = None
     value_fn: Callable[[bool], bool | None] | None = None
 
 # Binary sensor entity descriptions for Home Assistant
@@ -38,6 +39,7 @@ BINARY_SENSOR_ENTITY_DESCRIPTIONS: tuple[SolakonBinarySensorEntityDescription, .
         key="island_mode",
         entity_category=EntityCategory.DIAGNOSTIC,
         entity_registry_enabled_default=False,
+        data_key="grid_status",
     ),
 )
 
@@ -82,9 +84,10 @@ class SolakonBinarySensor(SolakonEntity, BinarySensorEntity):
     @callback
     def _handle_coordinator_update(self) -> None:
         """Handle updated data from the coordinator."""
+        key = self.entity_description.data_key if self.entity_description.data_key else self.entity_description.key
 
-        if self.coordinator.data and self.entity_description.key in self.coordinator.data:
-            value = self.coordinator.data[self.entity_description.key]
+        if self.coordinator.data and key in self.coordinator.data:
+            value = self.coordinator.data[key]
             if self.entity_description.value_fn and value is not None:
                 self._attr_is_on = self.entity_description.value_fn(value)
             else:
