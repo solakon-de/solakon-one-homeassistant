@@ -1,4 +1,5 @@
 """Binary sensor platform for Solakon ONE integration."""
+
 from __future__ import annotations
 
 import logging
@@ -25,6 +26,7 @@ BINARY_SENSOR_ENTITY_DESCRIPTIONS: tuple[BinarySensorEntityDescription, ...] = (
         entity_registry_enabled_default=False,
     ),
 )
+
 
 async def async_setup_entry(
     _: HomeAssistant,
@@ -68,7 +70,10 @@ class SolakonBinarySensor(SolakonEntity, BinarySensorEntity):
     def _handle_coordinator_update(self) -> None:
         """Handle updated data from the coordinator."""
 
-        if self.coordinator.data and self.entity_description.key in self.coordinator.data:
+        if (
+            self.coordinator.data
+            and self.entity_description.key in self.coordinator.data
+        ):
             self._attr_is_on = self.coordinator.data[self.entity_description.key]
         else:
             self._attr_is_on = None

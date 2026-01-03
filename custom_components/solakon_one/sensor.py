@@ -1,4 +1,5 @@
 """Sensor platform for Solakon ONE integration."""
+
 from __future__ import annotations
 
 import logging
@@ -29,32 +30,32 @@ from .types import SolakonConfigEntry
 
 _LOGGER = logging.getLogger(__name__)
 
-    # Control Status Sensors (showing current values of controllable parameters)
-    # "export_power_limit": {
-    #     "name": "Export Power Limit",
-    #     "device_class": "power",
-    #     "state_class": "measurement",
-    #     "unit": "W",
-    #     "icon": "mdi:transmission-tower-export",
-    # },
-    # "import_power_limit": {
-    #     "name": "Import Power Limit",
-    #     "device_class": "power",
-    #     "state_class": "measurement",
-    #     "unit": "W",
-    #     "icon": "mdi:transmission-tower-import",
-    # },
-    # "export_peak_limit": {
-    #     "name": "Export Peak Limit",
-    #     "device_class": "power",
-    #     "state_class": "measurement",
-    #     "unit": "W",
-    #     "icon": "mdi:transmission-tower-export",
-    # },
-    # "work_mode": {
-    #     "name": "Work Mode",
-    #     "icon": "mdi:cog",
-    # },
+# Control Status Sensors (showing current values of controllable parameters)
+# "export_power_limit": {
+#     "name": "Export Power Limit",
+#     "device_class": "power",
+#     "state_class": "measurement",
+#     "unit": "W",
+#     "icon": "mdi:transmission-tower-export",
+# },
+# "import_power_limit": {
+#     "name": "Import Power Limit",
+#     "device_class": "power",
+#     "state_class": "measurement",
+#     "unit": "W",
+#     "icon": "mdi:transmission-tower-import",
+# },
+# "export_peak_limit": {
+#     "name": "Export Peak Limit",
+#     "device_class": "power",
+#     "state_class": "measurement",
+#     "unit": "W",
+#     "icon": "mdi:transmission-tower-export",
+# },
+# "work_mode": {
+#     "name": "Work Mode",
+#     "icon": "mdi:cog",
+# },
 
 # Sensor entity descriptions for Home Assistant
 SENSOR_ENTITY_DESCRIPTIONS: tuple[SensorEntityDescription, ...] = (
@@ -343,6 +344,7 @@ SENSOR_ENTITY_DESCRIPTIONS: tuple[SensorEntityDescription, ...] = (
     ),
 )
 
+
 async def async_setup_entry(
     _: HomeAssistant,
     config_entry: SolakonConfigEntry,
@@ -384,7 +386,10 @@ class SolakonSensor(SolakonEntity, SensorEntity):
     @callback
     def _handle_coordinator_update(self) -> None:
         """Handle updated data from the coordinator."""
-        if self.coordinator.data and self.entity_description.key in self.coordinator.data:
+        if (
+            self.coordinator.data
+            and self.entity_description.key in self.coordinator.data
+        ):
             self._attr_native_value = self.coordinator.data[self.entity_description.key]
         else:
             self._attr_native_value = None
@@ -394,4 +399,6 @@ class SolakonSensor(SolakonEntity, SensorEntity):
     @property
     def available(self) -> bool:
         """Return if entity is available."""
-        return self.coordinator.last_update_success and self._attr_native_value is not None
+        return (
+            self.coordinator.last_update_success and self._attr_native_value is not None
+        )
