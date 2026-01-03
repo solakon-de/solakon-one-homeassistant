@@ -5,13 +5,13 @@ on:
     branches:
       - main
   pull_request:
-  workflow_dispatch:
 
 env:
   DEFAULT_PYTHON: "3.13"
 
 jobs:
   ruff:
+    name: Ruff
     runs-on: ubuntu-latest
     steps:
       - name: ⤵️ Checkout repository
