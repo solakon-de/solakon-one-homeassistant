@@ -385,28 +385,9 @@ class SolakonSensor(SolakonEntity, SensorEntity):
     def _handle_coordinator_update(self) -> None:
         """Handle updated data from the coordinator."""
         if self.coordinator.data and self.entity_description.key in self.coordinator.data:
-            value = self.coordinator.data[self.entity_description.key]
-
-            # Handle special cases
-            if isinstance(value, dict):
-                # For bitfield/status values, extract meaningful data
-                if "operation" in value:
-                    self._attr_native_value = "Operating" if value["operation"] else "Standby"
-                elif "fault" in value:
-                    self._attr_native_value = "Fault" if value["fault"] else "Normal"
-                else:
-                    self._attr_native_value = str(value)
-            else:
-                self._attr_native_value = value
-
-            # Add extra state attributes for complex values
-            if isinstance(value, dict):
-                self._attr_extra_state_attributes = value
-            else:
-                self._attr_extra_state_attributes = {}
+            self._attr_native_value = self.coordinator.data[self.entity_description.key]
         else:
             self._attr_native_value = None
-            self._attr_extra_state_attributes = {}
 
         self.async_write_ha_state()
 
