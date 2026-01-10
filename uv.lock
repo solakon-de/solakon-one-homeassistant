@@ -349,6 +349,15 @@ wheels = [
 ]
 
 [[package]]
+name = "bitflags"
+version = "1.2.0"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/f7/fa/4d7b0221f0e0a10573e26d07569cf393ac877f33b4264c55a037ee42ef83/bitflags-1.2.0.tar.gz", hash = "sha256:8d6f8203e8c971bdcffe8d526bf03e5a58e6ad3e8f1544746f80a089eae73ac1", size = 18083, upload-time = "2024-12-22T21:45:52.169Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/84/5f/13cf5910c8b4e542ac533823bfdb56f94975eae24909e264f6659bc4df0a/bitflags-1.2.0-py3-none-any.whl", hash = "sha256:2bbafbdec157a0c353d165ed19b7ba465eec6ed24e66c2842262fa97a364d600", size = 12067, upload-time = "2024-12-22T21:45:49.933Z" },
+]
+
+[[package]]
 name = "bleak"
 version = "2.1.1"
 source = { registry = "https://pypi.org/simple" }
@@ -1430,6 +1439,15 @@ crypto = [
 ]
 
 [[package]]
+name = "pymodbus"
+version = "3.11.4"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/2a/af/bbb716301ab9c60f0702c3cdf72cc0e373286a5648fe16bc4431400489dc/pymodbus-3.11.4.tar.gz", hash = "sha256:6910e385cb6b2f983cd457e9ecee2ff580dbb23cf3d84aefec0845e71edd606a", size = 163422, upload-time = "2025-11-30T10:36:33.717Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/02/80/84c32440949c77f2c201c38e5fa56fd8f19da31bf24df55bdbdaba67767c/pymodbus-3.11.4-py3-none-any.whl", hash = "sha256:89865929f53bd5e32b4076dde00ee86d9b8afb1686832ed74e69d55df22729c3", size = 166002, upload-time = "2025-11-30T10:36:31.992Z" },
+]
+
+[[package]]
 name = "pyobjc-core"
 version = "12.1"
 source = { registry = "https://pypi.org/simple" }
@@ -1633,7 +1651,9 @@ name = "solakon-one-homeassistant"
 version = "1.4.1"
 source = { virtual = "." }
 dependencies = [
+    { name = "bitflags" },
     { name = "homeassistant" },
+    { name = "pymodbus" },
 ]
 
 [package.dev-dependencies]
@@ -1642,7 +1662,11 @@ dev = [
 ]
 
 [package.metadata]
-requires-dist = [{ name = "homeassistant", specifier = "==2025.7.0" }]
+requires-dist = [
+    { name = "bitflags", specifier = ">=1.2.0" },
+    { name = "homeassistant", specifier = "==2025.7.0" },
+    { name = "pymodbus", specifier = ">=3.11.1" },
+]
 
 [package.metadata.requires-dev]
 dev = [{ name = "homeassistant-stubs", specifier = "==2025.7.0" }]
