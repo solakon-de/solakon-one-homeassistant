@@ -5,10 +5,9 @@ on:
     branches:
       - main
   pull_request:
-  workflow_dispatch:
 
 env:
-  DEFAULT_PYTHON: "3.13"
+  DEFAULT_PYTHON: 3.13
 
 jobs:
   mypy:
@@ -20,7 +19,11 @@ jobs:
         uses: actions/setup-python@v3
         with:
           python-version: ${{ env.DEFAULT_PYTHON }}
+      - name: 🏗 Install uv
+        uses: astral-sh/setup-uv@v7
+      - name: 🏗 Install mypy
+        run: uv sync --locked
       - name: 🏗 Install mypy
         run: python -m pip install --upgrade pip mypy
       - name: 🚀 Run mypy
-        run: mypy custom_components/solakon_one
+        run: uv tool run mypy .
