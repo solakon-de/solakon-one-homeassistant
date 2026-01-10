@@ -11,8 +11,8 @@ env:
 
 jobs:
   lockfile:
-    name: 'Lockfile'
-    runs-on: self-hosted
+    name: Lockfile
+    runs-on: ubuntu-latest
     steps:
       - name: ⤵️ Checkout repository
         uses: actions/checkout@v6
