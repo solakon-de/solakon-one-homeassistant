@@ -19,6 +19,7 @@ from homeassistant.const import (
     UnitOfTime,
 )
 from homeassistant.core import HomeAssistant, callback
+from typing import cast
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
 from .const import REGISTERS
@@ -174,7 +175,7 @@ async def async_setup_entry(
     # Get device info
     device_info = await config_entry.runtime_data.hub.async_get_device_info()
 
-    entities = []
+    entities: list[SolakonNumber] = []
     entities.extend(
         SolakonNumber(
             config_entry,
@@ -241,9 +242,9 @@ class SolakonNumber(SolakonEntity, NumberEntity):
                 _LOGGER.warning(
                     f"Invalid value type for {self.entity_description.key}: {type(value)}"
                 )
-                self._attr_native_value = None
+                self._attr_native_value = None  # type: ignore[assignment]
         else:
-            self._attr_native_value = None
+            self._attr_native_value = None  # type: ignore[assignment]
 
         self.async_write_ha_state()
 
@@ -255,8 +256,8 @@ class SolakonNumber(SolakonEntity, NumberEntity):
         # Get register info
         address = self._register_config["address"]
         count = self._register_config.get("count", 1)
-        data_type = self._register_config.get("type", "u16")
-        scale = self._register_config.get("scale", 1)
+        data_type = str(self._register_config.get("type", "u16"))
+        scale = float(cast(float, self._register_config.get("scale", 1)))
 
         # Apply scaling for write (reverse of read scaling)
         # If scale=1 (which is the case for all our RW registers), this does nothing
@@ -362,9 +363,9 @@ class ForceDurationNumber(SolakonEntity, NumberEntity):
                 _LOGGER.warning(
                     f"Invalid value type for remote_timeout_set: {type(value_seconds)}"
                 )
-                self._attr_native_value = None
+                self._attr_native_value = None  # type: ignore[assignment]
         else:
-            self._attr_native_value = None
+            self._attr_native_value = None  # type: ignore[assignment]
 
         self.async_write_ha_state()
 
@@ -444,9 +445,9 @@ class ForcePowerNumber(SolakonEntity, NumberEntity):
                 _LOGGER.warning(
                     f"Invalid value type for remote_active_power: {type(value)}"
                 )
-                self._attr_native_value = None
+                self._attr_native_value = None  # type: ignore[assignment]
         else:
-            self._attr_native_value = None
+            self._attr_native_value = None  # type: ignore[assignment]
 
         self.async_write_ha_state()
 

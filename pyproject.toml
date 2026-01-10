@@ -14,5 +14,10 @@ dependencies = [
 [dependency-groups]
 dev = [
     "homeassistant-stubs==2025.7.0",
+    "mypy>=1.19.1",
     "ruff>=0.14.11",
 ]
+
+[tool.mypy]
+# Ignore missing imports (disable "import not found" errors)
+ignore_missing_imports = true

@@ -4,8 +4,6 @@ from typing import Final
 
 from homeassistant.const import Platform
 
-CONF_DEVICE_ID: Final = "slave_id"
-
 DOMAIN: Final = "solakon_one"
 
 CONF_DEVICE_ID: Final = "slave_id"

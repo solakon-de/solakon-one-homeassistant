@@ -354,7 +354,7 @@ async def async_setup_entry(
     # Get device info for all sensors
     device_info = await config_entry.runtime_data.hub.async_get_device_info()
 
-    entities = []
+    entities: list[SolakonSensor] = []
     entities.extend(
         SolakonSensor(
             config_entry,

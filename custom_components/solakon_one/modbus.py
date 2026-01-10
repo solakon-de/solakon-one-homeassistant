@@ -43,8 +43,13 @@ class SolakonModbusHub:
         self._port = port
         self._device_id = device_id
         self.scan_interval = scan_interval
-        self._client = None
         self._lock = asyncio.Lock()
+        # Create client exactly like the working script
+        self._client = AsyncModbusTcpClient(
+            host=self._host,
+            port=self._port,
+            timeout=5,  # Same timeout as working script
+        )
 
     @property
     def connected(self) -> bool:
@@ -56,13 +61,6 @@ class SolakonModbusHub:
         try:
             _LOGGER.info(
                 f"Attempting to connect to Modbus TCP at {self._host}:{self._port}"
-            )
-
-            # Create client exactly like the working script
-            self._client = AsyncModbusTcpClient(
-                host=self._host,
-                port=self._port,
-                timeout=5,  # Same timeout as working script
             )
 
             # Connect to the device
@@ -162,7 +160,9 @@ class SolakonModbusHub:
                 )
 
                 if not model_result.isError():
-                    model_name = convert_string(model_result.registers)
+                    tmp_name = convert_string(model_result.registers)
+                    if tmp_name is not None:
+                        model_name = tmp_name
                 if not serial_result.isError():
                     serial_number = convert_string(serial_result.registers)
 
@@ -186,7 +186,7 @@ class SolakonModbusHub:
 
     async def async_read_registers(self) -> dict[str, Any]:
         """Read all configured registers."""
-        data = {}
+        data: dict[str, Any] = {}
 
         if not self._client or not self.connected:
             try:
@@ -238,8 +238,9 @@ class SolakonModbusHub:
         if not registers:
             return None
 
-        data_type = config.get("type", "uint16")
-        scale = config.get("scale", 1)
+        data_type = str(config.get("type", "uint16"))
+        scale = float(config.get("scale", 1))
+        value: Any = None
 
         try:
             if data_type in ("uint16", "u16"):
