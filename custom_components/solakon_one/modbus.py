@@ -1,4 +1,5 @@
 """Modbus communication for Solakon ONE."""
+
 from __future__ import annotations
 
 import asyncio

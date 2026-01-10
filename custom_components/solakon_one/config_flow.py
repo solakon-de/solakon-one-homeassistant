@@ -1,4 +1,5 @@
 """Config flow for Solakon ONE integration."""
+
 from __future__ import annotations
 
 import logging

@@ -1,4 +1,5 @@
 """Binary sensor platform for Solakon ONE integration."""
+
 from __future__ import annotations
 
 import logging
@@ -25,6 +26,7 @@ BINARY_SENSOR_ENTITY_DESCRIPTIONS: tuple[BinarySensorEntityDescription, ...] = (
         entity_registry_enabled_default=False,
     ),
 )
+
 
 async def async_setup_entry(
     _: HomeAssistant,

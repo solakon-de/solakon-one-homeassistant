@@ -1,4 +1,5 @@
 """Sensor platform for Solakon ONE integration."""
+
 from __future__ import annotations
 
 import logging
@@ -342,6 +343,7 @@ SENSOR_ENTITY_DESCRIPTIONS: tuple[SensorEntityDescription, ...] = (
         options=[0, 1, 2, 3, 4, 6, 7],
     ),
 )
+
 
 async def async_setup_entry(
     _: HomeAssistant,

@@ -1,4 +1,5 @@
 """Select platform for Solakon ONE integration."""
+
 from __future__ import annotations
 
 import logging
