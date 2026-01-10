@@ -23,7 +23,5 @@ jobs:
         uses: astral-sh/setup-uv@v7
       - name: 🏗 Install mypy
         run: uv sync --locked
-      - name: 🏗 Install mypy
-        run: python -m pip install --upgrade pip mypy
       - name: 🚀 Run mypy
         run: uv tool run mypy .
