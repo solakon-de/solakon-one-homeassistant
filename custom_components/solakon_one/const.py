@@ -8,6 +8,8 @@ DOMAIN: Final = "solakon_one"
 
 CONF_DEVICE_ID: Final = "slave_id"
 
+DEFAULT_MANUFACTURER: Final = "Solakon"
+DEFAULT_MODEL: Final = "ONE"
 DEFAULT_NAME: Final = "Solakon ONE"
 DEFAULT_PORT: Final = 502
 DEFAULT_DEVICE_ID: Final = 1
