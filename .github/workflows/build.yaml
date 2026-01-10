@@ -1,4 +1,4 @@
-name: Lint
+name: "Build"
 
 on:
   push:
@@ -10,8 +10,8 @@ env:
   DEFAULT_PYTHON: 3.13
 
 jobs:
-  ruff:
-    name: Ruff
+  lockfile:
+    name: Lockfile
     runs-on: ubuntu-latest
     steps:
       - name: ⤵️ Checkout repository
@@ -22,7 +22,7 @@ jobs:
           python-version: ${{ env.DEFAULT_PYTHON }}
       - name: 🏗 Install uv
         uses: astral-sh/setup-uv@v7
-      - name: 🏗 Install ruff
-        run: uv sync --locked
-      - name: 🔎 Analyse with ruff
-        run: uv tool run ruff check .
+      - name: 🚀 Generate lock-file
+        run: uv sync
+      - name: 🔎 Inspect differences
+        run: git diff --exit-code

@@ -1,4 +1,5 @@
 """Modbus communication for Solakon ONE."""
+
 from __future__ import annotations
 
 import asyncio
@@ -12,7 +13,14 @@ from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import CONF_HOST, CONF_PORT, CONF_SCAN_INTERVAL
 from homeassistant.core import HomeAssistant
 
-from .const import CONF_DEVICE_ID, DEFAULT_DEVICE_ID, DEFAULT_SCAN_INTERVAL, REGISTERS
+from .const import (
+    CONF_DEVICE_ID,
+    DEFAULT_DEVICE_ID,
+    DEFAULT_MANUFACTURER,
+    DEFAULT_NAME,
+    DEFAULT_SCAN_INTERVAL,
+    REGISTERS,
+)
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -20,8 +28,10 @@ _LOGGER = logging.getLogger(__name__)
 class Bitfield16(BitFlags):
     nbits = 16
 
+
 class Bitfield32(BitFlags):
     nbits = 32
+
 
 class SolakonModbusHub:
     """Modbus hub for Solakon ONE device."""
@@ -40,8 +50,13 @@ class SolakonModbusHub:
         self._port = port
         self._device_id = device_id
         self.scan_interval = scan_interval
-        self._client = None
         self._lock = asyncio.Lock()
+        # Create client exactly like the working script
+        self._client = AsyncModbusTcpClient(
+            host=self._host,
+            port=self._port,
+            timeout=5,  # Same timeout as working script
+        )
 
     @property
     def connected(self) -> bool:
@@ -51,13 +66,8 @@ class SolakonModbusHub:
     async def async_setup(self) -> None:
         """Set up the Modbus connection."""
         try:
-            _LOGGER.info(f"Attempting to connect to Modbus TCP at {self._host}:{self._port}")
-
-            # Create client exactly like the working script
-            self._client = AsyncModbusTcpClient(
-                host=self._host,
-                port=self._port,
-                timeout=5  # Same timeout as working script
+            _LOGGER.info(
+                f"Attempting to connect to Modbus TCP at {self._host}:{self._port}"
             )
 
             # Connect to the device
@@ -72,13 +82,15 @@ class SolakonModbusHub:
                     test_result = await self._client.read_holding_registers(
                         address=30000,
                         count=1,
-                        device_id=self._device_id  # Using device_id like your working script
+                        device_id=self._device_id,  # Using device_id like your working script
                     )
 
                     if test_result.isError():
                         _LOGGER.warning(f"Test read returned error: {test_result}")
                     else:
-                        _LOGGER.info(f"Test read successful, device_id={self._device_id}")
+                        _LOGGER.info(
+                            f"Test read successful, device_id={self._device_id}"
+                        )
                 except Exception as e:
                     _LOGGER.warning(f"Test read exception: {e}")
             else:
@@ -108,12 +120,14 @@ class SolakonModbusHub:
                 return False
 
             # Test with device_id parameter (like your working script)
-            _LOGGER.debug(f"Testing connection to {self._host}:{self._port} with device_id={self._device_id}")
+            _LOGGER.debug(
+                f"Testing connection to {self._host}:{self._port} with device_id={self._device_id}"
+            )
 
             result = await self._client.read_holding_registers(
                 address=30000,  # Model name register
                 count=1,
-                device_id=self._device_id  # Using device_id
+                device_id=self._device_id,  # Using device_id
             )
 
             if not result.isError():
@@ -135,25 +149,20 @@ class SolakonModbusHub:
 
             if not self._client or not self.connected:
                 return {
-                    "manufacturer": "Solakon",
-                    "model": "Solakon ONE",
-                    "name": "Solakon ONE",
+                    "manufacturer": DEFAULT_MANUFACTURER,
+                    "name": DEFAULT_NAME,
                 }
 
-            model_name = "Solakon ONE"
+            model_name = None
             serial_number = None
 
             try:
                 model_result = await self._client.read_holding_registers(
-                    address=30000,
-                    count=16,
-                    device_id=self._device_id
+                    address=30000, count=16, device_id=self._device_id
                 )
 
                 serial_result = await self._client.read_holding_registers(
-                    address=30016,
-                    count=16,
-                    device_id=self._device_id
+                    address=30016, count=16, device_id=self._device_id
                 )
 
                 if not model_result.isError():
@@ -165,23 +174,22 @@ class SolakonModbusHub:
                 _LOGGER.debug(f"Device info read error: {e}")
 
             return {
-                "manufacturer": "Solakon",
+                "manufacturer": DEFAULT_MANUFACTURER,
                 "model": model_name,
-                "name": model_name,
+                "name": model_name or DEFAULT_NAME,
                 "serial_number": serial_number,
             }
 
         except Exception as err:
             _LOGGER.error(f"Failed to get device info: {err}")
             return {
-                "manufacturer": "Solakon",
-                "model": "Solakon ONE",
-                "name": "Solakon ONE",
+                "manufacturer": DEFAULT_MANUFACTURER,
+                "name": DEFAULT_NAME,
             }
 
     async def async_read_registers(self) -> dict[str, Any]:
         """Read all configured registers."""
-        data = {}
+        data: dict[str, Any] = {}
 
         if not self._client or not self.connected:
             try:
@@ -200,7 +208,7 @@ class SolakonModbusHub:
                     result = await self._client.read_holding_registers(
                         address=config["address"],
                         count=config.get("count", 1),
-                        device_id=self._device_id
+                        device_id=self._device_id,
                     )
 
                     if result.isError():
@@ -210,9 +218,7 @@ class SolakonModbusHub:
                         continue
 
                     # Process the register value
-                    value = self._process_register_value(
-                        result.registers, config
-                    )
+                    value = self._process_register_value(result.registers, config)
 
                     if value is not None:
                         data[key] = value
@@ -235,8 +241,9 @@ class SolakonModbusHub:
         if not registers:
             return None
 
-        data_type = config.get("type", "uint16")
-        scale = config.get("scale", 1)
+        data_type = str(config.get("type", "uint16"))
+        scale = float(config.get("scale", 1))
+        value: Any = None
 
         try:
             if data_type in ("uint16", "u16"):
@@ -273,9 +280,7 @@ class SolakonModbusHub:
             _LOGGER.debug(f"Failed to process register value: {err}")
             return None
 
-    async def async_write_register(
-        self, address: int, value: int
-    ) -> bool:
+    async def async_write_register(self, address: int, value: int) -> bool:
         """Write a single register."""
         if not self.connected:
             return False
@@ -284,9 +289,7 @@ class SolakonModbusHub:
             try:
                 # Using device_id parameter
                 result = await self._client.write_register(
-                    address=address,
-                    value=value,
-                    device_id=self._device_id
+                    address=address, value=value, device_id=self._device_id
                 )
 
                 return not result.isError()
@@ -295,9 +298,7 @@ class SolakonModbusHub:
                 _LOGGER.error(f"Failed to write register at {address}: {err}")
                 return False
 
-    async def async_write_registers(
-        self, address: int, values: list[int]
-    ) -> bool:
+    async def async_write_registers(self, address: int, values: list[int]) -> bool:
         """Write multiple registers."""
         if not self.connected:
             return False
@@ -306,9 +307,7 @@ class SolakonModbusHub:
             try:
                 # Using device_id parameter
                 result = await self._client.write_registers(
-                    address=address,
-                    values=values,
-                    device_id=self._device_id
+                    address=address, values=values, device_id=self._device_id
                 )
 
                 return not result.isError()
@@ -316,6 +315,7 @@ class SolakonModbusHub:
             except Exception as err:
                 _LOGGER.error(f"Failed to write registers at {address}: {err}")
                 return False
+
 
 def get_modbus_hub(hass: HomeAssistant, data: ConfigEntry) -> SolakonModbusHub:
     """Creates the hub to interact with the modbus."""
@@ -327,12 +327,14 @@ def get_modbus_hub(hass: HomeAssistant, data: ConfigEntry) -> SolakonModbusHub:
         data.get(CONF_SCAN_INTERVAL, DEFAULT_SCAN_INTERVAL),
     )
 
+
 def convert_bitfield16(registers: list[int], bit: int) -> bool | None:
     """Convert bitfield16 registers to boolean."""
     if bit > 15:
         return None
     bitfield = Bitfield16(registers[0])
     return bool(bitfield[f"bit_{bit}"])
+
 
 def convert_bitfield32(registers: list[int], bit: int) -> bool | None:
     """Convert bitfield32 registers to boolean."""
@@ -341,11 +343,12 @@ def convert_bitfield32(registers: list[int], bit: int) -> bool | None:
     bitfield = Bitfield32((registers[0] << 16) | registers[1])
     return bool(bitfield[f"bit_{bit}"])
 
+
 def convert_string(registers: list[int]) -> str | None:
     """Convert registers to string."""
     chars = []
     for val in registers:
         chars.append(chr((val >> 8) & 0xFF))
         chars.append(chr(val & 0xFF))
-    text = ''.join(chars).rstrip('\x00').strip()
+    text = "".join(chars).rstrip("\x00").strip()
     return text if text else None

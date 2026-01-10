@@ -1,4 +1,5 @@
 """Binary sensor platform for Solakon ONE integration."""
+
 from __future__ import annotations
 
 from collections.abc import Callable
@@ -43,6 +44,7 @@ BINARY_SENSOR_ENTITY_DESCRIPTIONS: tuple[SolakonBinarySensorEntityDescription, .
     ),
 )
 
+
 async def async_setup_entry(
     _: HomeAssistant,
     config_entry: SolakonConfigEntry,
@@ -52,7 +54,7 @@ async def async_setup_entry(
     # Get device info for all binary sensors
     device_info = await config_entry.runtime_data.hub.async_get_device_info()
 
-    entities = []
+    entities: list[SolakonBinarySensor] = []
     entities.extend(
         SolakonBinarySensor(
             config_entry,
