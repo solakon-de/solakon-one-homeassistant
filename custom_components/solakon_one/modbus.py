@@ -13,7 +13,14 @@ from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import CONF_HOST, CONF_PORT, CONF_SCAN_INTERVAL
 from homeassistant.core import HomeAssistant
 
-from .const import CONF_DEVICE_ID, DEFAULT_DEVICE_ID, DEFAULT_MANUFACTURER, DEFAULT_NAME, DEFAULT_SCAN_INTERVAL, REGISTERS
+from .const import (
+    CONF_DEVICE_ID,
+    DEFAULT_DEVICE_ID,
+    DEFAULT_MANUFACTURER,
+    DEFAULT_NAME,
+    DEFAULT_SCAN_INTERVAL,
+    REGISTERS,
+)
 
 _LOGGER = logging.getLogger(__name__)
 
