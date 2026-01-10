@@ -30,9 +30,9 @@ class SolakonEntity(CoordinatorEntity, Entity):
         self._attr_device_info = DeviceInfo(
             identifiers={(DOMAIN, self._config_entry.entry_id)},
             name=self._config_entry.data.get("name", DEFAULT_NAME),
-            model_id=device_info.get("model") or None,
+            manufacturer=DEFAULT_MANUFACTURER,
+            model=DEFAULT_MODEL,
+            model_id=device_info.get("model"),
             sw_version=device_info.get("version"),
             serial_number=device_info.get("serial_number"),
-            default_model=DEFAULT_MODEL,
-            default_manufacturer=DEFAULT_MANUFACTURER,
         )
