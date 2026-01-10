@@ -115,6 +115,7 @@ REGISTERS = {
     "battery1_current": {"address": 39228, "count": 2, "type": "i32", "scale": 1000, "unit": "A"},
     "battery1_power": {"address": 39230, "count": 2, "type": "i32", "scale": 1, "unit": "W"},
     "battery_combined_power": {"address": 39237, "count": 2, "type": "i32", "scale": 1, "unit": "W"},
+    "battery_power": {"address": 39230, "count": 2, "type": "i32", "scale": 1, "unit": "W"},
     "battery_soc": {"address": 39424, "count": 1, "type": "i16", "scale": 1, "unit": "%"},
     "battery_max_charge_current": {"address": 46607, "count": 1, "type": 'i16', "scale": 10, "unit": 'A', "rw": True},
     "battery_max_discharge_current": {"address": 46608, "count": 1, "type": 'i16', "scale": 10, "unit": 'A', "rw": True},

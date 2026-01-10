@@ -112,6 +112,9 @@
       "battery_combined_power": {
         "name": "Battery power"
       },
+      "battery_power": {
+        "name": "Battery power"
+      },
       "battery_soc": {
         "name": "Battery state of charge"
       },
