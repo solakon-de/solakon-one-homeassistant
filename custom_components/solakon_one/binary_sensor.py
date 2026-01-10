@@ -28,6 +28,7 @@ class SolakonBinarySensorEntityDescription(BinarySensorEntityDescription):
     data_key: str | None = None
     value_fn: Callable[[bool], bool | None] | None = None
 
+
 # Binary sensor entity descriptions for Home Assistant
 BINARY_SENSOR_ENTITY_DESCRIPTIONS: tuple[SolakonBinarySensorEntityDescription, ...] = (
     SolakonBinarySensorEntityDescription(
@@ -86,7 +87,11 @@ class SolakonBinarySensor(SolakonEntity, BinarySensorEntity):
     @callback
     def _handle_coordinator_update(self) -> None:
         """Handle updated data from the coordinator."""
-        key = self.entity_description.data_key if self.entity_description.data_key else self.entity_description.key
+        key = (
+            self.entity_description.data_key
+            if self.entity_description.data_key
+            else self.entity_description.key
+        )
 
         if self.coordinator.data and key in self.coordinator.data:
             value = self.coordinator.data[key]
