@@ -1,4 +1,5 @@
 """Sensor platform for Solakon ONE integration."""
+
 from __future__ import annotations
 
 from collections.abc import Callable
@@ -357,6 +358,7 @@ SENSOR_ENTITY_DESCRIPTIONS: tuple[SolakonSensorEntityDescription, ...] = (
     ),
 )
 
+
 async def async_setup_entry(
     _: HomeAssistant,
     config_entry: SolakonConfigEntry,
@@ -366,7 +368,7 @@ async def async_setup_entry(
     # Get device info for all sensors
     device_info = await config_entry.runtime_data.hub.async_get_device_info()
 
-    entities = []
+    entities: list[SolakonSensor] = []
     entities.extend(
         SolakonSensor(
             config_entry,
@@ -414,4 +416,6 @@ class SolakonSensor(SolakonEntity, SensorEntity):
     @property
     def available(self) -> bool:
         """Return if entity is available."""
-        return self.coordinator.last_update_success and self._attr_native_value is not None
+        return (
+            self.coordinator.last_update_success and self._attr_native_value is not None
+        )

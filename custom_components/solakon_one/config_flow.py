@@ -1,4 +1,5 @@
 """Config flow for Solakon ONE integration."""
+
 from __future__ import annotations
 
 import logging
@@ -13,7 +14,14 @@ from homeassistant.data_entry_flow import FlowResult
 from homeassistant.exceptions import HomeAssistantError
 from homeassistant.helpers import config_validation as cv, selector
 
-from .const import CONF_DEVICE_ID, DEFAULT_DEVICE_ID, DEFAULT_NAME, DEFAULT_PORT, DEFAULT_SCAN_INTERVAL, DOMAIN
+from .const import (
+    CONF_DEVICE_ID,
+    DEFAULT_DEVICE_ID,
+    DEFAULT_NAME,
+    DEFAULT_PORT,
+    DEFAULT_SCAN_INTERVAL,
+    DOMAIN,
+)
 from .modbus import get_modbus_hub
 
 _LOGGER = logging.getLogger(__name__)
@@ -22,7 +30,9 @@ _LOGGER = logging.getLogger(__name__)
 SCAN_INTERVAL_NUMBER_SELECTOR = selector.NumberSelector(
     selector.NumberSelectorConfig(
         mode=selector.NumberSelectorMode.SLIDER,
-        min=1, max=300, step=1,
+        min=1,
+        max=300,
+        step=1,
         unit_of_measurement=UnitOfTime.SECONDS,
     ),
 )
@@ -35,20 +45,27 @@ STEP_USER_DATA_SCHEMA = vol.Schema(
             selector.NumberSelector(
                 selector.NumberSelectorConfig(
                     mode=selector.NumberSelectorMode.BOX,
-                    min=1, max=247, step=1,
+                    min=1,
+                    max=247,
+                    step=1,
                 ),
             ),
             vol.Coerce(int),
         ),
-        vol.Optional(CONF_SCAN_INTERVAL, default=DEFAULT_SCAN_INTERVAL): SCAN_INTERVAL_NUMBER_SELECTOR,
+        vol.Optional(
+            CONF_SCAN_INTERVAL, default=DEFAULT_SCAN_INTERVAL
+        ): SCAN_INTERVAL_NUMBER_SELECTOR,
     }
 )
 
 STEP_OPTIONS_DATA_SCHEMA = vol.Schema(
     {
-        vol.Optional(CONF_SCAN_INTERVAL, default=DEFAULT_SCAN_INTERVAL): SCAN_INTERVAL_NUMBER_SELECTOR,
+        vol.Optional(
+            CONF_SCAN_INTERVAL, default=DEFAULT_SCAN_INTERVAL
+        ): SCAN_INTERVAL_NUMBER_SELECTOR,
     }
 )
+
 
 async def validate_input(hass: HomeAssistant, data: dict[str, Any]) -> dict[str, Any]:
     """Validate the user input allows us to connect."""
@@ -70,7 +87,7 @@ async def validate_input(hass: HomeAssistant, data: dict[str, Any]) -> dict[str,
     return {"device_info": info}
 
 
-class ConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
+class ConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):  # type: ignore[call-arg]
     """Handle a config flow for Solakon ONE."""
 
     VERSION = 1
@@ -99,8 +116,7 @@ class ConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
             step_id="user",
             errors=errors,
             data_schema=self.add_suggested_values_to_schema(
-                STEP_USER_DATA_SCHEMA,
-                user_input or {}
+                STEP_USER_DATA_SCHEMA, user_input or {}
             ),
         )
 
