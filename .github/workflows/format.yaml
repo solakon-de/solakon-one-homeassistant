@@ -1,4 +1,4 @@
-name: Lint
+name: Format
 
 on:
   push:
@@ -24,5 +24,7 @@ jobs:
         uses: astral-sh/setup-uv@v7
       - name: 🏗 Install ruff
         run: uv sync --locked
-      - name: 🔎 Analyse with ruff
-        run: uv tool run ruff check .
+      - name: 🚀 Run ruff
+        run: uv tool run ruff format .
+      - name: 🔍 Verify
+        run: git diff --exit-code
