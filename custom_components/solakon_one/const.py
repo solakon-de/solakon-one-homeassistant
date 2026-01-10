@@ -51,7 +51,7 @@ REGISTERS = {
     # Status
     "status_1": {"address": 39063, "count": 1, "type": "u16"}, # bitfield16
     "status_3": {"address": 39065, "count": 2, "type": "u32"}, # bitfield32
-    "island_mode": {"address": 39065, "count": 2, "type": "bitfield32", "bit": 0}, # offgrid
+    "grid_status": {"address": 39065, "count": 2, "type": "bitfield32", "bit": 0}, # true=off-grid, false=grid connected
     "alarm_1": {"address": 39067, "count": 1, "type": "u16"}, #bitfield16
     "alarm_2": {"address": 39068, "count": 1, "type": "u16"}, #bitfield16
     "alarm_3": {"address": 39069, "count": 1, "type": "u16"}, #bitfield16

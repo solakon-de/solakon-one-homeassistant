@@ -28,6 +28,9 @@
   },
   "entity": {
     "binary_sensor": {
+      "grid_status": {
+        "name": "Grid"
+      },
       "island_mode": {
         "name": "Island mode"
       }
