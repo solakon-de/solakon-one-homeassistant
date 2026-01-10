@@ -13,7 +13,14 @@ from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import CONF_HOST, CONF_PORT, CONF_SCAN_INTERVAL
 from homeassistant.core import HomeAssistant
 
-from .const import CONF_DEVICE_ID, DEFAULT_DEVICE_ID, DEFAULT_SCAN_INTERVAL, REGISTERS
+from .const import (
+    CONF_DEVICE_ID,
+    DEFAULT_DEVICE_ID,
+    DEFAULT_MANUFACTURER,
+    DEFAULT_NAME,
+    DEFAULT_SCAN_INTERVAL,
+    REGISTERS,
+)
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -142,12 +149,11 @@ class SolakonModbusHub:
 
             if not self._client or not self.connected:
                 return {
-                    "manufacturer": "Solakon",
-                    "model": "Solakon ONE",
-                    "name": "Solakon ONE",
+                    "manufacturer": DEFAULT_MANUFACTURER,
+                    "name": DEFAULT_NAME,
                 }
 
-            model_name = "Solakon ONE"
+            model_name = None
             serial_number = None
 
             try:
@@ -160,9 +166,7 @@ class SolakonModbusHub:
                 )
 
                 if not model_result.isError():
-                    tmp_name = convert_string(model_result.registers)
-                    if tmp_name is not None:
-                        model_name = tmp_name
+                    model_name = convert_string(model_result.registers)
                 if not serial_result.isError():
                     serial_number = convert_string(serial_result.registers)
 
@@ -170,18 +174,17 @@ class SolakonModbusHub:
                 _LOGGER.debug(f"Device info read error: {e}")
 
             return {
-                "manufacturer": "Solakon",
+                "manufacturer": DEFAULT_MANUFACTURER,
                 "model": model_name,
-                "name": model_name,
+                "name": model_name or DEFAULT_NAME,
                 "serial_number": serial_number,
             }
 
         except Exception as err:
             _LOGGER.error(f"Failed to get device info: {err}")
             return {
-                "manufacturer": "Solakon",
-                "model": "Solakon ONE",
-                "name": "Solakon ONE",
+                "manufacturer": DEFAULT_MANUFACTURER,
+                "name": DEFAULT_NAME,
             }
 
     async def async_read_registers(self) -> dict[str, Any]:
