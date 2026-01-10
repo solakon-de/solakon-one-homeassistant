@@ -25,4 +25,4 @@ jobs:
       - name: 🚀 Generate lock-file
         run: uv sync
       - name: 🔎 Inspect differences
-        run: git diff --name-only --exit-code
+        run: git diff --exit-code
