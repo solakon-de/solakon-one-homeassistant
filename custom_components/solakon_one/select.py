@@ -10,32 +10,36 @@ from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
 from .const import REGISTERS
 from .entity import SolakonEntity
-from .remote_control import mode_to_register_value, register_value_to_mode, RemoteControlMode
+from .remote_control import (
+    mode_to_register_value,
+    register_value_to_mode,
+    RemoteControlMode,
+)
 from .types import SolakonConfigEntry
 
 _LOGGER = logging.getLogger(__name__)
 
-    # "work_mode": {
-    #     "name": "Work Mode Control",
-    #     "icon": "mdi:cog",
-    #     "options": {
-    #         1: "Self Use",
-    #         2: "Feedin Priority",
-    #         3: "Backup",
-    #         4: "Peak Shaving",
-    #         6: "Force Charge",
-    #         7: "Force Discharge",
-    #     },
-    # },
+# "work_mode": {
+#     "name": "Work Mode Control",
+#     "icon": "mdi:cog",
+#     "options": {
+#         1: "Self Use",
+#         2: "Feedin Priority",
+#         3: "Backup",
+#         4: "Peak Shaving",
+#         6: "Force Charge",
+#         7: "Force Discharge",
+#     },
+# },
 
 # Select entity definitions for Home Assistant
 SELECT_ENTITY_DESCRIPTIONS: tuple[SelectEntityDescription, ...] = (
     SelectEntityDescription(
         key="eps_output",
         options=[
-          "0", # Disable
-          "2", # EPS Mode
-          "3", # UPS Mode
+            "0",  # Disable
+            "2",  # EPS Mode
+            "3",  # UPS Mode
         ],
     ),
 )
@@ -43,24 +47,24 @@ SELECT_ENTITY_DESCRIPTIONS: tuple[SelectEntityDescription, ...] = (
 FORCE_MODE_SELECT_ENTITY_DESCRIPTION = SelectEntityDescription(
     key="force_mode",
     options=[
-        "0", # Disabled
-        "1", # Force Discharge
-        "3", # Force Charge
+        "0",  # Disabled
+        "1",  # Force Discharge
+        "3",  # Force Charge
     ],
 )
 
 REMOTE_CONTROLL_MODE_SELECT_ENTITY_DESCRIPTION = SelectEntityDescription(
     key="remote_control_mode",
     options=[
-        "0", # Disabled
-        "1", # INV Discharge (PV Priority)
-        "3", # INV Charge (PV Priority)
-        "5", # Battery Discharge
-        "7", # Battery Charge
-        "9", # Grid Discharge
-        "11", # Grid Charge
-        "13", # INV Discharge (AC First)
-        "15", # INV Charge (AC First)
+        "0",  # Disabled
+        "1",  # INV Discharge (PV Priority)
+        "3",  # INV Charge (PV Priority)
+        "5",  # Battery Discharge
+        "7",  # Battery Charge
+        "9",  # Grid Discharge
+        "11",  # Grid Charge
+        "13",  # INV Discharge (AC First)
+        "15",  # INV Charge (AC First)
     ],
 )
 
@@ -125,7 +129,10 @@ class SolakonSelect(SolakonEntity, SelectEntity):
     @callback
     def _handle_coordinator_update(self) -> None:
         """Handle updated data from the coordinator."""
-        if self.coordinator.data and self.entity_description.key in self.coordinator.data:
+        if (
+            self.coordinator.data
+            and self.entity_description.key in self.coordinator.data
+        ):
             raw_value = self.coordinator.data[self.entity_description.key]
 
             # raw_value is already processed by modbus.py (scaled if needed)
@@ -141,8 +148,7 @@ class SolakonSelect(SolakonEntity, SelectEntity):
                     )
                 else:
                     _LOGGER.warning(
-                        f"Unknown value {str_value} for {self.entity_description.key}. "
-                        f"Valid options: {self.entity_description.options}"
+                        f"Unknown value {str_value} for {self.entity_description.key}. Valid options: {self.entity_description.options}"
                     )
                     self._attr_current_option = None
             else:
@@ -159,8 +165,7 @@ class SolakonSelect(SolakonEntity, SelectEntity):
         """Change the selected option."""
         if option not in self.entity_description.options:
             _LOGGER.error(
-                f"Invalid option '{option}' for {self.entity_description.key}. "
-                f"Valid options: {self.entity_description.options}"
+                f"Invalid option '{option}' for {self.entity_description.key}. Valid options: {self.entity_description.options}"
             )
             return
 
@@ -173,10 +178,14 @@ class SolakonSelect(SolakonEntity, SelectEntity):
         )
 
         # Write the value to the register (single register for selects)
-        success = await self._config_entry.runtime_data.hub.async_write_register(address, numeric_value)
+        success = await self._config_entry.runtime_data.hub.async_write_register(
+            address, numeric_value
+        )
 
         if success:
-            _LOGGER.info(f"Successfully set {self.entity_description.key} to '{option}'")
+            _LOGGER.info(
+                f"Successfully set {self.entity_description.key} to '{option}'"
+            )
             # Update the state immediately (optimistic update)
             self._attr_current_option = option
             self.async_write_ha_state()
@@ -231,13 +240,11 @@ class RemoteControlModeSelect(SolakonEntity, SelectEntity):
                 if str_value in self.entity_description.options:
                     self._attr_current_option = str_value
                     _LOGGER.debug(
-                        f"Remote control mode: register={register_value:#06x}, "
-                        f"mode={mode.name}, option='{self._attr_current_option}'"
+                        f"Remote control mode: register={register_value:#06x}, mode={mode.name}, option='{self._attr_current_option}'"
                     )
                 else:
                     _LOGGER.warning(
-                        f"Unknown remote control mode value {str_value}. "
-                        f"Valid modes: {self.entity_description.options}"
+                        f"Unknown remote control mode value {str_value}. Valid modes: {self.entity_description.options}"
                     )
                     self._attr_current_option = None
             else:
@@ -254,8 +261,7 @@ class RemoteControlModeSelect(SolakonEntity, SelectEntity):
         """Change the selected option."""
         if option not in self.entity_description.options:
             _LOGGER.error(
-                f"Invalid option '{option}' for remote_control_mode. "
-                f"Valid options: {self.entity_description.options}"
+                f"Invalid option '{option}' for remote_control_mode. Valid options: {self.entity_description.options}"
             )
             return
 
@@ -270,13 +276,13 @@ class RemoteControlModeSelect(SolakonEntity, SelectEntity):
         address = self._register_config["address"]
 
         _LOGGER.info(
-            f"Setting remote_control_mode to '{option}' "
-            f"(mode={mode.name}, register value={register_value:#06x}) "
-            f"at address {address}"
+            f"Setting remote_control_mode to '{option}' (mode={mode.name}, register value={register_value:#06x}) at address {address}"
         )
 
         # Write the value to the register
-        success = await self._config_entry.runtime_data.hub.async_write_register(address, register_value)
+        success = await self._config_entry.runtime_data.hub.async_write_register(
+            address, register_value
+        )
 
         if success:
             _LOGGER.info(f"Successfully set remote_control_mode to '{option}'")
@@ -333,12 +339,13 @@ class ForceModeSelect(SolakonEntity, SelectEntity):
                 if str_value in self.entity_description.options:
                     self._attr_current_option = str_value
                     _LOGGER.debug(
-                        f"Force mode: register={register_value:#06x}, "
-                        f"mode={str_value}, option='{self._attr_current_option}'"
+                        f"Force mode: register={register_value:#06x}, mode={str_value}, option='{self._attr_current_option}'"
                     )
                 else:
                     # Not a force mode (could be other remote control mode)
-                    self._attr_current_option = self.entity_description.options[0]  # Default to "Disabled"
+                    self._attr_current_option = self.entity_description.options[
+                        0
+                    ]  # Default to "Disabled"
                     _LOGGER.debug(
                         f"Force mode: register={register_value:#06x} not a force mode, showing as Disabled"
                     )
@@ -356,8 +363,7 @@ class ForceModeSelect(SolakonEntity, SelectEntity):
         """Change the selected option."""
         if option not in self.entity_description.options:
             _LOGGER.error(
-                f"Invalid option '{option}' for force_mode. "
-                f"Valid options: {self.entity_description.options}"
+                f"Invalid option '{option}' for force_mode. Valid options: {self.entity_description.options}"
             )
             return
 
@@ -368,12 +374,13 @@ class ForceModeSelect(SolakonEntity, SelectEntity):
         address = self._register_config["address"]
 
         _LOGGER.info(
-            f"Setting force_mode to '{option}' "
-            f"(register value={mode_value:#06x}) at address {address}"
+            f"Setting force_mode to '{option}' (register value={mode_value:#06x}) at address {address}"
         )
 
         # Write the value to the register
-        success = await self._config_entry.runtime_data.hub.async_write_register(address, mode_value)
+        success = await self._config_entry.runtime_data.hub.async_write_register(
+            address, mode_value
+        )
 
         if success:
             _LOGGER.info(f"Successfully set force_mode to '{option}'")

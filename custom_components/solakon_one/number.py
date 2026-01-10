@@ -4,7 +4,12 @@ from __future__ import annotations
 
 import logging
 
-from homeassistant.components.number import NumberEntity, NumberMode, NumberDeviceClass, NumberEntityDescription
+from homeassistant.components.number import (
+    NumberEntity,
+    NumberMode,
+    NumberDeviceClass,
+    NumberEntityDescription,
+)
 from homeassistant.const import (
     EntityCategory,
     PERCENTAGE,
@@ -23,36 +28,36 @@ from .types import SolakonConfigEntry
 _LOGGER = logging.getLogger(__name__)
 
 
-    # "export_power_limit": {
-    #     "name": "Export Power Limit Control",
-    #     "icon": "mdi:transmission-tower-export",
-    #     "min": 0,
-    #     "max": 100000,  # 100kW max, will be adjusted based on inverter Pmax
-    #     "step": 100,
-    #     "unit": "W",
-    #     "device_class": "power",
-    #     "mode": "box",
-    # },
-    # "import_power_limit": {
-    #     "name": "Import Power Limit Control",
-    #     "icon": "mdi:transmission-tower-import",
-    #     "min": 0,
-    #     "max": 100000,  # 100kW max
-    #     "step": 100,
-    #     "unit": "W",
-    #     "device_class": "power",
-    #     "mode": "box",
-    # },
-    # "export_peak_limit": {
-    #     "name": "Export Peak Limit Control",
-    #     "icon": "mdi:transmission-tower-export",
-    #     "min": 0,
-    #     "max": 100000,  # 100kW max
-    #     "step": 100,
-    #     "unit": "W",
-    #     "device_class": "power",
-    #     "mode": "box",
-    # },
+# "export_power_limit": {
+#     "name": "Export Power Limit Control",
+#     "icon": "mdi:transmission-tower-export",
+#     "min": 0,
+#     "max": 100000,  # 100kW max, will be adjusted based on inverter Pmax
+#     "step": 100,
+#     "unit": "W",
+#     "device_class": "power",
+#     "mode": "box",
+# },
+# "import_power_limit": {
+#     "name": "Import Power Limit Control",
+#     "icon": "mdi:transmission-tower-import",
+#     "min": 0,
+#     "max": 100000,  # 100kW max
+#     "step": 100,
+#     "unit": "W",
+#     "device_class": "power",
+#     "mode": "box",
+# },
+# "export_peak_limit": {
+#     "name": "Export Peak Limit Control",
+#     "icon": "mdi:transmission-tower-export",
+#     "min": 0,
+#     "max": 100000,  # 100kW max
+#     "step": 100,
+#     "unit": "W",
+#     "device_class": "power",
+#     "mode": "box",
+# },
 
 # Number entity descriptions for Home Assistant
 NUMBER_ENTITY_DESCRIPTIONS: tuple[NumberEntityDescription, ...] = (
@@ -111,7 +116,7 @@ NUMBER_ENTITY_DESCRIPTIONS: tuple[NumberEntityDescription, ...] = (
         device_class=NumberDeviceClass.POWER,
         entity_category=EntityCategory.CONFIG,
         native_unit_of_measurement=UnitOfPower.WATT,
-        native_min_value=-100000, # -100kW (charging/import)
+        native_min_value=-100000,  # -100kW (charging/import)
         native_max_value=100000,  # +100kW (discharging/export)
         native_step=100,
     ),
@@ -158,6 +163,7 @@ FORCE_POWER_NUMBER_ENTITY_DESCRIPTION = NumberEntityDescription(
     native_max_value=1200,  # Will be validated based on mode (1200W charge, 800W discharge)
     native_step=10,
 )
+
 
 async def async_setup_entry(
     _: HomeAssistant,
@@ -219,7 +225,10 @@ class SolakonNumber(SolakonEntity, NumberEntity):
     @callback
     def _handle_coordinator_update(self) -> None:
         """Handle updated data from the coordinator."""
-        if self.coordinator.data and self.entity_description.key in self.coordinator.data:
+        if (
+            self.coordinator.data
+            and self.entity_description.key in self.coordinator.data
+        ):
             value = self.coordinator.data[self.entity_description.key]
 
             # Value is already processed by modbus.py (scaled and converted)
@@ -255,8 +264,7 @@ class SolakonNumber(SolakonEntity, NumberEntity):
             int_value = int(value * scale)
 
         _LOGGER.info(
-            f"Setting {self.entity_description.key} at address {address} to {value} "
-            f"(raw value: {int_value}, type: {data_type}, count: {count})"
+            f"Setting {self.entity_description.key} at address {address} to {value} (raw value: {int_value}, type: {data_type}, count: {count})"
         )
 
         # Write based on register count
@@ -268,7 +276,9 @@ class SolakonNumber(SolakonEntity, NumberEntity):
             elif int_value > 0xFFFF:
                 int_value = 0xFFFF
 
-            success = await self._config_entry.runtime_data.hub.async_write_register(address, int_value)
+            success = await self._config_entry.runtime_data.hub.async_write_register(
+                address, int_value
+            )
         else:
             # Multi-register write (32-bit)
             # Handle signed/unsigned conversion
@@ -291,7 +301,9 @@ class SolakonNumber(SolakonEntity, NumberEntity):
                 f"Writing 32-bit value: {int_value:#x} = [{high_word:#x}, {low_word:#x}]"
             )
 
-            success = await self._config_entry.runtime_data.hub.async_write_registers(address, values)
+            success = await self._config_entry.runtime_data.hub.async_write_registers(
+                address, values
+            )
 
         if success:
             _LOGGER.info(f"Successfully set {self.entity_description.key} to {value}")
@@ -340,7 +352,9 @@ class ForceDurationNumber(SolakonEntity, NumberEntity):
             # Convert from seconds to minutes for display
             if isinstance(value_seconds, (int, float)):
                 value_minutes = float(value_seconds) / 60.0
-                self._attr_native_value = round(value_minutes, 1)  # Round to 1 decimal place
+                self._attr_native_value = round(
+                    value_minutes, 1
+                )  # Round to 1 decimal place
                 _LOGGER.debug(
                     f"force_duration: Read value = {value_seconds}s = {self._attr_native_value} min"
                 )
@@ -372,10 +386,14 @@ class ForceDurationNumber(SolakonEntity, NumberEntity):
         )
 
         # Write to register 46002
-        success = await self._config_entry.runtime_data.hub.async_write_register(address, value_seconds)
+        success = await self._config_entry.runtime_data.hub.async_write_register(
+            address, value_seconds
+        )
 
         if success:
-            _LOGGER.info(f"Successfully set force_duration to {value} min ({value_seconds}s)")
+            _LOGGER.info(
+                f"Successfully set force_duration to {value} min ({value_seconds}s)"
+            )
             # Update the state immediately (optimistic update)
             self._attr_native_value = float(value)
             self.async_write_ha_state()
@@ -421,9 +439,7 @@ class ForcePowerNumber(SolakonEntity, NumberEntity):
             # Always use absolute value (positive)
             if isinstance(value, (int, float)):
                 self._attr_native_value = abs(float(value))
-                _LOGGER.debug(
-                    f"force_power: Read value = {self._attr_native_value}W"
-                )
+                _LOGGER.debug(f"force_power: Read value = {self._attr_native_value}W")
             else:
                 _LOGGER.warning(
                     f"Invalid value type for remote_active_power: {type(value)}"
@@ -461,8 +477,12 @@ class ForcePowerNumber(SolakonEntity, NumberEntity):
         )
 
         # Write to both registers
-        success_46003 = await self._config_entry.runtime_data.hub.async_write_registers(address_46003, values)
-        success_46005 = await self._config_entry.runtime_data.hub.async_write_registers(address_46005, values)
+        success_46003 = await self._config_entry.runtime_data.hub.async_write_registers(
+            address_46003, values
+        )
+        success_46005 = await self._config_entry.runtime_data.hub.async_write_registers(
+            address_46005, values
+        )
 
         if success_46003 and success_46005:
             _LOGGER.info(f"Successfully set force_power to {int_value}W")
@@ -473,8 +493,7 @@ class ForcePowerNumber(SolakonEntity, NumberEntity):
             await self.coordinator.async_request_refresh()
         else:
             _LOGGER.error(
-                f"Failed to set force_power to {int_value}W "
-                f"(46003: {success_46003}, 46005: {success_46005})"
+                f"Failed to set force_power to {int_value}W (46003: {success_46003}, 46005: {success_46005})"
             )
 
     @property
