@@ -1,4 +1,5 @@
 """Sensor platform for Solakon ONE integration."""
+
 from __future__ import annotations
 
 import logging
@@ -29,32 +30,32 @@ from .types import SolakonConfigEntry
 
 _LOGGER = logging.getLogger(__name__)
 
-    # Control Status Sensors (showing current values of controllable parameters)
-    # "export_power_limit": {
-    #     "name": "Export Power Limit",
-    #     "device_class": "power",
-    #     "state_class": "measurement",
-    #     "unit": "W",
-    #     "icon": "mdi:transmission-tower-export",
-    # },
-    # "import_power_limit": {
-    #     "name": "Import Power Limit",
-    #     "device_class": "power",
-    #     "state_class": "measurement",
-    #     "unit": "W",
-    #     "icon": "mdi:transmission-tower-import",
-    # },
-    # "export_peak_limit": {
-    #     "name": "Export Peak Limit",
-    #     "device_class": "power",
-    #     "state_class": "measurement",
-    #     "unit": "W",
-    #     "icon": "mdi:transmission-tower-export",
-    # },
-    # "work_mode": {
-    #     "name": "Work Mode",
-    #     "icon": "mdi:cog",
-    # },
+# Control Status Sensors (showing current values of controllable parameters)
+# "export_power_limit": {
+#     "name": "Export Power Limit",
+#     "device_class": "power",
+#     "state_class": "measurement",
+#     "unit": "W",
+#     "icon": "mdi:transmission-tower-export",
+# },
+# "import_power_limit": {
+#     "name": "Import Power Limit",
+#     "device_class": "power",
+#     "state_class": "measurement",
+#     "unit": "W",
+#     "icon": "mdi:transmission-tower-import",
+# },
+# "export_peak_limit": {
+#     "name": "Export Peak Limit",
+#     "device_class": "power",
+#     "state_class": "measurement",
+#     "unit": "W",
+#     "icon": "mdi:transmission-tower-export",
+# },
+# "work_mode": {
+#     "name": "Work Mode",
+#     "icon": "mdi:cog",
+# },
 
 # Sensor entity descriptions for Home Assistant
 SENSOR_ENTITY_DESCRIPTIONS: tuple[SensorEntityDescription, ...] = (
@@ -363,9 +364,10 @@ SENSOR_ENTITY_DESCRIPTIONS: tuple[SensorEntityDescription, ...] = (
         device_class=SensorDeviceClass.ENUM,
         entity_category=EntityCategory.DIAGNOSTIC,
         entity_registry_enabled_default=False,
-        options=[1, 2, 3, 4, 6, 7],
+        options=[0, 1, 2, 3, 4, 6, 7],
     ),
 )
+
 
 async def async_setup_entry(
     _: HomeAssistant,
@@ -376,7 +378,7 @@ async def async_setup_entry(
     # Get device info for all sensors
     device_info = await config_entry.runtime_data.hub.async_get_device_info()
 
-    entities = []
+    entities: list[SolakonSensor] = []
     entities.extend(
         SolakonSensor(
             config_entry,
@@ -411,33 +413,19 @@ class SolakonSensor(SolakonEntity, SensorEntity):
     @callback
     def _handle_coordinator_update(self) -> None:
         """Handle updated data from the coordinator."""
-        if self.coordinator.data and self.entity_description.key in self.coordinator.data:
-            value = self.coordinator.data[self.entity_description.key]
-
-            # Handle special cases
-            if isinstance(value, dict):
-                # For bitfield/status values, extract meaningful data
-                if "operation" in value:
-                    self._attr_native_value = "Operating" if value["operation"] else "Standby"
-                elif "fault" in value:
-                    self._attr_native_value = "Fault" if value["fault"] else "Normal"
-                else:
-                    self._attr_native_value = str(value)
-            else:
-                self._attr_native_value = value
-
-            # Add extra state attributes for complex values
-            if isinstance(value, dict):
-                self._attr_extra_state_attributes = value
-            else:
-                self._attr_extra_state_attributes = {}
+        if (
+            self.coordinator.data
+            and self.entity_description.key in self.coordinator.data
+        ):
+            self._attr_native_value = self.coordinator.data[self.entity_description.key]
         else:
             self._attr_native_value = None
-            self._attr_extra_state_attributes = {}
 
         self.async_write_ha_state()
 
     @property
     def available(self) -> bool:
         """Return if entity is available."""
-        return self.coordinator.last_update_success and self._attr_native_value is not None
+        return (
+            self.coordinator.last_update_success and self._attr_native_value is not None
+        )

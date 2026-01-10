@@ -1,4 +1,5 @@
 """Binary sensor platform for Solakon ONE integration."""
+
 from __future__ import annotations
 
 import logging
@@ -26,6 +27,7 @@ BINARY_SENSOR_ENTITY_DESCRIPTIONS: tuple[BinarySensorEntityDescription, ...] = (
     ),
 )
 
+
 async def async_setup_entry(
     _: HomeAssistant,
     config_entry: SolakonConfigEntry,
@@ -35,9 +37,9 @@ async def async_setup_entry(
     # Get device info for all binary sensors
     device_info = await config_entry.runtime_data.hub.async_get_device_info()
 
-    entities = []
+    entities: list[SolakonBinarySensor] = []
     entities.extend(
-        SolakonSensor(
+        SolakonBinarySensor(
             config_entry,
             device_info,
             description,
@@ -48,7 +50,7 @@ async def async_setup_entry(
         async_add_entities(entities, True)
 
 
-class SolakonSensor(SolakonEntity, BinarySensorEntity):
+class SolakonBinarySensor(SolakonEntity, BinarySensorEntity):
     """Representation of a Solakon ONE binary sensor."""
 
     def __init__(
@@ -68,7 +70,10 @@ class SolakonSensor(SolakonEntity, BinarySensorEntity):
     def _handle_coordinator_update(self) -> None:
         """Handle updated data from the coordinator."""
 
-        if self.coordinator.data and self.entity_description.key in self.coordinator.data:
+        if (
+            self.coordinator.data
+            and self.entity_description.key in self.coordinator.data
+        ):
             self._attr_is_on = self.coordinator.data[self.entity_description.key]
         else:
             self._attr_is_on = None

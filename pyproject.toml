@@ -1,0 +1,23 @@
+[project]
+name = "solakon-one-homeassistant"
+version = "1.4.1"
+description = "Home Assistant custom component for Solakon ONE"
+readme = "README.md"
+license = {text = "MIT"}
+requires-python = ">=3.13.2"
+dependencies = [
+    "homeassistant==2025.7.0",
+    "bitflags>=1.2.0",
+    "pymodbus>=3.11.1",
+]
+
+[dependency-groups]
+dev = [
+    "homeassistant-stubs==2025.7.0",
+    "mypy>=1.19.1",
+    "ruff>=0.14.11",
+]
+
+[tool.mypy]
+# Ignore missing imports (disable "import not found" errors)
+ignore_missing_imports = true

@@ -1,9 +1,8 @@
 """Constants for the Solakon ONE integration."""
+
 from typing import Final
 
 from homeassistant.const import Platform
-
-CONF_DEVICE_ID: Final = "slave_id"
 
 DOMAIN: Final = "solakon_one"
 
@@ -21,6 +20,7 @@ PLATFORMS = [
     Platform.SENSOR,
 ]
 
+# fmt: off
 # Register definitions
 REGISTERS = {
     # Model Information (Table 3-1)
@@ -137,3 +137,4 @@ REGISTERS = {
     "operating_mode": {"address": 49203, "count": 1, "type": "u16", "scale": 1, "rw": True}, # work_mode
     "network_status": {"address": 49240, "count": 1, "type": "u16", "scale": 1},
 }
+# fmt: on

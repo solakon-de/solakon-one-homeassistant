@@ -7,6 +7,7 @@ from homeassistant.helpers.update_coordinator import CoordinatorEntity
 from .const import DOMAIN
 from .types import SolakonConfigEntry
 
+
 class SolakonEntity(CoordinatorEntity, Entity):
     """Base class for Solakon ONE entities."""
 
