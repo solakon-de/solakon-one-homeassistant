@@ -150,14 +150,14 @@ class SolakonSelect(SolakonEntity, SelectEntity):
                     _LOGGER.warning(
                         f"Unknown value {str_value} for {self.entity_description.key}. Valid options: {self.entity_description.options}"
                     )
-                    self._attr_current_option = None
+                    self._attr_current_option = None  # type: ignore[assignment]
             else:
                 _LOGGER.warning(
                     f"Invalid value type for {self.entity_description.key}: {type(raw_value)}"
                 )
-                self._attr_current_option = None
+                self._attr_current_option = None  # type: ignore[assignment]
         else:
-            self._attr_current_option = None
+            self._attr_current_option = None  # type: ignore[assignment]
 
         self.async_write_ha_state()
 
@@ -246,14 +246,14 @@ class RemoteControlModeSelect(SolakonEntity, SelectEntity):
                     _LOGGER.warning(
                         f"Unknown remote control mode value {str_value}. Valid modes: {self.entity_description.options}"
                     )
-                    self._attr_current_option = None
+                    self._attr_current_option = None  # type: ignore[assignment]
             else:
                 _LOGGER.warning(
                     f"Invalid value type for remote_control: {type(raw_value)}"
                 )
-                self._attr_current_option = None
+                self._attr_current_option = None  # type: ignore[assignment]
         else:
-            self._attr_current_option = None
+            self._attr_current_option = None  # type: ignore[assignment]
 
         self.async_write_ha_state()
 
@@ -353,9 +353,9 @@ class ForceModeSelect(SolakonEntity, SelectEntity):
                 _LOGGER.warning(
                     f"Invalid value type for remote_control: {type(raw_value)}"
                 )
-                self._attr_current_option = None
+                self._attr_current_option = None  # type: ignore[assignment]
         else:
-            self._attr_current_option = None
+            self._attr_current_option = None  # type: ignore[assignment]
 
         self.async_write_ha_state()
 
