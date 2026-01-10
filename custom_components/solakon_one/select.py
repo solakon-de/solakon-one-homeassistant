@@ -78,7 +78,7 @@ async def async_setup_entry(
     # Get device info
     device_info = await config_entry.runtime_data.hub.async_get_device_info()
 
-    entities = []
+    entities: list[SolakonSelect] = []
     entities.extend(
         SolakonSelect(
             config_entry,
