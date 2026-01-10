@@ -33,28 +33,29 @@ from .types import SolakonConfigEntry
 
 _LOGGER = logging.getLogger(__name__)
 
-    # Control Status Sensors (showing current values of controllable parameters)
-    # "export_power_limit": {
-    #     "name": "Export Power Limit",
-    #     "device_class": "power",
-    #     "state_class": "measurement",
-    #     "unit": "W",
-    #     "icon": "mdi:transmission-tower-export",
-    # },
-    # "import_power_limit": {
-    #     "name": "Import Power Limit",
-    #     "device_class": "power",
-    #     "state_class": "measurement",
-    #     "unit": "W",
-    #     "icon": "mdi:transmission-tower-import",
-    # },
-    # "export_peak_limit": {
-    #     "name": "Export Peak Limit",
-    #     "device_class": "power",
-    #     "state_class": "measurement",
-    #     "unit": "W",
-    #     "icon": "mdi:transmission-tower-export",
-    # },
+# Control Status Sensors (showing current values of controllable parameters)
+# "export_power_limit": {
+#     "name": "Export Power Limit",
+#     "device_class": "power",
+#     "state_class": "measurement",
+#     "unit": "W",
+#     "icon": "mdi:transmission-tower-export",
+# },
+# "import_power_limit": {
+#     "name": "Import Power Limit",
+#     "device_class": "power",
+#     "state_class": "measurement",
+#     "unit": "W",
+#     "icon": "mdi:transmission-tower-import",
+# },
+# "export_peak_limit": {
+#     "name": "Export Peak Limit",
+#     "device_class": "power",
+#     "state_class": "measurement",
+#     "unit": "W",
+#     "icon": "mdi:transmission-tower-export",
+# },
+
 
 @dataclass(frozen=True, kw_only=True)
 class SolakonSensorEntityDescription(SensorEntityDescription):
@@ -62,6 +63,7 @@ class SolakonSensorEntityDescription(SensorEntityDescription):
 
     data_key: str | None = None
     value_fn: Callable[[Any], Any | None] | None = None
+
 
 # Sensor entity descriptions for Home Assistant
 SENSOR_ENTITY_DESCRIPTIONS: tuple[SolakonSensorEntityDescription, ...] = (
@@ -400,7 +402,11 @@ class SolakonSensor(SolakonEntity, SensorEntity):
     @callback
     def _handle_coordinator_update(self) -> None:
         """Handle updated data from the coordinator."""
-        key = self.entity_description.data_key if self.entity_description.data_key else self.entity_description.key
+        key = (
+            self.entity_description.data_key
+            if self.entity_description.data_key
+            else self.entity_description.key
+        )
 
         if self.coordinator.data and key in self.coordinator.data:
             value = self.coordinator.data[key]
