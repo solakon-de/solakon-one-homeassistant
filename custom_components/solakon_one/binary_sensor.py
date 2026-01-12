@@ -5,6 +5,7 @@ from __future__ import annotations
 import logging
 
 from homeassistant.components.binary_sensor import (
+    BinarySensorDeviceClass,
     BinarySensorEntity,
     BinarySensorEntityDescription,
 )
@@ -23,6 +24,11 @@ BINARY_SENSOR_ENTITY_DESCRIPTIONS: tuple[BinarySensorEntityDescription, ...] = (
     BinarySensorEntityDescription(
         key="island_mode",
         entity_category=EntityCategory.DIAGNOSTIC,
+        entity_registry_enabled_default=False,
+    ),
+    BinarySensorEntityDescription(
+        key="battery_charging",
+        device_class=BinarySensorDeviceClass.BATTERY_CHARGING,
         entity_registry_enabled_default=False,
     ),
 )
