@@ -28,6 +28,9 @@
   },
   "entity": {
     "binary_sensor": {
+      "grid_status": {
+        "name": "Netz"
+      },
       "island_mode": {
         "name": "Inselbetrieb"
       }
@@ -107,6 +110,9 @@
         "name": "Batterie Spannung"
       },
       "battery_combined_power": {
+        "name": "Batterie Leistung"
+      },
+      "battery_power": {
         "name": "Batterie Leistung"
       },
       "battery_soc": {
