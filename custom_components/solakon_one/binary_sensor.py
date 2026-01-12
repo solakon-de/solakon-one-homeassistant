@@ -43,6 +43,13 @@ BINARY_SENSOR_ENTITY_DESCRIPTIONS: tuple[SolakonBinarySensorEntityDescription, .
         entity_registry_enabled_default=False,
         data_key="grid_status",
     ),
+    SolakonBinarySensorEntityDescription(
+        key="battery_charging",
+        device_class=BinarySensorDeviceClass.BATTERY_CHARGING,
+        entity_registry_enabled_default=False,
+        data_key="battery_power",
+        value_fn=lambda val: val > 0,
+    ),
 )
 
 
