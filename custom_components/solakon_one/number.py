@@ -220,8 +220,6 @@ class SolakonNumber(SolakonEntity, NumberEntity):
         self._register_config = REGISTERS[description.key]
         # Set entity description
         self.entity_description = description
-        # Set entity ID
-        self.entity_id = f"number.solakon_one_{description.key}"
 
     @callback
     def _handle_coordinator_update(self) -> None:
@@ -341,8 +339,6 @@ class ForceDurationNumber(SolakonEntity, NumberEntity):
         super().__init__(config_entry, device_info, description.key)
         # Set entity description
         self.entity_description = description
-        # Set entity ID
-        self.entity_id = f"number.solakon_one_{description.key}"
 
     @callback
     def _handle_coordinator_update(self) -> None:
@@ -427,8 +423,6 @@ class ForcePowerNumber(SolakonEntity, NumberEntity):
         super().__init__(config_entry, device_info, description.key)
         # Set entity description
         self.entity_description = description
-        # Set entity ID
-        self.entity_id = f"number.solakon_one_{description.key}"
 
     @callback
     def _handle_coordinator_update(self) -> None:

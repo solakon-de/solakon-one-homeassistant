@@ -123,8 +123,6 @@ class SolakonSelect(SolakonEntity, SelectEntity):
         self._register_config = REGISTERS[description.key]
         # Set entity description
         self.entity_description = description
-        # Set entity ID
-        self.entity_id = f"select.solakon_one_{description.key}"
 
     @callback
     def _handle_coordinator_update(self) -> None:
@@ -220,8 +218,6 @@ class RemoteControlModeSelect(SolakonEntity, SelectEntity):
         self._register_config = REGISTERS[self._register_key]
         # Set entity description
         self.entity_description = description
-        # Set entity ID
-        self.entity_id = f"select.solakon_one_{description.key}"
 
     @callback
     def _handle_coordinator_update(self) -> None:
@@ -319,8 +315,6 @@ class ForceModeSelect(SolakonEntity, SelectEntity):
         self._register_config = REGISTERS[self._register_key]
         # Set entity description
         self.entity_description = description
-        # Set entity ID
-        self.entity_id = "select.solakon_one_{description.key}"
 
     @callback
     def _handle_coordinator_update(self) -> None:
