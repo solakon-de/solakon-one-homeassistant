@@ -1,6 +1,12 @@
 {
   "entity": {
     "binary_sensor": {
+      "battery_charging": {
+        "default": "mdi:battery",
+        "state": {
+          "on": "mdi:battery-charging"
+        }
+      },
       "grid_status": {
         "default": "mdi:transmission-tower-off",
         "state": {
