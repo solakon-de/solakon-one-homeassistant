@@ -10,7 +10,7 @@ from .types import SolakonConfigEntry
 
 
 async def async_get_config_entry_diagnostics(
-    hass: HomeAssistant, config_entry: SolakonConfigEntry
+    _: HomeAssistant, config_entry: SolakonConfigEntry
 ) -> dict[str, Any]:
     """Return diagnostics for a config entry."""
 

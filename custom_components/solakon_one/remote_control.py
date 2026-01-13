@@ -8,29 +8,46 @@ from enum import IntEnum
 
 class RemoteControlTarget(IntEnum):
     """Remote control target types (bits 3:2 of register 46001)."""
-    AC = 0b00           # AC port
-    BATTERY = 0b01      # Battery port
-    GRID = 0b10         # Grid/Meter port
+
+    AC = 0b00  # AC port
+    BATTERY = 0b01  # Battery port
+    GRID = 0b10  # Grid/Meter port
     AC_GRID_FIRST = 0b11  # AC port with grid power used first
 
 
 class RemoteControlDirection(IntEnum):
     """Remote control direction (bit 1 of register 46001)."""
+
     GENERATION = 0  # Power generation system (discharge/export)
     CONSUMPTION = 1  # Power consumption system (charge/import)
 
 
 class RemoteControlMode(IntEnum):
     """Remote control modes combining target and direction."""
+
     DISABLED = 0
-    INV_DISCHARGE_PV_PRIORITY = 1    # Target: AC(00), Direction: Generation(0), Enabled(1) = 0b0001
-    INV_CHARGE_PV_PRIORITY = 3       # Target: AC(00), Direction: Consumption(1), Enabled(1) = 0b0011
-    BATTERY_DISCHARGE = 5            # Target: Battery(01), Direction: Generation(0), Enabled(1) = 0b0101
-    BATTERY_CHARGE = 7               # Target: Battery(01), Direction: Consumption(1), Enabled(1) = 0b0111
-    GRID_DISCHARGE = 9               # Target: Grid(10), Direction: Generation(0), Enabled(1) = 0b1001
-    GRID_CHARGE = 11                 # Target: Grid(10), Direction: Consumption(1), Enabled(1) = 0b1011
-    INV_DISCHARGE_AC_FIRST = 13      # Target: AC Grid First(11), Direction: Generation(0), Enabled(1) = 0b1101
-    INV_CHARGE_AC_FIRST = 15         # Target: AC Grid First(11), Direction: Consumption(1), Enabled(1) = 0b1111
+    INV_DISCHARGE_PV_PRIORITY = (
+        1  # Target: AC(00), Direction: Generation(0), Enabled(1) = 0b0001
+    )
+    INV_CHARGE_PV_PRIORITY = (
+        3  # Target: AC(00), Direction: Consumption(1), Enabled(1) = 0b0011
+    )
+    BATTERY_DISCHARGE = (
+        5  # Target: Battery(01), Direction: Generation(0), Enabled(1) = 0b0101
+    )
+    BATTERY_CHARGE = (
+        7  # Target: Battery(01), Direction: Consumption(1), Enabled(1) = 0b0111
+    )
+    GRID_DISCHARGE = (
+        9  # Target: Grid(10), Direction: Generation(0), Enabled(1) = 0b1001
+    )
+    GRID_CHARGE = 11  # Target: Grid(10), Direction: Consumption(1), Enabled(1) = 0b1011
+    INV_DISCHARGE_AC_FIRST = (
+        13  # Target: AC Grid First(11), Direction: Generation(0), Enabled(1) = 0b1101
+    )
+    INV_CHARGE_AC_FIRST = (
+        15  # Target: AC Grid First(11), Direction: Consumption(1), Enabled(1) = 0b1111
+    )
 
 
 def encode_remote_control(
@@ -63,7 +80,9 @@ def encode_remote_control(
     return value
 
 
-def decode_remote_control(value: int) -> tuple[bool, RemoteControlDirection, RemoteControlTarget]:
+def decode_remote_control(
+    value: int,
+) -> tuple[bool, RemoteControlDirection, RemoteControlTarget]:
     """Decode remote control register value into components.
 
     Args:

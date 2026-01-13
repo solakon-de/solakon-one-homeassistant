@@ -1,4 +1,5 @@
 """The Solakon ONE integration."""
+
 from __future__ import annotations
 
 import logging
@@ -6,9 +7,9 @@ import logging
 from homeassistant.core import HomeAssistant
 from homeassistant.exceptions import ConfigEntryNotReady
 
-from .const import PLATFORMS, SCAN_INTERVAL
+from .const import PLATFORMS
 from .coordinator import SolakonDataCoordinator
-from .modbus import SolakonModbusHub
+from .modbus import get_modbus_hub
 from .types import SolakonConfigEntry, SolakonData
 
 _LOGGER = logging.getLogger(__name__)
@@ -16,13 +17,7 @@ _LOGGER = logging.getLogger(__name__)
 
 async def async_setup_entry(hass: HomeAssistant, entry: SolakonConfigEntry) -> bool:
     """Set up Solakon ONE from a config entry."""
-    hub = SolakonModbusHub(
-        hass,
-        entry.data["host"],
-        entry.data["port"],
-        entry.data.get("slave_id", 1),
-        entry.data.get("scan_interval", SCAN_INTERVAL),
-    )
+    hub = get_modbus_hub(hass, entry.options | entry.data)
 
     try:
         await hub.async_setup()
@@ -42,16 +37,13 @@ async def async_setup_entry(hass: HomeAssistant, entry: SolakonConfigEntry) -> b
 
     await hass.config_entries.async_forward_entry_setups(entry, PLATFORMS)
 
-    entry.async_on_unload(entry.add_update_listener(async_reload_entry))
-
     return True
 
 
 async def async_unload_entry(hass: HomeAssistant, entry: SolakonConfigEntry) -> bool:
     """Unload a config entry."""
     if unload_ok := await hass.config_entries.async_unload_platforms(entry, PLATFORMS):
-        hub = entry.runtime_data.hub
-        await hub.async_close()
+        await entry.runtime_data.hub.async_close()
 
     return unload_ok
 
@@ -60,4 +52,3 @@ async def async_reload_entry(hass: HomeAssistant, entry: SolakonConfigEntry) -> 
     """Reload config entry."""
     await async_unload_entry(hass, entry)
     await async_setup_entry(hass, entry)
-

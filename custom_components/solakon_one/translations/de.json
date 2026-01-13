@@ -3,26 +3,24 @@
     "step": {
       "user": {
         "title": "Solakon ONE konfigurieren",
-        "description": "Set up your Solakon ONE device for integration with Home Assistant.",
+        "description": "Richte dein Solakon ONE Gerät für die Integration in Home Assistant ein.",
         "data": {
           "host": "Gerät",
           "port": "Port",
-          "name": "Gerätename",
-          "slave_id": "Modbus Node ID",
+          "slave_id": "Modbus Geräte ID",
           "scan_interval": "Update Interval (Sekunden)"
         },
         "data_description": {
           "host": "IP Adresse des Gerätes",
-          "port": "Modbus TCP Port",
-          "name": "Anzeigename für dein Gerät",
-          "slave_id": "Modbus slave address (1-247)",
-          "scan_interval": "How often to poll the device (1-300 seconds)"
+          "port": "Modbus TCP Port (normalerweise 502)",
+          "slave_id": "Modbus Geräte Adresse (1-247)",
+          "scan_interval": "Zeitintervall in dem Aktualisierungen am Gerät abgefragt werden sollen (1-300 Sekunden)"
         }
       }
     },
     "error": {
-      "cannot_connect": "Failed to connect to the device",
-      "unknown": "Unexpected error occurred"
+      "cannot_connect": "Verbindung zum Gerät fehlgeschlagen",
+      "unknown": "Unerwarteter Fehler ist aufgetreten"
     },
     "abort": {
       "already_configured": "Gerät ist schon konfiguriert"
@@ -30,6 +28,9 @@
   },
   "entity": {
     "binary_sensor": {
+      "grid_status": {
+        "name": "Netz"
+      },
       "island_mode": {
         "name": "Inselbetrieb"
       }
@@ -42,10 +43,10 @@
         "name": "Maximaler Entladestrom"
       },
       "force_duration": {
-        "name": "Force Mode Dauer"
+        "name": "Modus überschreiben Dauer"
       },
       "force_power": {
-        "name": "Force Mode Power"
+        "name": "Modus überschreiben Leistung"
       },
       "maximum_soc": {
         "name": "Maximaler Ladestand"
@@ -54,7 +55,7 @@
         "name": "Minimaler Ladestand"
       },
       "minimum_soc_ongrid": {
-        "name": "Minimaler Ladestand OnGrid"
+        "name": "Minimaler Ladestand (Netzbetrieb)"
       },
       "remote_active_power": {
         "name": "Fernsteuerung Leistung"
@@ -92,7 +93,7 @@
           "5": "Batterie entladen",
           "7": "Batterie laden",
           "9": "Netz export",
-          "11": "Netz import",  
+          "11": "Netz import",
           "13": "Inverter export (Netz priorität)",
           "15": "Inverter import (Netz priorität)"
         }
@@ -109,6 +110,9 @@
         "name": "Batterie Spannung"
       },
       "battery_combined_power": {
+        "name": "Batterie Leistung"
+      },
+      "battery_power": {
         "name": "Batterie Leistung"
       },
       "battery_soc": {
@@ -153,6 +157,12 @@
       "inverter_r_frequency": {
         "name": "Inverter Frequenz"
       },
+      "grid_total_export_energy": {
+        "name": "Netz Exportenergie"
+      },
+      "grid_total_import_energy": {
+        "name": "Netz Importenergie"
+      },
       "grid_frequency": {
         "name": "Netzfrequenz"
       },
@@ -167,7 +177,7 @@
         }
       },
       "internal_temp": {
-        "name": "Interne Temperatur"
+        "name": "Inverter Temperatur"
       },
       "network_status": {
         "name": "Netzwerk",
@@ -238,6 +248,18 @@
       },
       "total_pv_power": {
         "name": "PV Leistung"
+      },
+      "operating_mode": {
+        "name": "Betriebsart",
+        "state": {
+          "0": "Nicht festgelegt",
+          "1": "Eigenverbrauch",
+          "2": "Einspeisepriorität",
+          "3": "Backup",
+          "4": "Spitzenlastkappung",
+          "6": "Laden erzwingen",
+          "7": "Entladen erzwingen"
+        }
       }
     }
   },
@@ -245,12 +267,12 @@
     "step": {
       "init": {
         "title": "Einstellungen anpassen",
-        "description": "Passe die Einstellungen für dein Solakon ONE an.",
+        "description": "Passe die Einstellungen für dein Solakon ONE Gerät an.",
         "data": {
           "scan_interval": "Aktualisierungsintervall (Sekunden)"
         },
         "data_description": {
-          "scan_interval": "In welchem Zeitintervall am Gerät Aktualisierungen abgefragt werden sollen (1-300 Sekunden)"
+          "scan_interval": "Zeitintervall in dem Aktualisierungen am Gerät abgefragt werden sollen (1-300 Sekunden)"
         }
       }
     }
