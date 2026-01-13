@@ -30,9 +30,6 @@
     "binary_sensor": {
       "grid_status": {
         "name": "Netz"
-      },
-      "island_mode": {
-        "name": "Inselbetrieb"
       }
     },
     "number": {

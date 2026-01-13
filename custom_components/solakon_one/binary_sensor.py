@@ -38,12 +38,6 @@ BINARY_SENSOR_ENTITY_DESCRIPTIONS: tuple[SolakonBinarySensorEntityDescription, .
         value_fn=lambda val: not val,
     ),
     SolakonBinarySensorEntityDescription(
-        key="island_mode",
-        entity_category=EntityCategory.DIAGNOSTIC,
-        entity_registry_enabled_default=False,
-        data_key="grid_status",
-    ),
-    SolakonBinarySensorEntityDescription(
         key="battery_charging",
         device_class=BinarySensorDeviceClass.BATTERY_CHARGING,
         entity_registry_enabled_default=False,
