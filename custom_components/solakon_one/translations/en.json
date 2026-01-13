@@ -125,10 +125,10 @@
         "name": "Battery capacity"
       },
       "bms1_max_temp": {
-        "name": "BMS max temperature"
+        "name": "Battery max temperature"
       },
       "bms1_min_temp": {
-        "name": "BMS min temperature"
+        "name": "Battery min temperature"
       },
       "bms1_soh": {
         "name": "Battery state of health"
