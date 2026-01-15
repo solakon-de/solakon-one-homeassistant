@@ -6,9 +6,6 @@
         "state": {
           "on": "mdi:transmission-tower"
         }
-      },
-      "island_mode": {
-        "default": "mdi:island"
       }
     },
     "number": {
