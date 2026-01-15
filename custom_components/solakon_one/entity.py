@@ -4,8 +4,9 @@ from homeassistant.helpers.device_registry import DeviceInfo
 from homeassistant.helpers.entity import Entity
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
 
-from .const import DOMAIN
+from .const import DEFAULT_MANUFACTURER, DEFAULT_MODEL, DEFAULT_NAME, DOMAIN
 from .types import SolakonConfigEntry
+
 
 class SolakonEntity(CoordinatorEntity, Entity):
     """Base class for Solakon ONE entities."""
@@ -28,9 +29,10 @@ class SolakonEntity(CoordinatorEntity, Entity):
 
         self._attr_device_info = DeviceInfo(
             identifiers={(DOMAIN, self._config_entry.entry_id)},
-            name=self._config_entry.data.get("name", "Solakon ONE"),
-            manufacturer=device_info.get("manufacturer", "Solakon"),
-            model=device_info.get("model", "One"),
+            name=self._config_entry.data.get("name", DEFAULT_NAME),
+            manufacturer=DEFAULT_MANUFACTURER,
+            model=DEFAULT_MODEL,
+            model_id=device_info.get("model"),
             sw_version=device_info.get("version"),
             serial_number=device_info.get("serial_number"),
         )

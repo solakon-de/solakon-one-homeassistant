@@ -1,14 +1,19 @@
 """Constants for the Solakon ONE integration."""
+
 from typing import Final
 
 from homeassistant.const import Platform
 
 DOMAIN: Final = "solakon_one"
+
+CONF_DEVICE_ID: Final = "slave_id"
+
+DEFAULT_MANUFACTURER: Final = "Solakon"
+DEFAULT_MODEL: Final = "ONE"
 DEFAULT_NAME: Final = "Solakon ONE"
 DEFAULT_PORT: Final = 502
-DEFAULT_SLAVE_ID: Final = 1
+DEFAULT_DEVICE_ID: Final = 1
 DEFAULT_SCAN_INTERVAL: Final = 30
-SCAN_INTERVAL: Final = 30
 
 PLATFORMS = [
     Platform.BINARY_SENSOR,
@@ -17,6 +22,7 @@ PLATFORMS = [
     Platform.SENSOR,
 ]
 
+# fmt: off
 # Register definitions
 REGISTERS = {
     # Model Information (Table 3-1)
@@ -45,7 +51,7 @@ REGISTERS = {
     # Status
     "status_1": {"address": 39063, "count": 1, "type": "u16"}, # bitfield16
     "status_3": {"address": 39065, "count": 2, "type": "u32"}, # bitfield32
-    "island_mode": {"address": 39065, "count": 2, "type": "bitfield32", "bit": 0}, # offgrid
+    "grid_status": {"address": 39065, "count": 2, "type": "bitfield32", "bit": 0}, # true=off-grid, false=grid connected
     "alarm_1": {"address": 39067, "count": 1, "type": "u16"}, #bitfield16
     "alarm_2": {"address": 39068, "count": 1, "type": "u16"}, #bitfield16
     "alarm_3": {"address": 39069, "count": 1, "type": "u16"}, #bitfield16
@@ -76,16 +82,20 @@ REGISTERS = {
     "grid_r_voltage": {"address": 39123, "count": 1, "type": "i16", "scale": 10, "unit": "V"},
     "grid_s_voltage": {"address": 39124, "count": 1, "type": "i16", "scale": 10, "unit": "V"},
     "grid_t_voltage": {"address": 39125, "count": 1, "type": "i16", "scale": 10, "unit": "V"},
+    "grid_frequency": {"address": 39139, "count": 1, "type": "i16", "scale": 100, "unit": "Hz"},
+    "active_power": {"address": 39134, "count": 2, "type": "i32", "scale": 1, "unit": "W"},
+    "reactive_power": {"address": 39136, "count": 2, "type": "i32", "scale": 1000, "unit": "kvar"},
+    "power_factor": {"address": 39138, "count": 1, "type": "i16", "scale": 1000},
+    "grid_total_export_energy": {"address": 39621, "count": 2, "type": "u32", "scale": 100, "unit": "kWh"},
+    "grid_total_import_energy": {"address": 39625, "count": 2, "type": "u32", "scale": 100, "unit": "kWh"},
+
+    # Inverter Information
     "inverter_r_current": {"address": 39126, "count": 2, "type": "i32", "scale": 1000, "unit": "A"},
     "inverter_s_current": {"address": 39128, "count": 2, "type": "i32", "scale": 1000, "unit": "A"},
     "inverter_t_current": {"address": 39130, "count": 2, "type": "i32", "scale": 1000, "unit": "A"},
     "inverter_r_frequency": {"address": 39272, "count": 1, "type": "i16", "scale": 100, "unit": "Hz"},
     "inverter_s_frequency": {"address": 39273, "count": 1, "type": "i16", "scale": 100, "unit": "Hz"},
     "inverter_t_frequency": {"address": 39274, "count": 1, "type": "i16", "scale": 100, "unit": "Hz"},
-    "active_power": {"address": 39134, "count": 2, "type": "i32", "scale": 1, "unit": "W"},
-    "reactive_power": {"address": 39136, "count": 2, "type": "i32", "scale": 1000, "unit": "kvar"},
-    "power_factor": {"address": 39138, "count": 1, "type": "i16", "scale": 1000},
-    "grid_frequency": {"address": 39139, "count": 1, "type": "i16", "scale": 100, "unit": "Hz"},
 
     # Temperature
     "internal_temp": {"address": 39141, "count": 1, "type": "i16", "scale": 10, "unit": "°C"},
@@ -105,6 +115,7 @@ REGISTERS = {
     "battery1_current": {"address": 39228, "count": 2, "type": "i32", "scale": 1000, "unit": "A"},
     "battery1_power": {"address": 39230, "count": 2, "type": "i32", "scale": 1, "unit": "W"},
     "battery_combined_power": {"address": 39237, "count": 2, "type": "i32", "scale": 1, "unit": "W"},
+    "battery_power": {"address": 39230, "count": 2, "type": "i32", "scale": 1, "unit": "W"},
     "battery_soc": {"address": 39424, "count": 1, "type": "i16", "scale": 1, "unit": "%"},
     "battery_max_charge_current": {"address": 46607, "count": 1, "type": 'i16', "scale": 10, "unit": 'A', "rw": True},
     "battery_max_discharge_current": {"address": 46608, "count": 1, "type": 'i16', "scale": 10, "unit": 'A', "rw": True},
@@ -126,6 +137,7 @@ REGISTERS = {
     "minimum_soc": {"address": 46609, "count": 1, "type": "u16", "scale": 1, "unit": "%", "rw": True},
     "maximum_soc": {"address": 46610, "count": 1, "type": "u16", "scale": 1, "unit": "%", "rw": True},
     "minimum_soc_ongrid": {"address": 46611, "count": 1, "type": "u16", "scale": 1, "unit": "%", "rw": True},
-    # "work_mode": {"address": 49203, "count": 1, "type": "u16", "scale": 1, "rw": True},
+    "operating_mode": {"address": 49203, "count": 1, "type": "u16", "scale": 1, "rw": True}, # work_mode
     "network_status": {"address": 49240, "count": 1, "type": "u16", "scale": 1},
 }
+# fmt: on
