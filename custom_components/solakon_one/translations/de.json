@@ -233,14 +233,14 @@
         "name": "Fernsteuerung",
         "state": {
           "0": "Aus",
-          "1": "Wechselrichter entladen (PV Priority)",
-          "3": "Wechselrichter laden (PV Priority)",
+          "1": "Wechselrichter entladen (PV priorität)",
+          "3": "Wechselrichter laden (PV priorität)",
           "5": "Batterie entladen",
           "7": "Batterie laden",
           "9": "Netz entladen",
           "11": "Netz laden",
-          "13": "Wechselrichter entladen (AC First)",
-          "15": "Wechselrichter laden (AC First)"
+          "13": "Wechselrichter entladen (Netz priorität)",
+          "15": "Wechselrichter laden (Netz priorität)"
         }
       },
       "remote_timeout_countdown": {
