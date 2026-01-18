@@ -396,8 +396,6 @@ class SolakonSensor(SolakonEntity, SensorEntity):
         super().__init__(config_entry, device_info, description.key)
         # Set entity description
         self.entity_description = description
-        # Set entity ID
-        self.entity_id = f"sensor.solakon_one_{description.key}"
 
     @callback
     def _handle_coordinator_update(self) -> None:
