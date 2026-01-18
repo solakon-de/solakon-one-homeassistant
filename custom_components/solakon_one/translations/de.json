@@ -190,13 +190,13 @@
       "power_factor": {
         "name": "Leistungsfaktor"
       },
-      "pvn_current": {
+      "pv_string_current": {
         "name": "PV{n} Strom"
       },
-      "pvn_power": {
+      "pv_string_power": {
         "name": "PV{n} Leistung"
       },
-      "pvn_voltage": {
+      "pv_string_voltage": {
         "name": "PV{n} Spannung"
       },
       "reactive_power": {

@@ -49,7 +49,7 @@
       }
     },
     "sensor": {
-      "pvn_power": {
+      "pv_string_power": {
         "default": "mdi:solar-power"
       },
       "total_pv_power": {
@@ -79,7 +79,7 @@
       "grid_standard_code": {
         "default": "mdi:transmission-tower"
       },
-      "pvn_current": {
+      "pv_string_current": {
         "default": "mdi:current-dc"
       },
       "battery1_current": {
