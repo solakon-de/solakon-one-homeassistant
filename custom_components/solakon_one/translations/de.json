@@ -28,8 +28,8 @@
   },
   "entity": {
     "binary_sensor": {
-      "island_mode": {
-        "name": "Inselbetrieb"
+      "grid_status": {
+        "name": "Netz"
       }
     },
     "number": {
@@ -85,14 +85,14 @@
         "name": "Modus fernsteuern",
         "state": {
           "0": "Aus",
-          "1": "Inverter export (PV priorität)",
-          "3": "Inverter import (PV priorität)",
+          "1": "Wechselrichter export (PV priorität)",
+          "3": "Wechselrichter import (PV priorität)",
           "5": "Batterie entladen",
           "7": "Batterie laden",
           "9": "Netz export",
           "11": "Netz import",
-          "13": "Inverter export (Netz priorität)",
-          "15": "Inverter import (Netz priorität)"
+          "13": "Wechselrichter export (Netz priorität)",
+          "15": "Wechselrichter import (Netz priorität)"
         }
       }
     },
@@ -109,6 +109,9 @@
       "battery_combined_power": {
         "name": "Batterie Leistung"
       },
+      "battery_power": {
+        "name": "Batterie Leistung"
+      },
       "battery_soc": {
         "name": "Batterie Ladestand"
       },
@@ -119,10 +122,10 @@
         "name": "Batteriekapazität"
       },
       "bms1_max_temp": {
-        "name": "BMS max. Temperatur"
+        "name": "Batterie max. Temperatur"
       },
       "bms1_min_temp": {
-        "name": "BMS min. Temperatur"
+        "name": "Batterie min. Temperatur"
       },
       "bms1_soh": {
         "name": "Batterie Gesundheitszustand"
@@ -152,7 +155,7 @@
         "name": "Steckdose Spannung"
       },
       "inverter_r_frequency": {
-        "name": "Inverter Frequenz"
+        "name": "Wechselrichter Frequenz"
       },
       "grid_total_export_energy": {
         "name": "Netz Exportenergie"
@@ -174,7 +177,7 @@
         }
       },
       "internal_temp": {
-        "name": "Inverter Temperatur"
+        "name": "Wechselrichter Temperatur"
       },
       "network_status": {
         "name": "Netzwerk",
@@ -203,14 +206,14 @@
         "name": "Fernsteuerung",
         "state": {
           "0": "Aus",
-          "1": "Inverter entladen (PV Priority)",
-          "3": "Inverter laden (PV Priority)",
+          "1": "Wechselrichter entladen (PV priorität)",
+          "3": "Wechselrichter laden (PV priorität)",
           "5": "Batterie entladen",
           "7": "Batterie laden",
           "9": "Netz entladen",
           "11": "Netz laden",
-          "13": "Inverter entladen (AC First)",
-          "15": "Inverter laden (AC First)"
+          "13": "Wechselrichter entladen (Netz priorität)",
+          "15": "Wechselrichter laden (Netz priorität)"
         }
       },
       "remote_timeout_countdown": {

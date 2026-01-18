@@ -28,8 +28,8 @@
   },
   "entity": {
     "binary_sensor": {
-      "island_mode": {
-        "name": "Island mode"
+      "grid_status": {
+        "name": "Grid"
       }
     },
     "number": {
@@ -109,6 +109,9 @@
       "battery_combined_power": {
         "name": "Battery power"
       },
+      "battery_power": {
+        "name": "Battery power"
+      },
       "battery_soc": {
         "name": "Battery state of charge"
       },
@@ -119,10 +122,10 @@
         "name": "Battery capacity"
       },
       "bms1_max_temp": {
-        "name": "BMS max temperature"
+        "name": "Battery max temperature"
       },
       "bms1_min_temp": {
-        "name": "BMS min temperature"
+        "name": "Battery min temperature"
       },
       "bms1_soh": {
         "name": "Battery state of health"

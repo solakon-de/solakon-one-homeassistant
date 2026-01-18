@@ -8,6 +8,8 @@ DOMAIN: Final = "solakon_one"
 
 CONF_DEVICE_ID: Final = "slave_id"
 
+DEFAULT_MANUFACTURER: Final = "Solakon"
+DEFAULT_MODEL: Final = "ONE"
 DEFAULT_NAME: Final = "Solakon ONE"
 DEFAULT_PORT: Final = 502
 DEFAULT_DEVICE_ID: Final = 1
@@ -49,7 +51,7 @@ REGISTERS = {
     # Status
     "status_1": {"address": 39063, "count": 1, "type": "u16"}, # bitfield16
     "status_3": {"address": 39065, "count": 2, "type": "u32"}, # bitfield32
-    "island_mode": {"address": 39065, "count": 2, "type": "bitfield32", "bit": 0}, # offgrid
+    "grid_status": {"address": 39065, "count": 2, "type": "bitfield32", "bit": 0}, # true=off-grid, false=grid connected
     "alarm_1": {"address": 39067, "count": 1, "type": "u16"}, #bitfield16
     "alarm_2": {"address": 39068, "count": 1, "type": "u16"}, #bitfield16
     "alarm_3": {"address": 39069, "count": 1, "type": "u16"}, #bitfield16
@@ -113,6 +115,7 @@ REGISTERS = {
     "battery1_current": {"address": 39228, "count": 2, "type": "i32", "scale": 1000, "unit": "A"},
     "battery1_power": {"address": 39230, "count": 2, "type": "i32", "scale": 1, "unit": "W"},
     "battery_combined_power": {"address": 39237, "count": 2, "type": "i32", "scale": 1, "unit": "W"},
+    "battery_power": {"address": 39230, "count": 2, "type": "i32", "scale": 1, "unit": "W"},
     "battery_soc": {"address": 39424, "count": 1, "type": "i16", "scale": 1, "unit": "%"},
     "battery_max_charge_current": {"address": 46607, "count": 1, "type": 'i16', "scale": 10, "unit": 'A', "rw": True},
     "battery_max_discharge_current": {"address": 46608, "count": 1, "type": 'i16', "scale": 10, "unit": 'A', "rw": True},

@@ -2,9 +2,12 @@
 
 from __future__ import annotations
 
+from collections.abc import Callable
+from dataclasses import dataclass
 import logging
 
 from homeassistant.components.binary_sensor import (
+    BinarySensorDeviceClass,
     BinarySensorEntity,
     BinarySensorEntityDescription,
 )
@@ -18,12 +21,28 @@ from .types import SolakonConfigEntry
 _LOGGER = logging.getLogger(__name__)
 
 
+@dataclass(frozen=True, kw_only=True)
+class SolakonBinarySensorEntityDescription(BinarySensorEntityDescription):
+    """Solakon binary sensor entity description."""
+
+    data_key: str | None = None
+    value_fn: Callable[[bool], bool | None] | None = None
+
+
 # Binary sensor entity descriptions for Home Assistant
-BINARY_SENSOR_ENTITY_DESCRIPTIONS: tuple[BinarySensorEntityDescription, ...] = (
-    BinarySensorEntityDescription(
-        key="island_mode",
+BINARY_SENSOR_ENTITY_DESCRIPTIONS: tuple[SolakonBinarySensorEntityDescription, ...] = (
+    SolakonBinarySensorEntityDescription(
+        key="grid_status",
+        device_class=BinarySensorDeviceClass.CONNECTIVITY,
         entity_category=EntityCategory.DIAGNOSTIC,
+        value_fn=lambda val: not val,
+    ),
+    SolakonBinarySensorEntityDescription(
+        key="battery_charging",
+        device_class=BinarySensorDeviceClass.BATTERY_CHARGING,
         entity_registry_enabled_default=False,
+        data_key="battery_power",
+        value_fn=lambda val: val > 0,
     ),
 )
 
@@ -57,24 +76,28 @@ class SolakonBinarySensor(SolakonEntity, BinarySensorEntity):
         self,
         config_entry: SolakonConfigEntry,
         device_info: dict,
-        description: BinarySensorEntityDescription,
+        description: SolakonBinarySensorEntityDescription,
     ) -> None:
         """Initialize the binary sensor."""
         super().__init__(config_entry, device_info, description.key)
         # Set entity description
         self.entity_description = description
-        # Set entity ID
-        self.entity_id = f"binary_sensor.solakon_one_{description.key}"
 
     @callback
     def _handle_coordinator_update(self) -> None:
         """Handle updated data from the coordinator."""
+        key = (
+            self.entity_description.data_key
+            if self.entity_description.data_key
+            else self.entity_description.key
+        )
 
-        if (
-            self.coordinator.data
-            and self.entity_description.key in self.coordinator.data
-        ):
-            self._attr_is_on = self.coordinator.data[self.entity_description.key]
+        if self.coordinator.data and key in self.coordinator.data:
+            value = self.coordinator.data[key]
+            if self.entity_description.value_fn and value is not None:
+                self._attr_is_on = self.entity_description.value_fn(value)
+            else:
+                self._attr_is_on = value
         else:
             self._attr_is_on = None
 

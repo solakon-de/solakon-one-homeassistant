@@ -1,8 +1,11 @@
 {
   "entity": {
     "binary_sensor": {
-      "island_mode": {
-        "default": "mdi:island"
+      "grid_status": {
+        "default": "mdi:transmission-tower-off",
+        "state": {
+          "on": "mdi:transmission-tower"
+        }
       }
     },
     "number": {
