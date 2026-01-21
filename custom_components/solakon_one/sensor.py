@@ -281,13 +281,6 @@ SENSOR_ENTITY_DESCRIPTIONS: tuple[SolakonSensorEntityDescription, ...] = (
         native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
     ),
     SolakonSensorEntityDescription(
-        key="daily_generation",
-        state_class=SensorStateClass.TOTAL_INCREASING,
-        device_class=SensorDeviceClass.ENERGY,
-        entity_registry_enabled_default=False,
-        native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
-    ),
-    SolakonSensorEntityDescription(
         key="internal_temp",
         state_class=SensorStateClass.MEASUREMENT,
         device_class=SensorDeviceClass.TEMPERATURE,
