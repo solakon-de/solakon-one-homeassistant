@@ -190,41 +190,14 @@
       "power_factor": {
         "name": "Leistungsfaktor"
       },
-      "pv1_current": {
-        "name": "PV1 Strom"
+      "pv_string_current": {
+        "name": "String {n} Strom"
       },
-      "pv1_power": {
-        "name": "PV1 Leistung"
+      "pv_string_power": {
+        "name": "String {n} Leistung"
       },
-      "pv1_voltage": {
-        "name": "PV1 Spannung"
-      },
-      "pv2_current": {
-        "name": "PV2 Strom"
-      },
-      "pv2_power": {
-        "name": "PV2 Leistung"
-      },
-      "pv2_voltage": {
-        "name": "PV2 Spannung"
-      },
-      "pv3_current": {
-        "name": "PV3 Strom"
-      },
-      "pv3_power": {
-        "name": "PV3 Leistung"
-      },
-      "pv3_voltage": {
-        "name": "PV3 Spannung"
-      },
-      "pv4_current": {
-        "name": "PV4 Strom"
-      },
-      "pv4_power": {
-        "name": "PV4 Leistung"
-      },
-      "pv4_voltage": {
-        "name": "PV4 Spannung"
+      "pv_string_voltage": {
+        "name": "String {n} Spannung"
       },
       "reactive_power": {
         "name": "Blindleistung"
