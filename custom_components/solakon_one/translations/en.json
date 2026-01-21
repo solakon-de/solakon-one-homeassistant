@@ -191,13 +191,13 @@
         "name": "Power factor"
       },
       "pv_string_current": {
-        "name": "PV{n} current"
+        "name": "String {n} current"
       },
       "pv_string_power": {
-        "name": "PV{n} power"
+        "name": "String {n} power"
       },
       "pv_string_voltage": {
-        "name": "PV{n} voltage"
+        "name": "String {n} voltage"
       },
       "reactive_power": {
         "name": "Reactive power"
