@@ -49,9 +49,6 @@
       }
     },
     "sensor": {
-      "pv_string_power": {
-        "default": "mdi:solar-power"
-      },
       "total_pv_power": {
         "default": "mdi:solar-power"
       },
