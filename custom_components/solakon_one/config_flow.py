@@ -20,8 +20,8 @@ from .const import (
     DEFAULT_PORT,
     DEFAULT_SCAN_INTERVAL,
     DOMAIN,
-    CannotConnect,
 )
+from .exceptions import CannotConnect
 from .modbus import get_modbus_hub
 
 _LOGGER = logging.getLogger(__name__)
