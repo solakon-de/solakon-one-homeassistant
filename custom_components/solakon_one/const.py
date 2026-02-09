@@ -3,6 +3,7 @@
 from typing import Final
 
 from homeassistant.const import Platform
+from homeassistant.exceptions import HomeAssistantError
 
 DOMAIN: Final = "solakon_one"
 
@@ -141,3 +142,7 @@ REGISTERS = {
     "network_status": {"address": 49240, "count": 1, "type": "u16", "scale": 1},
 }
 # fmt: on
+
+
+class CannotConnect(HomeAssistantError):
+    """Error to indicate we cannot connect."""
