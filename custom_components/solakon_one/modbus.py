@@ -20,8 +20,8 @@ from .const import (
     DEFAULT_NAME,
     DEFAULT_SCAN_INTERVAL,
     REGISTERS,
-    CannotConnect,
 )
+from .exceptions import CannotConnect
 
 _LOGGER = logging.getLogger(__name__)
 
