@@ -11,7 +11,6 @@ from homeassistant import config_entries
 from homeassistant.const import CONF_HOST, CONF_PORT, CONF_SCAN_INTERVAL, UnitOfTime
 from homeassistant.core import HomeAssistant, callback
 from homeassistant.data_entry_flow import FlowResult
-from homeassistant.exceptions import HomeAssistantError
 from homeassistant.helpers import config_validation as cv, selector
 
 from .const import (
@@ -21,6 +20,7 @@ from .const import (
     DEFAULT_PORT,
     DEFAULT_SCAN_INTERVAL,
     DOMAIN,
+    CannotConnect,
 )
 from .modbus import get_modbus_hub
 
@@ -152,7 +152,3 @@ class OptionsFlowHandler(config_entries.OptionsFlowWithReload):
                 self._config_entry.options or self._config_entry.data,
             ),
         )
-
-
-class CannotConnect(HomeAssistantError):
-    """Error to indicate we cannot connect."""
