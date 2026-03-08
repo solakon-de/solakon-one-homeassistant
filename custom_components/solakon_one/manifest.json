@@ -4,6 +4,16 @@
   "codeowners": ["@solakon-de"],
   "config_flow": true,
   "dependencies": [],
+  "dhcp": [
+    {
+      "hostname": "INVERTER_*",
+      "macaddress": "441D64*"
+    },
+    {
+      "hostname": "INVERTER_*",
+      "macaddress": "140808*"
+    }
+  ],
   "documentation": "https://github.com/solakon-de/solakon-one-homeassistant",
   "integration_type": "device",
   "iot_class": "local_polling",
