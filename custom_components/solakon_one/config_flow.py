@@ -17,8 +17,9 @@ from homeassistant.config_entries import (
     OptionsFlowWithReload,
 )
 from homeassistant.exceptions import HomeAssistantError
-from homeassistant.helpers import config_validation as cv, selector
+from homeassistant.helpers import config_validation as cv, device_registry as dr, selector
 from homeassistant.helpers.service_info.dhcp import DhcpServiceInfo
+
 
 from .const import (
     CONF_DEVICE_ID,
@@ -123,6 +124,22 @@ class SolakonONEConfigFlow(ConfigFlow, domain=DOMAIN):  # type: ignore[call-arg]
             errors=errors,
             data_schema=self.add_suggested_values_to_schema(
                 STEP_USER_DATA_SCHEMA, user_input or {}
+            ),
+        )
+
+
+    async def async_step_dhcp(
+        self, discovery_info: DhcpServiceInfo
+    ) -> ConfigFlowResult:
+        """Automatically handle a DHCP discovered IP change."""
+        await self.async_set_unique_id(dr.format_mac(discovery_info.macaddress).upper())
+        self._abort_if_unique_id_configured(updates={CONF_HOST: discovery_info.ip})
+
+        return self.async_show_form(
+            step_id="user",
+            errors={},
+            data_schema=self.add_suggested_values_to_schema(
+                STEP_USER_DATA_SCHEMA, {CONF_HOST: discovery_info.ip}
             ),
         )
 
