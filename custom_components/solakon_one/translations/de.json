@@ -136,9 +136,6 @@
       "cumulative_generation": {
         "name": "Energie"
       },
-      "daily_generation": {
-        "name": "Tägliche Energie"
-      },
       "battery_total_charge_energy": {
         "name": "Batterie Ladeenergie"
       },
