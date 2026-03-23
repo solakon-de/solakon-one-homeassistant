@@ -382,6 +382,18 @@ SENSOR_ENTITY_DESCRIPTIONS: tuple[SolakonSensorEntityDescription, ...] = (
         entity_registry_enabled_default=False,
         options=[0, 1, 2, 3, 4, 6, 7],
     ),
+    SolakonSensorEntityDescription(
+        key="system_loss_power",
+        state_class=SensorStateClass.MEASUREMENT,
+        device_class=SensorDeviceClass.POWER,
+        native_unit_of_measurement=UnitOfPower.WATT,
+    ),
+    SolakonSensorEntityDescription(
+        key="system_loss_energy",
+        state_class=SensorStateClass.TOTAL_INCREASING,
+        device_class=SensorDeviceClass.ENERGY,
+        native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
+    ),
 )
 
 
