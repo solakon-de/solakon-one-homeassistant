@@ -222,6 +222,12 @@
       "total_pv_power": {
         "name": "PV Leistung"
       },
+      "system_loss_power": {
+        "name": "Systemverlustleistung"
+      },
+      "system_loss_energy": {
+        "name": "Systemverlustenergie"
+      },
       "operating_mode": {
         "name": "Betriebsart",
         "state": {
