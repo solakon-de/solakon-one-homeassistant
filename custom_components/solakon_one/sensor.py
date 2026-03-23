@@ -369,6 +369,18 @@ SENSOR_ENTITY_DESCRIPTIONS: tuple[SolakonSensorEntityDescription, ...] = (
         options=[0, 1, 2, 3, 4, 6, 7],
     ),
     SolakonSensorEntityDescription(
+        key="system_loss_power",
+        state_class=SensorStateClass.MEASUREMENT,
+        device_class=SensorDeviceClass.POWER,
+        native_unit_of_measurement=UnitOfPower.WATT,
+    ),
+    SolakonSensorEntityDescription(
+        key="system_loss_energy",
+        state_class=SensorStateClass.TOTAL_INCREASING,
+        device_class=SensorDeviceClass.ENERGY,
+        native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
+    ),
+    SolakonSensorEntityDescription(
         key="pv_version",
         entity_category=EntityCategory.DIAGNOSTIC,
         value_fn=lambda val: f"{int(hex(val >> 8), 16)}.{int(hex(val & 0xFF), 16):03}",
