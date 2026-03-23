@@ -220,7 +220,7 @@ The integration provides control entities to manage your Solakon ONE device dire
 To add solar production to your Energy Dashboard:
 
 1. Go to Settings → Dashboards → Energy
-2. Under **Solar production**, select "Solakon ONE Daily Energy"
+2. Under **Solar production**, select "PV Energy" and "PV Power"
 
 ### Battery Integration (Requires Setup)
 
