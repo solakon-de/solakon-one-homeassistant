@@ -226,7 +226,7 @@ To add solar production to your Energy Dashboard:
 
 The battery sensors need to be configured as helpers before they can be used in the Energy Dashboard. Follow these steps:
 
-#### 1. Create Template Sensors for Battery Power Split
+#### Create Template Sensors for Battery Power Split
 
 Go to Settings → Devices & Services → Helpers → Create Helper → Template → Template a sensor
 
@@ -234,45 +234,29 @@ Create two template sensors with the following settings:
 
 **Battery Discharge Power:**
 - Name: `Battery Discharge Power`
-- State template: `{{ max(0, 0 - states('sensor.solakon_one_battery_combined_power') | float(default=0)) }}`
+- State template: `{{ max(0, states('sensor.solakon_one_battery_combined_power') | float(default=0)) }}`
 - Unit of measurement: `W`
 - Device class: `Power`
 - State class: `Measurement`
 
 **Battery Charge Power:**
 - Name: `Battery Charge Power`
-- State template: `{{ max(0, states('sensor.solakon_one_battery_combined_power') | float(default=0)) }}`
+- State template: `{{ max(0, 0 - states('sensor.solakon_one_battery_combined_power') | float(default=0)) }}`
 - Unit of measurement: `W`
 - Device class: `Power`
 - State class: `Measurement`
 
-#### 2. Create Riemann Sum Integral Sensors
-
-Go to Settings → Devices & Services → Helpers → Create Helper → Integration - Riemann sum integral sensor
-
-Create two integral sensors:
-
-**Battery Discharge Energy:**
-- Input sensor: `Battery Discharge Power` (from step 1)
-- Name: `Battery Discharge Energy`
-- Integration method: `Left Riemann sum`
-- Precision: `2`
-- Metric prefix: `k` (kilo)
-
-**Battery Charge Energy:**
-- Input sensor: `Battery Charge Power` (from step 1)
-- Name: `Battery Charge Energy`
-- Integration method: `Left Riemann sum`
-- Precision: `2`
-- Metric prefix: `k` (kilo)
-
-#### 3. Add to Energy Dashboard
+#### Add to Energy Dashboard
 
 1. Go to Settings → Dashboards → Energy
-2. Under **Battery systems**, click "Add battery system"
+2. Under **Battery systems**, click "Add battery system".
 3. Configure:
-   - **Energy going in to the battery**: Select "Battery Charge Energy"
-   - **Energy going out of the battery**: Select "Battery Discharge Energy"
+   - **Energy going in to the battery**: Select the `Battery charge energy` sensor.
+   - **Energy going out of the battery**: Select the `Battery discharge energy` sensor.
+
+Optionally, you can also assign the power sensors created above for real time information:
+   - **Power going in to the battery**: Select the `Battery Charge Power` template sensor.
+   - **Power going out of the battery**: Select the `Battery Discharge Power` template sensor.
 
 ### Grid Import/Export (Not Currently Supported)
 
@@ -304,7 +288,7 @@ automation:
     trigger:
       - platform: numeric_state
         entity_id: sensor.solakon_one_battery_combined_power
-        below: -5000  # Alert when discharging more than 5kW
+        above: 5000  # Alert when discharging more than 5kW
     action:
       - service: notify.mobile_app
         data:
