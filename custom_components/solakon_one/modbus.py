@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import asyncio
 import logging
+import time
 from typing import Any
 
 from bitflags import BitFlags
@@ -24,6 +25,91 @@ from .const import (
 from .exceptions import CannotConnect
 
 _LOGGER = logging.getLogger(__name__)
+
+# Maximum number of registers that can be read in a single Modbus request
+_MAX_BATCH_SIZE = 125
+# Maximum gap between registers before starting a new batch
+_BATCH_GAP_THRESHOLD = 10
+
+
+def compute_register_batches(
+    registers: dict[str, dict[str, Any]],
+    static: bool = False,
+) -> list[dict[str, Any]]:
+    """Compute optimized batches of contiguous register reads.
+
+    Groups registers that are close together (within _BATCH_GAP_THRESHOLD)
+    into single Modbus read operations to minimize round-trips.
+
+    Args:
+        registers: The REGISTERS dict from const.py.
+        static: If True, only include registers with "static": True.
+                If False, only include registers without "static": True.
+
+    Returns a list of batch descriptors:
+        [
+            {
+                "address": start_address,
+                "count": total_registers_to_read,
+                "keys": [(key, offset, count, config), ...]
+            },
+            ...
+        ]
+    """
+    # Filter and collect entries with their address info
+    entries: list[tuple[str, dict[str, Any]]] = []
+    for key, config in registers.items():
+        is_static = config.get("static", False)
+        if is_static == static:
+            entries.append((key, config))
+
+    if not entries:
+        return []
+
+    # Sort by address, then by key name for deterministic ordering
+    entries.sort(key=lambda e: (e[1]["address"], e[0]))
+
+    batches: list[dict[str, Any]] = []
+    batch_start = entries[0][1]["address"]
+    batch_end = batch_start + entries[0][1].get("count", 1)
+    batch_keys: list[tuple[str, int, int, dict[str, Any]]] = [
+        (entries[0][0], 0, entries[0][1].get("count", 1), entries[0][1])
+    ]
+
+    for key, config in entries[1:]:
+        addr = config["address"]
+        count = config.get("count", 1)
+        entry_end = addr + count
+
+        # Check if this entry fits in the current batch
+        gap = addr - batch_end
+        new_total = entry_end - batch_start
+
+        if gap <= _BATCH_GAP_THRESHOLD and new_total <= _MAX_BATCH_SIZE:
+            # Extend the batch
+            offset = addr - batch_start
+            batch_keys.append((key, offset, count, config))
+            if entry_end > batch_end:
+                batch_end = entry_end
+        else:
+            # Finalize current batch and start a new one
+            batches.append({
+                "address": batch_start,
+                "count": batch_end - batch_start,
+                "keys": list(batch_keys),
+            })
+            batch_start = addr
+            batch_end = entry_end
+            batch_keys = [(key, 0, count, config)]
+
+    # Finalize last batch
+    batches.append({
+        "address": batch_start,
+        "count": batch_end - batch_start,
+        "keys": list(batch_keys),
+    })
+
+    return batches
 
 
 class Bitfield16(BitFlags):
@@ -57,6 +143,17 @@ class SolakonModbusHub:
             host=self._host,
             port=self._port,
             timeout=5,  # Same timeout as working script
+        )
+        # Pre-compute batched register groups for efficient reading
+        self._dynamic_batches = compute_register_batches(REGISTERS, static=False)
+        self._static_batches = compute_register_batches(REGISTERS, static=True)
+        self._static_data: dict[str, Any] = {}
+
+        _LOGGER.debug(
+            "Computed %d dynamic batches and %d static batches from %d registers",
+            len(self._dynamic_batches),
+            len(self._static_batches),
+            len(REGISTERS),
         )
 
     @property
@@ -94,6 +191,9 @@ class SolakonModbusHub:
                         )
                 except Exception as e:
                     _LOGGER.warning(f"Test read exception: {e}")
+
+                # Read static registers once after successful connection
+                await self._async_read_static_registers()
             else:
                 _LOGGER.error(f"Failed to connect to {self._host}:{self._port}")
                 raise CannotConnect(f"Failed to connect to {self._host}:{self._port}")
@@ -188,8 +288,73 @@ class SolakonModbusHub:
                 "name": DEFAULT_NAME,
             }
 
+    async def _async_read_batches(
+        self, batches: list[dict[str, Any]]
+    ) -> dict[str, Any]:
+        """Read a list of register batches and return processed values."""
+        data: dict[str, Any] = {}
+
+        for batch in batches:
+            batch_start = time.monotonic()
+            batch_addr = batch["address"]
+            batch_count = batch["count"]
+            batch_keys = batch["keys"]
+            key_names = [k[0] for k in batch_keys]
+
+            try:
+                result = await self._client.read_holding_registers(
+                    address=batch_addr,
+                    count=batch_count,
+                    device_id=self._device_id,
+                )
+
+                if result.isError():
+                    _LOGGER.error(
+                        "Error reading batch at address %d (count=%d, keys=%s): %s",
+                        batch_addr, batch_count, key_names, result,
+                    )
+                    continue
+
+                # Extract each key's registers from the batch result
+                for key, offset, count, config in batch_keys:
+                    key_regs = result.registers[offset : offset + count]
+                    value = self._process_register_value(key_regs, config)
+                    if value is not None:
+                        data[key] = value
+
+            except Exception as err:
+                _LOGGER.error(
+                    "Failed to read batch at address %d (count=%d, keys=%s): %s",
+                    batch_addr, batch_count, key_names, err,
+                )
+            finally:
+                batch_elapsed = time.monotonic() - batch_start
+                _LOGGER.debug(
+                    "Batch at address %d (%d regs, %d keys) took %.3fs",
+                    batch_addr, batch_count, len(batch_keys), batch_elapsed,
+                )
+
+        return data
+
+    async def _async_read_static_registers(self) -> None:
+        """Read static registers (device info, versions) once."""
+        if not self._static_batches:
+            return
+
+        _LOGGER.debug("Reading %d static register batches", len(self._static_batches))
+        start = time.monotonic()
+
+        async with self._lock:
+            self._static_data = await self._async_read_batches(self._static_batches)
+
+        elapsed = time.monotonic() - start
+        _LOGGER.debug(
+            "Static registers read complete: %d values in %.3fs",
+            len(self._static_data), elapsed,
+        )
+
     async def async_read_registers(self) -> dict[str, Any]:
-        """Read all configured registers."""
+        """Read all configured registers using batched reads."""
         data: dict[str, Any] = {}
 
         if not self._client or not self.connected:
@@ -203,31 +368,17 @@ class SolakonModbusHub:
             return data
 
         async with self._lock:
-            for key, config in REGISTERS.items():
-                try:
-                    # Read register with device_id parameter (like working script)
-                    result = await self._client.read_holding_registers(
-                        address=config["address"],
-                        count=config.get("count", 1),
-                        device_id=self._device_id,
-                    )
+            lock_start = time.monotonic()
+            data = await self._async_read_batches(self._dynamic_batches)
+            lock_elapsed = time.monotonic() - lock_start
+            _LOGGER.debug(
+                "Lock held for %.3fs total. Register read: %d batches and %d values",
+                lock_elapsed, len(self._dynamic_batches), len(data),
+            )
 
-                    if result.isError():
-                        _LOGGER.debug(
-                            f"Error reading register {key} at address {config['address']}: {result}"
-                        )
-                        continue
-
-                    # Process the register value
-                    value = self._process_register_value(result.registers, config)
-
-                    if value is not None:
-                        data[key] = value
-
-                except Exception as err:
-                    _LOGGER.debug(
-                        f"Failed to read register {key} at address {config.get('address', 'unknown')}: {err}"
-                    )
+        # Merge in static data (read once at setup)
+        if self._static_data:
+            data.update(self._static_data)
 
         return data
 
