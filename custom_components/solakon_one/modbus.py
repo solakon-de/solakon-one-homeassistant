@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import asyncio
 import logging
+import time
 from typing import Any
 
 from bitflags import BitFlags
@@ -203,7 +204,9 @@ class SolakonModbusHub:
             return data
 
         async with self._lock:
+            lock_start = time.monotonic()
             for key, config in REGISTERS.items():
+                key_start = time.monotonic()
                 try:
                     # Read register with device_id parameter (like working script)
                     result = await self._client.read_holding_registers(
@@ -213,7 +216,7 @@ class SolakonModbusHub:
                     )
 
                     if result.isError():
-                        _LOGGER.debug(
+                        _LOGGER.error(
                             f"Error reading register {key} at address {config['address']}: {result}"
                         )
                         continue
@@ -225,9 +228,17 @@ class SolakonModbusHub:
                         data[key] = value
 
                 except Exception as err:
-                    _LOGGER.debug(
+                    _LOGGER.error(
                         f"Failed to read register {key} at address {config.get('address', 'unknown')}: {err}"
                     )
+                finally:
+                    key_elapsed = time.monotonic() - key_start
+                    _LOGGER.debug(
+                        f"Register {key} took {key_elapsed:.3f}s to process"
+                    )
+
+            lock_elapsed = time.monotonic() - lock_start
+            _LOGGER.debug(f"Lock held for {lock_elapsed:.3f}s total")
 
         return data
 
