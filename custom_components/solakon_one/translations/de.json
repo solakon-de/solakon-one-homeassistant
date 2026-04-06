@@ -39,6 +39,9 @@
       "battery_max_discharge_current": {
         "name": "Maximaler Entladestrom"
       },
+      "export_power_limit": {
+        "name": "Export Leistungsgrenze"
+      },
       "force_duration": {
         "name": "Modus überschreiben Dauer"
       },
