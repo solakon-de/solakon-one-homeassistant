@@ -39,6 +39,9 @@
       "battery_max_discharge_current": {
         "name": "Maximum discharge current"
       },
+      "export_power_limit": {
+        "name": "Export power limit"
+      },
       "force_duration": {
         "name": "Force mode duration"
       },
