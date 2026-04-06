@@ -29,16 +29,6 @@ from .types import SolakonConfigEntry
 _LOGGER = logging.getLogger(__name__)
 
 
-# "export_power_limit": {
-#     "name": "Export Power Limit Control",
-#     "icon": "mdi:transmission-tower-export",
-#     "min": 0,
-#     "max": 100000,  # 100kW max, will be adjusted based on inverter Pmax
-#     "step": 100,
-#     "unit": "W",
-#     "device_class": "power",
-#     "mode": "box",
-# },
 # "import_power_limit": {
 #     "name": "Import Power Limit Control",
 #     "icon": "mdi:transmission-tower-import",
@@ -140,6 +130,16 @@ NUMBER_ENTITY_DESCRIPTIONS: tuple[NumberEntityDescription, ...] = (
         native_min_value=0,
         native_max_value=3600,
         native_step=10,
+    ),
+    NumberEntityDescription(
+        key="export_power_limit",
+        mode=NumberMode.BOX,
+        device_class=NumberDeviceClass.POWER,
+        entity_category=EntityCategory.CONFIG,
+        native_unit_of_measurement=UnitOfPower.WATT,
+        native_min_value=0,
+        native_max_value=1200,
+        native_step=1,
     ),
 )
 
