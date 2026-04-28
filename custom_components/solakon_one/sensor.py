@@ -29,6 +29,7 @@ from homeassistant.core import HomeAssistant, callback
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
 from .entity import SolakonEntity
+from .ir_meter import IR_METER_DATA_KEYS
 from .types import SolakonConfigEntry
 
 _LOGGER = logging.getLogger(__name__)
@@ -344,6 +345,26 @@ SENSOR_ENTITY_DESCRIPTIONS: tuple[SolakonSensorEntityDescription, ...] = (
         native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
     ),
     SolakonSensorEntityDescription(
+        key="grid_power",
+        state_class=SensorStateClass.MEASUREMENT,
+        device_class=SensorDeviceClass.POWER,
+        native_unit_of_measurement=UnitOfPower.WATT,
+    ),
+    SolakonSensorEntityDescription(
+        key="grid_import_total",
+        state_class=SensorStateClass.TOTAL_INCREASING,
+        device_class=SensorDeviceClass.ENERGY,
+        native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
+        suggested_display_precision=2,
+    ),
+    SolakonSensorEntityDescription(
+        key="grid_export_total",
+        state_class=SensorStateClass.TOTAL_INCREASING,
+        device_class=SensorDeviceClass.ENERGY,
+        native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
+        suggested_display_precision=2,
+    ),
+    SolakonSensorEntityDescription(
         key="grid_frequency",
         state_class=SensorStateClass.MEASUREMENT,
         device_class=SensorDeviceClass.FREQUENCY,
@@ -394,15 +415,17 @@ async def async_setup_entry(
     # Get device info for all sensors
     device_info = await config_entry.runtime_data.hub.async_get_device_info()
 
-    entities: list[SolakonSensor] = []
-    entities.extend(
-        SolakonSensor(
-            config_entry,
-            device_info,
-            description,
-        )
+    has_ir_meter = config_entry.runtime_data.ir_meter is not None
+    descriptions = tuple(
+        description
         for description in SENSOR_ENTITY_DESCRIPTIONS
+        if has_ir_meter or description.key not in IR_METER_DATA_KEYS
     )
+
+    entities: list[SolakonSensor] = [
+        SolakonSensor(config_entry, device_info, description)
+        for description in descriptions
+    ]
     if entities:
         async_add_entities(entities, True)
 

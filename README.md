@@ -10,6 +10,10 @@ A complete Home Assistant custom integration for Solakon ONE devices using Modbu
 
 ### Latest Version
 **New Features:**
+- ✨ **Native PowerTracker IR support**: Optional integration of the Solakon
+  PowerTracker IR via its local HTTP API. Adds `grid_power`, `grid_import_total`
+  and `grid_export_total` sensors – no more manual `rest:` YAML configuration is
+  required. Configure the meter's IP address from the integration's options.
 - ✨ **Device Control Entities**: Control your Solakon ONE device directly from Home Assistant
   - EPS Output Mode control (Disable/EPS/UPS)
   - Remote Control Mode with 9 operating modes
@@ -66,6 +70,8 @@ A complete Home Assistant custom integration for Solakon ONE devices using Modbu
 - Reactive Power
 - Load Power
 - Battery Power
+- Grid Power (W) — *requires the optional Solakon PowerTracker IR*
+- Grid Import / Export (kWh, totals) — *requires the optional Solakon PowerTracker IR*
 
 ### Voltage & Current
 - PV1/PV2/PV3/PV4 Voltage & Current
@@ -274,26 +280,35 @@ Create two integral sensors:
    - **Energy going in to the battery**: Select "Battery Charge Energy"
    - **Energy going out of the battery**: Select "Battery Discharge Energy"
 
-### Grid Import/Export (Not Currently Supported)
+### Grid Import/Export (via Solakon PowerTracker IR)
 
-Grid import and export sensors are not currently available in this integration. These values would need to be derived from the available power sensors or added in a future update if the Modbus registers support them.
+Grid power, grid import (kWh) and grid export (kWh) are provided by the optional
+Solakon PowerTracker IR. When a PowerTracker IR is configured, the integration
+polls its local API at `http://<TRACKER_IP>/api/v1/status` and exposes:
+
+- `sensor.solakon_one_grid_power` (W, `device_class: power`)
+- `sensor.solakon_one_grid_import_total` (kWh, `device_class: energy`, `state_class: total_increasing`)
+- `sensor.solakon_one_grid_export_total` (kWh, `device_class: energy`, `state_class: total_increasing`)
+
+These can be used directly in the Energy Dashboard under
+**Electricity grid → Grid consumption / Return to grid**.
 
 ### Solakon PowerTracker IR Integration
 
-You can integrate the Solakon PowerTracker IR via Home Assistant's REST sensor. Add the following to your `configuration.yaml`:
+The PowerTracker IR is integrated natively – no manual REST sensor configuration
+is required. To enable it:
 
-```yaml
-rest:
-  - resource: "http://<TRACKER_IP>/api/v1/status"
-    scan_interval: 1
-    sensor:
-      - name: "Solakon PowerTracker IR"
-        value_template: "{{ value_json.extracted.instantaneous_power_w }}"
-```
+1. Go to **Settings → Devices & Services → Solakon ONE → Configure**.
+2. Enter the IP address (or hostname) of your PowerTracker IR in the
+   **PowerTracker IR host** field.
+3. Save. The grid sensors above will appear automatically.
 
-Replace `<TRACKER_IP>` with the IP address of your PowerTracker IR.
+The same field is also available when initially adding the integration. Leave it
+empty if you don't have a PowerTracker IR.
 
-> **Note**: After adding this configuration, reload the REST integration via Developer Tools → YAML → REST. A full Home Assistant restart is not required.
+> **Migration note**: If you previously added the PowerTracker IR via a manual
+> `rest:` block in `configuration.yaml`, you can remove that block once the
+> native integration is configured.
 
 ## Automation Examples
 

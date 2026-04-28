@@ -73,6 +73,15 @@
       "grid_total_import_energy": {
         "default": "mdi:transmission-tower-export"
       },
+      "grid_power": {
+        "default": "mdi:transmission-tower"
+      },
+      "grid_import_total": {
+        "default": "mdi:transmission-tower-import"
+      },
+      "grid_export_total": {
+        "default": "mdi:transmission-tower-export"
+      },
       "grid_standard_code": {
         "default": "mdi:transmission-tower"
       },
