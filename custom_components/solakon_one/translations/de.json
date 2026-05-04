@@ -45,6 +45,9 @@
       "force_power": {
         "name": "Modus überschreiben Leistung"
       },
+      "grid_export_power_limit": {
+        "name": "Maximale Netz Ausgangsleistung"
+      },
       "maximum_soc": {
         "name": "Maximaler Ladestand"
       },

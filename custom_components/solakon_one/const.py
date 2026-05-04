@@ -88,6 +88,7 @@ REGISTERS = {
     "power_factor": {"address": 39138, "count": 1, "type": "i16", "scale": 1000},
     "grid_total_export_energy": {"address": 39621, "count": 2, "type": "u32", "scale": 100, "unit": "kWh"},
     "grid_total_import_energy": {"address": 39625, "count": 2, "type": "u32", "scale": 100, "unit": "kWh"},
+    "grid_export_power_limit": {"address": 46616, "count": 2, "type": "i32", "scale": 1, "unit": "W", "rw": True},
 
     # Inverter Information
     "inverter_r_current": {"address": 39126, "count": 2, "type": "i32", "scale": 1000, "unit": "A"},
@@ -131,7 +132,6 @@ REGISTERS = {
 
     # Control Registers (Read/Write)
     "eps_output": {"address": 46613, "count": 1, "type": "u16", "scale": 1, "rw": True},
-    # "export_power_limit": {"address": 46616, "count": 2, "type": "i32", "scale": 1, "unit": "W", "rw": True},
     # "import_power_limit": {"address": 46501, "count": 2, "type": "i32", "scale": 1, "unit": "W", "rw": True},
     # "export_peak_limit": {"address": 46504, "count": 2, "type": "i32", "scale": 1, "unit": "W", "rw": True},
     "minimum_soc": {"address": 46609, "count": 1, "type": "u16", "scale": 1, "unit": "%", "rw": True},
