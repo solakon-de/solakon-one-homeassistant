@@ -8,18 +8,21 @@
           "host": "Host",
           "port": "Port",
           "slave_id": "Modbus device ID",
-          "scan_interval": "Update interval (seconds)"
+          "scan_interval": "Update interval (seconds)",
+          "ir_meter_host": "PowerTracker IR host (optional)"
         },
         "data_description": {
           "host": "IP address of your Solakon ONE device",
           "port": "Modbus TCP port (usually 502)",
           "slave_id": "Modbus device address (1-247)",
-          "scan_interval": "Interval to poll device for updates (1-300 seconds)"
+          "scan_interval": "Interval to poll device for updates (1-300 seconds)",
+          "ir_meter_host": "IP address or hostname of your Solakon PowerTracker IR. Leave empty if you don't use one."
         }
       }
     },
     "error": {
       "cannot_connect": "Failed to connect to the device",
+      "cannot_connect_ir_meter": "Failed to reach the PowerTracker IR meter",
       "unknown": "Unexpected error occurred"
     },
     "abort": {
@@ -163,6 +166,15 @@
       "grid_total_import_energy": {
         "name": "Grid import energy"
       },
+      "grid_power": {
+        "name": "Grid power"
+      },
+      "grid_import_total": {
+        "name": "Grid import"
+      },
+      "grid_export_total": {
+        "name": "Grid export"
+      },
       "grid_frequency": {
         "name": "Grid frequency"
       },
@@ -242,12 +254,17 @@
         "title": "Configure options",
         "description": "Adjust settings for your Solakon ONE device.",
         "data": {
-          "scan_interval": "Update interval (seconds)"
+          "scan_interval": "Update interval (seconds)",
+          "ir_meter_host": "PowerTracker IR host (optional)"
         },
         "data_description": {
-          "scan_interval": "Interval to poll device for updates (1-300 seconds)"
+          "scan_interval": "Interval to poll device for updates (1-300 seconds)",
+          "ir_meter_host": "IP address or hostname of your Solakon PowerTracker IR. Leave empty if you don't use one."
         }
       }
+    },
+    "error": {
+      "cannot_connect_ir_meter": "Failed to reach the PowerTracker IR meter"
     }
   }
 }

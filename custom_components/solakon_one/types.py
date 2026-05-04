@@ -5,6 +5,7 @@ from dataclasses import dataclass
 from homeassistant.config_entries import ConfigEntry
 
 from .coordinator import SolakonDataCoordinator
+from .ir_meter import SolakonIRMeterClient
 from .modbus import SolakonModbusHub
 
 
@@ -14,6 +15,7 @@ class SolakonData:
 
     hub: SolakonModbusHub
     coordinator: SolakonDataCoordinator
+    ir_meter: SolakonIRMeterClient | None = None
 
 
 type SolakonConfigEntry = ConfigEntry[SolakonData]

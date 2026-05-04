@@ -8,18 +8,21 @@
           "host": "Gerät",
           "port": "Port",
           "slave_id": "Modbus Geräte ID",
-          "scan_interval": "Update Interval (Sekunden)"
+          "scan_interval": "Update Interval (Sekunden)",
+          "ir_meter_host": "PowerTracker IR (optional)"
         },
         "data_description": {
           "host": "IP Adresse des Gerätes",
           "port": "Modbus TCP Port (normalerweise 502)",
           "slave_id": "Modbus Geräte Adresse (1-247)",
-          "scan_interval": "Zeitintervall in dem Aktualisierungen am Gerät abgefragt werden sollen (1-300 Sekunden)"
+          "scan_interval": "Zeitintervall in dem Aktualisierungen am Gerät abgefragt werden sollen (1-300 Sekunden)",
+          "ir_meter_host": "IP-Adresse oder Hostname deines Solakon PowerTracker IR. Leer lassen, falls nicht vorhanden."
         }
       }
     },
     "error": {
       "cannot_connect": "Verbindung zum Gerät fehlgeschlagen",
+      "cannot_connect_ir_meter": "Verbindung zum PowerTracker IR fehlgeschlagen",
       "unknown": "Unerwarteter Fehler ist aufgetreten"
     },
     "abort": {
@@ -163,6 +166,15 @@
       "grid_total_import_energy": {
         "name": "Netz Importenergie"
       },
+      "grid_power": {
+        "name": "Netzleistung"
+      },
+      "grid_import_total": {
+        "name": "Netzbezug"
+      },
+      "grid_export_total": {
+        "name": "Netzeinspeisung"
+      },
       "grid_frequency": {
         "name": "Netzfrequenz"
       },
@@ -242,12 +254,17 @@
         "title": "Einstellungen anpassen",
         "description": "Passe die Einstellungen für dein Solakon ONE Gerät an.",
         "data": {
-          "scan_interval": "Aktualisierungsintervall (Sekunden)"
+          "scan_interval": "Aktualisierungsintervall (Sekunden)",
+          "ir_meter_host": "PowerTracker IR (optional)"
         },
         "data_description": {
-          "scan_interval": "Zeitintervall in dem Aktualisierungen am Gerät abgefragt werden sollen (1-300 Sekunden)"
+          "scan_interval": "Zeitintervall in dem Aktualisierungen am Gerät abgefragt werden sollen (1-300 Sekunden)",
+          "ir_meter_host": "IP-Adresse oder Hostname deines Solakon PowerTracker IR. Leer lassen, falls nicht vorhanden."
         }
       }
+    },
+    "error": {
+      "cannot_connect_ir_meter": "Verbindung zum PowerTracker IR fehlgeschlagen"
     }
   }
 }

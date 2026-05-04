@@ -15,6 +15,7 @@ from homeassistant.helpers import config_validation as cv, selector
 
 from .const import (
     CONF_DEVICE_ID,
+    CONF_IR_METER_HOST,
     DEFAULT_DEVICE_ID,
     DEFAULT_NAME,
     DEFAULT_PORT,
@@ -22,6 +23,7 @@ from .const import (
     DOMAIN,
 )
 from .exceptions import CannotConnect
+from .ir_meter import SolakonIRMeterClient
 from .modbus import get_modbus_hub
 
 _LOGGER = logging.getLogger(__name__)
@@ -55,6 +57,7 @@ STEP_USER_DATA_SCHEMA = vol.Schema(
         vol.Optional(
             CONF_SCAN_INTERVAL, default=DEFAULT_SCAN_INTERVAL
         ): SCAN_INTERVAL_NUMBER_SELECTOR,
+        vol.Optional(CONF_IR_METER_HOST, default=""): str,
     }
 )
 
@@ -63,6 +66,7 @@ STEP_OPTIONS_DATA_SCHEMA = vol.Schema(
         vol.Optional(
             CONF_SCAN_INTERVAL, default=DEFAULT_SCAN_INTERVAL
         ): SCAN_INTERVAL_NUMBER_SELECTOR,
+        vol.Optional(CONF_IR_METER_HOST, default=""): str,
     }
 )
 
@@ -84,7 +88,17 @@ async def validate_input(hass: HomeAssistant, data: dict[str, Any]) -> dict[str,
         await hub.async_close()
         raise CannotConnect(f"Failed to get device info: {err}") from err
 
+    ir_host = (data.get(CONF_IR_METER_HOST) or "").strip()
+    if ir_host:
+        ir_client = SolakonIRMeterClient(hass, ir_host)
+        if not await ir_client.async_test_connection():
+            raise CannotConnectIRMeter(f"Cannot reach IR meter at {ir_host}")
+
     return {"device_info": info}
+
+
+class CannotConnectIRMeter(CannotConnect):
+    """Raised when the IR meter is unreachable or returns invalid data."""
 
 
 class ConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):  # type: ignore[call-arg]
@@ -100,6 +114,8 @@ class ConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):  # type: ignore[call
         if user_input is not None:
             try:
                 await validate_input(self.hass, user_input)
+            except CannotConnectIRMeter:
+                errors[CONF_IR_METER_HOST] = "cannot_connect_ir_meter"
             except CannotConnect:
                 errors["base"] = "cannot_connect"
             except Exception:
@@ -142,13 +158,21 @@ class OptionsFlowHandler(config_entries.OptionsFlowWithReload):
         self, user_input: dict[str, Any] | None = None
     ) -> FlowResult:
         """Manage the options."""
+        errors: dict[str, str] = {}
         if user_input is not None:
-            return self.async_create_entry(data=user_input)
+            ir_host = (user_input.get(CONF_IR_METER_HOST) or "").strip()
+            if ir_host:
+                ir_client = SolakonIRMeterClient(self.hass, ir_host)
+                if not await ir_client.async_test_connection():
+                    errors[CONF_IR_METER_HOST] = "cannot_connect_ir_meter"
+            if not errors:
+                return self.async_create_entry(data=user_input)
 
         return self.async_show_form(
             step_id="init",
+            errors=errors,
             data_schema=self.add_suggested_values_to_schema(
                 STEP_OPTIONS_DATA_SCHEMA,
-                self._config_entry.options or self._config_entry.data,
+                user_input or self._config_entry.options or self._config_entry.data,
             ),
         )

@@ -7,6 +7,7 @@ from homeassistant.const import Platform
 DOMAIN: Final = "solakon_one"
 
 CONF_DEVICE_ID: Final = "slave_id"
+CONF_IR_METER_HOST: Final = "ir_meter_host"
 
 DEFAULT_MANUFACTURER: Final = "Solakon"
 DEFAULT_MODEL: Final = "ONE"
