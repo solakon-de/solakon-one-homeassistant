@@ -45,6 +45,9 @@
       "force_power": {
         "name": "Force mode power"
       },
+      "grid_export_power_limit": {
+        "name": "Maximum grid export power"
+      },
       "maximum_soc": {
         "name": "Maximum state of charge"
       },
