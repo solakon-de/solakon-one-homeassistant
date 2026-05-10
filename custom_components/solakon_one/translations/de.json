@@ -100,11 +100,11 @@
       "active_power": {
         "name": "Leistung"
       },
-      "battery1_current": {
-        "name": "Batterie Strom"
+      "battery_current": {
+        "name": "Batteriestrom"
       },
-      "battery1_voltage": {
-        "name": "Batterie Spannung"
+      "battery_voltage": {
+        "name": "Batteriespannung"
       },
       "battery_combined_power": {
         "name": "Batterie Leistung"

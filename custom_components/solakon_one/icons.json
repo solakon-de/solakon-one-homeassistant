@@ -79,7 +79,7 @@
       "pv_string_current": {
         "default": "mdi:current-dc"
       },
-      "battery1_current": {
+      "battery_current": {
         "default": "mdi:current-dc"
       },
       "network_status": {
