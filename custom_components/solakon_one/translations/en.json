@@ -100,10 +100,10 @@
       "active_power": {
         "name": "Active power"
       },
-      "battery1_current": {
+      "battery_current": {
         "name": "Battery current"
       },
-      "battery1_voltage": {
+      "battery_voltage": {
         "name": "Battery voltage"
       },
       "battery_combined_power": {
