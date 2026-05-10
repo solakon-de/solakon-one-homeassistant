@@ -104,7 +104,7 @@
         "name": "Batteriestrom"
       },
       "battery_voltage": {
-        "name": "Batterie Spannung"
+        "name": "Batteriespannung"
       },
       "battery_combined_power": {
         "name": "Batterie Leistung"
