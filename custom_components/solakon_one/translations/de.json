@@ -101,7 +101,7 @@
         "name": "Leistung"
       },
       "battery_current": {
-        "name": "Batterie Strom"
+        "name": "Batteriestrom"
       },
       "battery_voltage": {
         "name": "Batterie Spannung"
