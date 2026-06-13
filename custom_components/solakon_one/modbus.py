@@ -367,6 +367,9 @@ class SolakonModbusHub:
             _LOGGER.error("Client not connected for register read")
             return data
 
+        if not self._static_data and self._static_batches:
+            await self._async_read_static_registers()
+
         async with self._lock:
             lock_start = time.monotonic()
             data = await self._async_read_batches(self._dynamic_batches)
