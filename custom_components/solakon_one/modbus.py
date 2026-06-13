@@ -309,7 +309,7 @@ class SolakonModbusHub:
                 )
 
                 if result.isError():
-                    _LOGGER.error(
+                    _LOGGER.debug(
                         "Error reading batch at address %d (count=%d, keys=%s): %s",
                         batch_addr, batch_count, key_names, result,
                     )
@@ -323,7 +323,7 @@ class SolakonModbusHub:
                         data[key] = value
 
             except Exception as err:
-                _LOGGER.error(
+                _LOGGER.debug(
                     "Failed to read batch at address %d (count=%d, keys=%s): %s",
                     batch_addr, batch_count, key_names, err,
                 )
