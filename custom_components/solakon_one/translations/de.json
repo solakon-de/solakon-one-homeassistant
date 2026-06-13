@@ -106,9 +106,6 @@
       "battery1_voltage": {
         "name": "Batterie Spannung"
       },
-      "battery_combined_power": {
-        "name": "Batterie Leistung"
-      },
       "battery_power": {
         "name": "Batterie Leistung"
       },
