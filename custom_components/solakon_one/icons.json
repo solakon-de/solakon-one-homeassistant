@@ -61,6 +61,9 @@
       "battery_total_discharge_energy": {
         "default": "mdi:battery-arrow-down"
       },
+      "max_active_power": {
+        "default": "mdi:transmission-tower-import"
+      },
       "reactive_power": {
         "default": "mdi:flash-outline"
       },
