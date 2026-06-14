@@ -28,3 +28,19 @@ jobs:
         run: uv tool run ruff format .
       - name: 🔍 Verify
         run: git diff --exit-code
+  sort:
+    name: sort JSON data
+    runs-on: ubuntu-latest
+    steps:
+      - name: ⤵️ Checkout repository
+        uses: actions/checkout@v6
+      - name: 🚀 Sort JSON data
+        run: |
+          find '.' \
+            -type 'f' \
+            -name '*.json' \
+            -not -name 'hacs.json' \
+            -not -name 'manifest.json' \
+            -exec sh -c 'mv $1 $1.tmp; jq . --sort-keys $1.tmp > $1; rm $1.tmp' shell {} ";"
+      - name: 🔍 Verify
+        run: git diff --exit-code

@@ -9,29 +9,29 @@
       }
     },
     "number": {
-      "minimum_soc": {
-        "default": "mdi:battery-outline"
-      },
-      "maximum_soc": {
-        "default": "mdi:battery-high"
-      },
-      "minimum_soc_ongrid": {
-        "default": "mdi:power-plug-battery-outline"
-      },
       "battery_max_charge_current": {
         "default": "mdi:battery-charging"
       },
       "battery_max_discharge_current": {
         "default": "mdi:battery-charging"
       },
+      "force_duration": {
+        "default": "mdi:timer-outline"
+      },
+      "maximum_soc": {
+        "default": "mdi:battery-high"
+      },
+      "minimum_soc": {
+        "default": "mdi:battery-outline"
+      },
+      "minimum_soc_ongrid": {
+        "default": "mdi:power-plug-battery-outline"
+      },
       "remote_reactive_power": {
         "default": "mdi:flash-outline"
       },
       "remote_timeout_set": {
         "default": "mdi:timer"
-      },
-      "force_duration": {
-        "default": "mdi:timer-outline"
       }
     },
     "select": {
@@ -41,19 +41,16 @@
           "0": "mdi:power-plug-off"
         }
       },
-      "remote_control_mode": {
-        "default": "mdi:remote"
-      },
       "force_mode": {
         "default": "mdi:debug-step-over"
+      },
+      "remote_control_mode": {
+        "default": "mdi:remote"
       }
     },
     "sensor": {
-      "total_pv_power": {
-        "default": "mdi:solar-power"
-      },
-      "pv_total_energy": {
-        "default": "mdi:solar-power"
+      "battery1_current": {
+        "default": "mdi:current-dc"
       },
       "battery_total_charge_energy": {
         "default": "mdi:battery-arrow-up"
@@ -61,11 +58,11 @@
       "battery_total_discharge_energy": {
         "default": "mdi:battery-arrow-down"
       },
-      "reactive_power": {
-        "default": "mdi:flash-outline"
-      },
       "bms1_soh": {
         "default": "mdi:hospital-box-outline"
+      },
+      "grid_standard_code": {
+        "default": "mdi:transmission-tower"
       },
       "grid_total_export_energy": {
         "default": "mdi:transmission-tower-import"
@@ -73,14 +70,8 @@
       "grid_total_import_energy": {
         "default": "mdi:transmission-tower-export"
       },
-      "grid_standard_code": {
-        "default": "mdi:transmission-tower"
-      },
-      "pv_string_current": {
-        "default": "mdi:current-dc"
-      },
-      "battery1_current": {
-        "default": "mdi:current-dc"
+      "max_active_power": {
+        "default": "mdi:transmission-tower-import"
       },
       "network_status": {
         "default": "mdi:network",
@@ -89,14 +80,26 @@
           "2": "mdi:network"
         }
       },
+      "operating_mode": {
+        "default": "mdi:car-shift-pattern"
+      },
+      "pv_string_current": {
+        "default": "mdi:current-dc"
+      },
+      "pv_total_energy": {
+        "default": "mdi:solar-power"
+      },
+      "reactive_power": {
+        "default": "mdi:flash-outline"
+      },
       "remote_control": {
         "default": "mdi:remote"
       },
       "remote_timeout_countdown": {
         "default": "mdi:timer-sand"
       },
-      "operating_mode": {
-        "default": "mdi:car-shift-pattern"
+      "total_pv_power": {
+        "default": "mdi:solar-power"
       }
     }
   }

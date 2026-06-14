@@ -1,29 +1,29 @@
 {
   "config": {
-    "step": {
-      "user": {
-        "title": "Solakon ONE konfigurieren",
-        "description": "Richte dein Solakon ONE Gerät für die Integration in Home Assistant ein.",
-        "data": {
-          "host": "Gerät",
-          "port": "Port",
-          "slave_id": "Modbus Geräte ID",
-          "scan_interval": "Update Interval (Sekunden)"
-        },
-        "data_description": {
-          "host": "IP Adresse des Gerätes",
-          "port": "Modbus TCP Port (normalerweise 502)",
-          "slave_id": "Modbus Geräte Adresse (1-247)",
-          "scan_interval": "Zeitintervall in dem Aktualisierungen am Gerät abgefragt werden sollen (1-300 Sekunden)"
-        }
-      }
+    "abort": {
+      "already_configured": "Gerät ist schon konfiguriert"
     },
     "error": {
       "cannot_connect": "Verbindung zum Gerät fehlgeschlagen",
       "unknown": "Unerwarteter Fehler ist aufgetreten"
     },
-    "abort": {
-      "already_configured": "Gerät ist schon konfiguriert"
+    "step": {
+      "user": {
+        "data": {
+          "host": "Gerät",
+          "port": "Port",
+          "scan_interval": "Update Interval (Sekunden)",
+          "slave_id": "Modbus Geräte ID"
+        },
+        "data_description": {
+          "host": "IP Adresse des Gerätes",
+          "port": "Modbus TCP Port (normalerweise 502)",
+          "scan_interval": "Zeitintervall in dem Aktualisierungen am Gerät abgefragt werden sollen (1-300 Sekunden)",
+          "slave_id": "Modbus Geräte Adresse (1-247)"
+        },
+        "description": "Richte dein Solakon ONE Gerät für die Integration in Home Assistant ein.",
+        "title": "Solakon ONE konfigurieren"
+      }
     }
   },
   "entity": {
@@ -44,6 +44,9 @@
       },
       "force_power": {
         "name": "Modus überschreiben Leistung"
+      },
+      "grid_export_power_limit": {
+        "name": "Netz Ausgangsleistungsgrenze"
       },
       "maximum_soc": {
         "name": "Maximaler Ladestand"
@@ -86,13 +89,13 @@
         "state": {
           "0": "Aus",
           "1": "Wechselrichter export (PV priorität)",
+          "11": "Netz import",
+          "13": "Wechselrichter export (Netz priorität)",
+          "15": "Wechselrichter import (Netz priorität)",
           "3": "Wechselrichter import (PV priorität)",
           "5": "Batterie entladen",
           "7": "Batterie laden",
-          "9": "Netz export",
-          "11": "Netz import",
-          "13": "Wechselrichter export (Netz priorität)",
-          "15": "Wechselrichter import (Netz priorität)"
+          "9": "Netz export"
         }
       }
     },
@@ -112,6 +115,12 @@
       "battery_soc": {
         "name": "Batterie Ladestand"
       },
+      "battery_total_charge_energy": {
+        "name": "Batterie Ladeenergie"
+      },
+      "battery_total_discharge_energy": {
+        "name": "Batterie Entladeenergie"
+      },
       "bms1_ambient_temp": {
         "name": "Umgebungstemperatur"
       },
@@ -127,20 +136,11 @@
       "bms1_soh": {
         "name": "Batterie Gesundheitszustand"
       },
-      "pv_total_energy": {
-        "name": "PV Energie"
-      },
       "cumulative_generation": {
         "name": "Energie"
       },
       "daily_generation": {
         "name": "Tägliche Energie"
-      },
-      "battery_total_charge_energy": {
-        "name": "Batterie Ladeenergie"
-      },
-      "battery_total_discharge_energy": {
-        "name": "Batterie Entladeenergie"
       },
       "eps_current": {
         "name": "Steckdose Strom"
@@ -150,15 +150,6 @@
       },
       "eps_voltage": {
         "name": "Steckdose Spannung"
-      },
-      "inverter_r_frequency": {
-        "name": "Wechselrichter Frequenz"
-      },
-      "grid_total_export_energy": {
-        "name": "Netz Exportenergie"
-      },
-      "grid_total_import_energy": {
-        "name": "Netz Importenergie"
       },
       "grid_frequency": {
         "name": "Netzfrequenz"
@@ -173,8 +164,20 @@
           "7": "VDE4105_DE"
         }
       },
+      "grid_total_export_energy": {
+        "name": "Netz Exportenergie"
+      },
+      "grid_total_import_energy": {
+        "name": "Netz Importenergie"
+      },
       "internal_temp": {
         "name": "Wechselrichter Temperatur"
+      },
+      "inverter_r_frequency": {
+        "name": "Wechselrichter Frequenz"
+      },
+      "max_active_power": {
+        "name": "Netz maximale Ausgangsleistungsgrenze"
       },
       "network_status": {
         "name": "Netzwerk",
@@ -182,6 +185,18 @@
           "0": "Aus",
           "1": "Getrennt",
           "2": "Verbunden"
+        }
+      },
+      "operating_mode": {
+        "name": "Betriebsart",
+        "state": {
+          "0": "Nicht festgelegt",
+          "1": "Eigenverbrauch",
+          "2": "Einspeisepriorität",
+          "3": "Backup",
+          "4": "Spitzenlastkappung",
+          "6": "Laden erzwingen",
+          "7": "Entladen erzwingen"
         }
       },
       "power_factor": {
@@ -196,6 +211,9 @@
       "pv_string_voltage": {
         "name": "String {n} Spannung"
       },
+      "pv_total_energy": {
+        "name": "PV Energie"
+      },
       "reactive_power": {
         "name": "Blindleistung"
       },
@@ -204,13 +222,13 @@
         "state": {
           "0": "Aus",
           "1": "Wechselrichter entladen (PV priorität)",
+          "11": "Netz laden",
+          "13": "Wechselrichter entladen (Netz priorität)",
+          "15": "Wechselrichter laden (Netz priorität)",
           "3": "Wechselrichter laden (PV priorität)",
           "5": "Batterie entladen",
           "7": "Batterie laden",
-          "9": "Netz entladen",
-          "11": "Netz laden",
-          "13": "Wechselrichter entladen (Netz priorität)",
-          "15": "Wechselrichter laden (Netz priorität)"
+          "9": "Netz entladen"
         }
       },
       "remote_timeout_countdown": {
@@ -218,32 +236,20 @@
       },
       "total_pv_power": {
         "name": "PV Leistung"
-      },
-      "operating_mode": {
-        "name": "Betriebsart",
-        "state": {
-          "0": "Nicht festgelegt",
-          "1": "Eigenverbrauch",
-          "2": "Einspeisepriorität",
-          "3": "Backup",
-          "4": "Spitzenlastkappung",
-          "6": "Laden erzwingen",
-          "7": "Entladen erzwingen"
-        }
       }
     }
   },
   "options": {
     "step": {
       "init": {
-        "title": "Einstellungen anpassen",
-        "description": "Passe die Einstellungen für dein Solakon ONE Gerät an.",
         "data": {
           "scan_interval": "Aktualisierungsintervall (Sekunden)"
         },
         "data_description": {
           "scan_interval": "Zeitintervall in dem Aktualisierungen am Gerät abgefragt werden sollen (1-300 Sekunden)"
-        }
+        },
+        "description": "Passe die Einstellungen für dein Solakon ONE Gerät an.",
+        "title": "Einstellungen anpassen"
       }
     }
   }
