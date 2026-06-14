@@ -109,6 +109,7 @@ NUMBER_ENTITY_DESCRIPTIONS: tuple[NumberEntityDescription, ...] = (
         native_min_value=0,
         native_max_value=1200,
         native_step=10,
+        entity_registry_enabled_default=False,
     ),
     NumberEntityDescription(
         key="remote_active_power",
