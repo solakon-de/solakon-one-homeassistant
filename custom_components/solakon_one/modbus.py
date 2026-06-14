@@ -21,6 +21,7 @@ from .const import (
     DEFAULT_SCAN_INTERVAL,
     REGISTERS,
 )
+from .exceptions import CannotConnect
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -95,7 +96,7 @@ class SolakonModbusHub:
                     _LOGGER.warning(f"Test read exception: {e}")
             else:
                 _LOGGER.error(f"Failed to connect to {self._host}:{self._port}")
-                raise ConnectionError(f"Failed to connect to {self._host}:{self._port}")
+                raise CannotConnect(f"Failed to connect to {self._host}:{self._port}")
 
         except Exception as err:
             _LOGGER.error(f"Connection setup error: {err}")

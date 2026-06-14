@@ -16,10 +16,10 @@ from homeassistant.config_entries import (
     OptionsFlow, 
     OptionsFlowWithReload,
 )
+from homeassistant.data_entry_flow import FlowResult
 from homeassistant.exceptions import HomeAssistantError
 from homeassistant.helpers import config_validation as cv, device_registry as dr, selector
 from homeassistant.helpers.service_info.dhcp import DhcpServiceInfo
-
 
 from .const import (
     CONF_DEVICE_ID,
@@ -29,6 +29,7 @@ from .const import (
     DEFAULT_SCAN_INTERVAL,
     DOMAIN,
 )
+from .exceptions import CannotConnect
 from .modbus import get_modbus_hub
 
 _LOGGER = logging.getLogger(__name__)
@@ -175,7 +176,3 @@ class OptionsFlowHandler(OptionsFlowWithReload):
                 self._config_entry.options or self._config_entry.data,
             ),
         )
-
-
-class CannotConnect(HomeAssistantError):
-    """Error to indicate we cannot connect."""
