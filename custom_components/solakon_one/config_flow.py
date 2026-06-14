@@ -126,7 +126,6 @@ class SolakonONEConfigFlow(ConfigFlow, domain=DOMAIN):  # type: ignore[call-arg]
             ),
         )
 
-
     async def async_step_dhcp(
         self, discovery_info: DhcpServiceInfo
     ) -> ConfigFlowResult:
