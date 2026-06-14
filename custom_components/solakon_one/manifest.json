@@ -6,11 +6,11 @@
   "dependencies": [],
   "dhcp": [
     {
-      "hostname": "INVERTER_*",
+      "hostname": "inverter_*",
       "macaddress": "441D64*"
     },
     {
-      "hostname": "INVERTER_*",
+      "hostname": "inverter_*",
       "macaddress": "140808*"
     }
   ],
