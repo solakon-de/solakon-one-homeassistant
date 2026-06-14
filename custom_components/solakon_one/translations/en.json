@@ -109,9 +109,6 @@
       "battery1_voltage": {
         "name": "Battery voltage"
       },
-      "battery_combined_power": {
-        "name": "Battery power"
-      },
       "battery_power": {
         "name": "Battery power"
       },
