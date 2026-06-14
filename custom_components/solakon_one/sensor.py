@@ -375,6 +375,21 @@ SENSOR_ENTITY_DESCRIPTIONS: tuple[SolakonSensorEntityDescription, ...] = (
         entity_registry_enabled_default=False,
         options=[0, 1, 2, 3, 4, 6, 7],
     ),
+    SolakonSensorEntityDescription(
+        key="pv_version",
+        entity_category=EntityCategory.DIAGNOSTIC,
+        value_fn=lambda val: f"{int(hex(val >> 8), 16)}.{int(hex(val & 0xFF),16):03}",
+    ),
+    SolakonSensorEntityDescription(
+        key="bms_version",
+        entity_category=EntityCategory.DIAGNOSTIC,
+        value_fn=lambda val: f"{int(hex(val >> 8), 16)}.{int(hex(val & 0xFF),16):03}",
+    ),
+    SolakonSensorEntityDescription(
+        key="inverter_version",
+        entity_category=EntityCategory.DIAGNOSTIC,
+        value_fn=lambda val: f"{int(hex(val >> 8), 16)}.{int(hex(val & 0xFF),16):03}",
+    ),
 )
 
 
