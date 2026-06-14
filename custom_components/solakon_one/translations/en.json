@@ -1,29 +1,29 @@
 {
   "config": {
-    "step": {
-      "user": {
-        "title": "Configure Solakon ONE",
-        "description": "Set up your Solakon ONE device for integration with Home Assistant.",
-        "data": {
-          "host": "Host",
-          "port": "Port",
-          "slave_id": "Modbus device ID",
-          "scan_interval": "Update interval (seconds)"
-        },
-        "data_description": {
-          "host": "IP address of your Solakon ONE device",
-          "port": "Modbus TCP port (usually 502)",
-          "slave_id": "Modbus device address (1-247)",
-          "scan_interval": "Interval to poll device for updates (1-300 seconds)"
-        }
-      }
+    "abort": {
+      "already_configured": "Device is already configured"
     },
     "error": {
       "cannot_connect": "Failed to connect to the device",
       "unknown": "Unexpected error occurred"
     },
-    "abort": {
-      "already_configured": "Device is already configured"
+    "step": {
+      "user": {
+        "data": {
+          "host": "Host",
+          "port": "Port",
+          "scan_interval": "Update interval (seconds)",
+          "slave_id": "Modbus device ID"
+        },
+        "data_description": {
+          "host": "IP address of your Solakon ONE device",
+          "port": "Modbus TCP port (usually 502)",
+          "scan_interval": "Interval to poll device for updates (1-300 seconds)",
+          "slave_id": "Modbus device address (1-247)"
+        },
+        "description": "Set up your Solakon ONE device for integration with Home Assistant.",
+        "title": "Configure Solakon ONE"
+      }
     }
   },
   "entity": {
@@ -44,6 +44,9 @@
       },
       "force_power": {
         "name": "Force mode power"
+      },
+      "grid_export_power_limit": {
+        "name": "Grid export power limit"
       },
       "maximum_soc": {
         "name": "Maximum state of charge"
@@ -86,13 +89,13 @@
         "state": {
           "0": "Disabled",
           "1": "Inverter export (PV priority)",
+          "11": "Grid import",
+          "13": "Inverter export (Grid priority)",
+          "15": "Inverter import (Grid priority)",
           "3": "Inverter import (PV priority)",
           "5": "Battery discharge",
           "7": "Battery charge",
-          "9": "Grid export",
-          "11": "Grid import",
-          "13": "Inverter export (Grid priority)",
-          "15": "Inverter import (Grid priority)"
+          "9": "Grid export"
         }
       }
     },
@@ -112,6 +115,12 @@
       "battery_soc": {
         "name": "Battery state of charge"
       },
+      "battery_total_charge_energy": {
+        "name": "Battery charge energy"
+      },
+      "battery_total_discharge_energy": {
+        "name": "Battery discharge energy"
+      },
       "bms1_ambient_temp": {
         "name": "Ambient temperature"
       },
@@ -127,17 +136,8 @@
       "bms1_soh": {
         "name": "Battery state of health"
       },
-      "pv_total_energy": {
-        "name": "PV energy"
-      },
       "cumulative_generation": {
         "name": "Total energy"
-      },
-      "battery_total_charge_energy": {
-        "name": "Battery charge energy"
-      },
-      "battery_total_discharge_energy": {
-        "name": "Battery discharge energy"
       },
       "eps_current": {
         "name": "EPS current"
@@ -147,15 +147,6 @@
       },
       "eps_voltage": {
         "name": "EPS voltage"
-      },
-      "inverter_r_frequency": {
-        "name": "Inverter frequency"
-      },
-      "grid_total_export_energy": {
-        "name": "Grid export energy"
-      },
-      "grid_total_import_energy": {
-        "name": "Grid import energy"
       },
       "grid_frequency": {
         "name": "Grid frequency"
@@ -170,8 +161,20 @@
           "7": "VDE4105_DE"
         }
       },
+      "grid_total_export_energy": {
+        "name": "Grid export energy"
+      },
+      "grid_total_import_energy": {
+        "name": "Grid import energy"
+      },
       "internal_temp": {
         "name": "Inverter temperature"
+      },
+      "inverter_r_frequency": {
+        "name": "Inverter frequency"
+      },
+      "max_active_power": {
+        "name": "Grid maximum export power limit"
       },
       "network_status": {
         "name": "Network",
@@ -179,6 +182,18 @@
           "0": "Disabled",
           "1": "Disconnected",
           "2": "Connected"
+        }
+      },
+      "operating_mode": {
+        "name": "Operating mode",
+        "state": {
+          "0": "Not set",
+          "1": "Self use",
+          "2": "Feed-in priority",
+          "3": "Backup",
+          "4": "Peak shaving",
+          "6": "Force charge",
+          "7": "Force discharge"
         }
       },
       "power_factor": {
@@ -193,6 +208,9 @@
       "pv_string_voltage": {
         "name": "String {n} voltage"
       },
+      "pv_total_energy": {
+        "name": "PV energy"
+      },
       "reactive_power": {
         "name": "Reactive power"
       },
@@ -201,13 +219,13 @@
         "state": {
           "0": "Disabled",
           "1": "Inverter export (PV priority)",
+          "11": "Grid import",
+          "13": "Inverter export (Grid priority)",
+          "15": "Inverter import (Grid priority)",
           "3": "Inverter import (PV priority)",
           "5": "Battery discharge",
           "7": "Battery charge",
-          "9": "Grid export",
-          "11": "Grid import",
-          "13": "Inverter export (Grid priority)",
-          "15": "Inverter import (Grid priority)"
+          "9": "Grid export"
         }
       },
       "remote_timeout_countdown": {
@@ -215,32 +233,20 @@
       },
       "total_pv_power": {
         "name": "PV power"
-      },
-      "operating_mode": {
-        "name": "Operating mode",
-        "state": {
-          "0": "Not set",
-          "1": "Self use",
-          "2": "Feed-in priority",
-          "3": "Backup",
-          "4": "Peak shaving",
-          "6": "Force charge",
-          "7": "Force discharge"
-        }
       }
     }
   },
   "options": {
     "step": {
       "init": {
-        "title": "Configure options",
-        "description": "Adjust settings for your Solakon ONE device.",
         "data": {
           "scan_interval": "Update interval (seconds)"
         },
         "data_description": {
           "scan_interval": "Interval to poll device for updates (1-300 seconds)"
-        }
+        },
+        "description": "Adjust settings for your Solakon ONE device.",
+        "title": "Configure options"
       }
     }
   }
