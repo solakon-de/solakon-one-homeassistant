@@ -31,11 +31,12 @@ REGISTERS = {
     "mfg_id": {"address": 30032, "count": 16, "type": "string"},
 
     # Version Information (Table 3-2)
-    "master_version": {"address": 36001, "count": 1, "type": "u16"},
+    "inverter_version": {"address": 36001, "count": 1, "type": "u16"},
     "slave_version": {"address": 36002, "count": 1, "type": "u16"},
-    "manager_version": {"address": 36003, "count": 1, "type": "u16"},
+    "pv_version": {"address": 36003, "count": 1, "type": "u16"},
 
     # Battery Version Information (Table 3-3)
+    "bms1_version": {"address": 37003, "count": 1, "type": "u16"}, # bms_master_version
     "bms1_design_energy": {"address": 37635, "count": 1, "type": "i16", "scale": 0.1, "unit": "Wh"},
 
     "bms1_soh": {"address": 37624, "count": 1, "type": "u16", "scale": 1, "unit": "%"},
