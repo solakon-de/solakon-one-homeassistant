@@ -34,13 +34,6 @@ from .types import SolakonConfigEntry
 _LOGGER = logging.getLogger(__name__)
 
 # Control Status Sensors (showing current values of controllable parameters)
-# "export_power_limit": {
-#     "name": "Export Power Limit",
-#     "device_class": "power",
-#     "state_class": "measurement",
-#     "unit": "W",
-#     "icon": "mdi:transmission-tower-export",
-# },
 # "import_power_limit": {
 #     "name": "Import Power Limit",
 #     "device_class": "power",
@@ -118,6 +111,13 @@ SENSOR_ENTITY_DESCRIPTIONS: tuple[SolakonSensorEntityDescription, ...] = (
     SolakonSensorEntityDescription(
         key="active_power",
         state_class=SensorStateClass.MEASUREMENT,
+        device_class=SensorDeviceClass.POWER,
+        native_unit_of_measurement=UnitOfPower.WATT,
+    ),
+    SolakonSensorEntityDescription(
+        key="max_active_power",
+        state_class=SensorStateClass.MEASUREMENT,
+        entity_category=EntityCategory.DIAGNOSTIC,
         device_class=SensorDeviceClass.POWER,
         native_unit_of_measurement=UnitOfPower.WATT,
     ),
