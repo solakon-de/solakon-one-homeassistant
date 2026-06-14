@@ -46,7 +46,7 @@
         "name": "Modus überschreiben Leistung"
       },
       "grid_export_power_limit": {
-        "name": "Netz maximale Ausgangsleistung"
+        "name": "Netz Ausgangsleistungsgrenze"
       },
       "maximum_soc": {
         "name": "Maximaler Ladestand"
