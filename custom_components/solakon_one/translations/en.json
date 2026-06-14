@@ -176,6 +176,9 @@
       "inverter_r_frequency": {
         "name": "Inverter frequency"
       },
+      "max_active_power": {
+        "name": "Grid maximum export power limit"
+      },
       "network_status": {
         "name": "Network",
         "state": {

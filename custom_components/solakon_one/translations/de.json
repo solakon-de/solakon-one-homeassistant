@@ -176,6 +176,9 @@
       "inverter_r_frequency": {
         "name": "Wechselrichter Frequenz"
       },
+      "max_active_power": {
+        "name": "Netz maximale Ausgangsleistungsgrenze"
+      },
       "network_status": {
         "name": "Netzwerk",
         "state": {

@@ -70,6 +70,9 @@
       "grid_total_import_energy": {
         "default": "mdi:transmission-tower-export"
       },
+      "max_active_power": {
+        "default": "mdi:transmission-tower-import"
+      },
       "network_status": {
         "default": "mdi:network",
         "state": {
