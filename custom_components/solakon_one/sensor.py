@@ -75,6 +75,8 @@ SENSOR_ENTITY_DESCRIPTIONS: tuple[SolakonSensorEntityDescription, ...] = (
     ),
     SolakonSensorEntityDescription(
         key="pv1_power",
+        translation_key="pv_string_power",
+        translation_placeholders={"n": "1"},
         state_class=SensorStateClass.MEASUREMENT,
         device_class=SensorDeviceClass.POWER,
         entity_registry_enabled_default=False,
@@ -82,6 +84,8 @@ SENSOR_ENTITY_DESCRIPTIONS: tuple[SolakonSensorEntityDescription, ...] = (
     ),
     SolakonSensorEntityDescription(
         key="pv2_power",
+        translation_key="pv_string_power",
+        translation_placeholders={"n": "2"},
         state_class=SensorStateClass.MEASUREMENT,
         device_class=SensorDeviceClass.POWER,
         entity_registry_enabled_default=False,
@@ -89,6 +93,8 @@ SENSOR_ENTITY_DESCRIPTIONS: tuple[SolakonSensorEntityDescription, ...] = (
     ),
     SolakonSensorEntityDescription(
         key="pv3_power",
+        translation_key="pv_string_power",
+        translation_placeholders={"n": "3"},
         state_class=SensorStateClass.MEASUREMENT,
         device_class=SensorDeviceClass.POWER,
         entity_registry_enabled_default=False,
@@ -96,6 +102,8 @@ SENSOR_ENTITY_DESCRIPTIONS: tuple[SolakonSensorEntityDescription, ...] = (
     ),
     SolakonSensorEntityDescription(
         key="pv4_power",
+        translation_key="pv_string_power",
+        translation_placeholders={"n": "4"},
         state_class=SensorStateClass.MEASUREMENT,
         device_class=SensorDeviceClass.POWER,
         entity_registry_enabled_default=False,
@@ -119,13 +127,6 @@ SENSOR_ENTITY_DESCRIPTIONS: tuple[SolakonSensorEntityDescription, ...] = (
         device_class=SensorDeviceClass.REACTIVE_POWER,
         entity_registry_enabled_default=False,
         native_unit_of_measurement=UnitOfReactivePower.KILO_VOLT_AMPERE_REACTIVE,
-    ),
-    SolakonSensorEntityDescription(
-        key="battery_combined_power",
-        state_class=SensorStateClass.MEASUREMENT,
-        device_class=SensorDeviceClass.POWER,
-        native_unit_of_measurement=UnitOfPower.WATT,
-        entity_registry_enabled_default=False,
     ),
     SolakonSensorEntityDescription(
         key="battery_power",
@@ -160,6 +161,8 @@ SENSOR_ENTITY_DESCRIPTIONS: tuple[SolakonSensorEntityDescription, ...] = (
     ),
     SolakonSensorEntityDescription(
         key="pv1_voltage",
+        translation_key="pv_string_voltage",
+        translation_placeholders={"n": "1"},
         state_class=SensorStateClass.MEASUREMENT,
         device_class=SensorDeviceClass.VOLTAGE,
         entity_registry_enabled_default=False,
@@ -167,6 +170,8 @@ SENSOR_ENTITY_DESCRIPTIONS: tuple[SolakonSensorEntityDescription, ...] = (
     ),
     SolakonSensorEntityDescription(
         key="pv2_voltage",
+        translation_key="pv_string_voltage",
+        translation_placeholders={"n": "2"},
         state_class=SensorStateClass.MEASUREMENT,
         device_class=SensorDeviceClass.VOLTAGE,
         entity_registry_enabled_default=False,
@@ -174,6 +179,8 @@ SENSOR_ENTITY_DESCRIPTIONS: tuple[SolakonSensorEntityDescription, ...] = (
     ),
     SolakonSensorEntityDescription(
         key="pv3_voltage",
+        translation_key="pv_string_voltage",
+        translation_placeholders={"n": "3"},
         state_class=SensorStateClass.MEASUREMENT,
         device_class=SensorDeviceClass.VOLTAGE,
         entity_registry_enabled_default=False,
@@ -181,6 +188,8 @@ SENSOR_ENTITY_DESCRIPTIONS: tuple[SolakonSensorEntityDescription, ...] = (
     ),
     SolakonSensorEntityDescription(
         key="pv4_voltage",
+        translation_key="pv_string_voltage",
+        translation_placeholders={"n": "4"},
         state_class=SensorStateClass.MEASUREMENT,
         device_class=SensorDeviceClass.VOLTAGE,
         entity_registry_enabled_default=False,
@@ -206,6 +215,8 @@ SENSOR_ENTITY_DESCRIPTIONS: tuple[SolakonSensorEntityDescription, ...] = (
     ),
     SolakonSensorEntityDescription(
         key="pv1_current",
+        translation_key="pv_string_current",
+        translation_placeholders={"n": "1"},
         state_class=SensorStateClass.MEASUREMENT,
         device_class=SensorDeviceClass.CURRENT,
         entity_registry_enabled_default=False,
@@ -213,6 +224,8 @@ SENSOR_ENTITY_DESCRIPTIONS: tuple[SolakonSensorEntityDescription, ...] = (
     ),
     SolakonSensorEntityDescription(
         key="pv2_current",
+        translation_key="pv_string_current",
+        translation_placeholders={"n": "2"},
         state_class=SensorStateClass.MEASUREMENT,
         device_class=SensorDeviceClass.CURRENT,
         entity_registry_enabled_default=False,
@@ -220,6 +233,8 @@ SENSOR_ENTITY_DESCRIPTIONS: tuple[SolakonSensorEntityDescription, ...] = (
     ),
     SolakonSensorEntityDescription(
         key="pv3_current",
+        translation_key="pv_string_current",
+        translation_placeholders={"n": "3"},
         state_class=SensorStateClass.MEASUREMENT,
         device_class=SensorDeviceClass.CURRENT,
         entity_registry_enabled_default=False,
@@ -227,6 +242,8 @@ SENSOR_ENTITY_DESCRIPTIONS: tuple[SolakonSensorEntityDescription, ...] = (
     ),
     SolakonSensorEntityDescription(
         key="pv4_current",
+        translation_key="pv_string_current",
+        translation_placeholders={"n": "4"},
         state_class=SensorStateClass.MEASUREMENT,
         device_class=SensorDeviceClass.CURRENT,
         entity_registry_enabled_default=False,
@@ -389,8 +406,9 @@ class SolakonSensor(SolakonEntity, SensorEntity):
         super().__init__(config_entry, device_info, description.key)
         # Set entity description
         self.entity_description = description
-        # Set entity ID
-        self.entity_id = f"sensor.solakon_one_{description.key}"
+        # Prioritize translation key from entity description
+        if self.entity_description.translation_key is not None:
+            self._attr_translation_key = self.entity_description.translation_key
 
     @callback
     def _handle_coordinator_update(self) -> None:

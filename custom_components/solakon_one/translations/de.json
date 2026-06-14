@@ -30,9 +30,6 @@
     "binary_sensor": {
       "grid_status": {
         "name": "Netz"
-      },
-      "island_mode": {
-        "name": "Inselbetrieb"
       }
     },
     "number": {
@@ -88,14 +85,14 @@
         "name": "Modus fernsteuern",
         "state": {
           "0": "Aus",
-          "1": "Inverter export (PV priorität)",
-          "3": "Inverter import (PV priorität)",
+          "1": "Wechselrichter export (PV priorität)",
+          "3": "Wechselrichter import (PV priorität)",
           "5": "Batterie entladen",
           "7": "Batterie laden",
           "9": "Netz export",
           "11": "Netz import",
-          "13": "Inverter export (Netz priorität)",
-          "15": "Inverter import (Netz priorität)"
+          "13": "Wechselrichter export (Netz priorität)",
+          "15": "Wechselrichter import (Netz priorität)"
         }
       }
     },
@@ -108,9 +105,6 @@
       },
       "battery1_voltage": {
         "name": "Batterie Spannung"
-      },
-      "battery_combined_power": {
-        "name": "Batterie Leistung"
       },
       "battery_power": {
         "name": "Batterie Leistung"
@@ -125,10 +119,10 @@
         "name": "Batteriekapazität"
       },
       "bms1_max_temp": {
-        "name": "BMS max. Temperatur"
+        "name": "Batterie max. Temperatur"
       },
       "bms1_min_temp": {
-        "name": "BMS min. Temperatur"
+        "name": "Batterie min. Temperatur"
       },
       "bms1_soh": {
         "name": "Batterie Gesundheitszustand"
@@ -155,7 +149,7 @@
         "name": "Steckdose Spannung"
       },
       "inverter_r_frequency": {
-        "name": "Inverter Frequenz"
+        "name": "Wechselrichter Frequenz"
       },
       "grid_total_export_energy": {
         "name": "Netz Exportenergie"
@@ -177,7 +171,7 @@
         }
       },
       "internal_temp": {
-        "name": "Inverter Temperatur"
+        "name": "Wechselrichter Temperatur"
       },
       "network_status": {
         "name": "Netzwerk",
@@ -190,41 +184,14 @@
       "power_factor": {
         "name": "Leistungsfaktor"
       },
-      "pv1_current": {
-        "name": "PV1 Strom"
+      "pv_string_current": {
+        "name": "String {n} Strom"
       },
-      "pv1_power": {
-        "name": "PV1 Leistung"
+      "pv_string_power": {
+        "name": "String {n} Leistung"
       },
-      "pv1_voltage": {
-        "name": "PV1 Spannung"
-      },
-      "pv2_current": {
-        "name": "PV2 Strom"
-      },
-      "pv2_power": {
-        "name": "PV2 Leistung"
-      },
-      "pv2_voltage": {
-        "name": "PV2 Spannung"
-      },
-      "pv3_current": {
-        "name": "PV3 Strom"
-      },
-      "pv3_power": {
-        "name": "PV3 Leistung"
-      },
-      "pv3_voltage": {
-        "name": "PV3 Spannung"
-      },
-      "pv4_current": {
-        "name": "PV4 Strom"
-      },
-      "pv4_power": {
-        "name": "PV4 Leistung"
-      },
-      "pv4_voltage": {
-        "name": "PV4 Spannung"
+      "pv_string_voltage": {
+        "name": "String {n} Spannung"
       },
       "reactive_power": {
         "name": "Blindleistung"
@@ -233,14 +200,14 @@
         "name": "Fernsteuerung",
         "state": {
           "0": "Aus",
-          "1": "Inverter entladen (PV Priority)",
-          "3": "Inverter laden (PV Priority)",
+          "1": "Wechselrichter entladen (PV priorität)",
+          "3": "Wechselrichter laden (PV priorität)",
           "5": "Batterie entladen",
           "7": "Batterie laden",
           "9": "Netz entladen",
           "11": "Netz laden",
-          "13": "Inverter entladen (AC First)",
-          "15": "Inverter laden (AC First)"
+          "13": "Wechselrichter entladen (Netz priorität)",
+          "15": "Wechselrichter laden (Netz priorität)"
         }
       },
       "remote_timeout_countdown": {

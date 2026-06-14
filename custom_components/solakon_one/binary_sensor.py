@@ -38,12 +38,6 @@ BINARY_SENSOR_ENTITY_DESCRIPTIONS: tuple[SolakonBinarySensorEntityDescription, .
         value_fn=lambda val: not val,
     ),
     SolakonBinarySensorEntityDescription(
-        key="island_mode",
-        entity_category=EntityCategory.DIAGNOSTIC,
-        entity_registry_enabled_default=False,
-        data_key="grid_status",
-    ),
-    SolakonBinarySensorEntityDescription(
         key="battery_charging",
         device_class=BinarySensorDeviceClass.BATTERY_CHARGING,
         entity_registry_enabled_default=False,
@@ -88,8 +82,6 @@ class SolakonBinarySensor(SolakonEntity, BinarySensorEntity):
         super().__init__(config_entry, device_info, description.key)
         # Set entity description
         self.entity_description = description
-        # Set entity ID
-        self.entity_id = f"binary_sensor.solakon_one_{description.key}"
 
     @callback
     def _handle_coordinator_update(self) -> None:
