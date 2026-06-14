@@ -116,9 +116,9 @@ SENSOR_ENTITY_DESCRIPTIONS: tuple[SolakonSensorEntityDescription, ...] = (
     ),
     SolakonSensorEntityDescription(
         key="max_active_power",
-        state_class=SensorStateClass.MEASUREMENT,
         entity_category=EntityCategory.DIAGNOSTIC,
         device_class=SensorDeviceClass.POWER,
+        entity_registry_enabled_default=False,
         native_unit_of_measurement=UnitOfPower.WATT,
     ),
     SolakonSensorEntityDescription(
