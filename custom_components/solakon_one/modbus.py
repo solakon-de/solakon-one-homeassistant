@@ -93,21 +93,25 @@ def compute_register_batches(
                 batch_end = entry_end
         else:
             # Finalize current batch and start a new one
-            batches.append({
-                "address": batch_start,
-                "count": batch_end - batch_start,
-                "keys": list(batch_keys),
-            })
+            batches.append(
+                {
+                    "address": batch_start,
+                    "count": batch_end - batch_start,
+                    "keys": list(batch_keys),
+                }
+            )
             batch_start = addr
             batch_end = entry_end
             batch_keys = [(key, 0, count, config)]
 
     # Finalize last batch
-    batches.append({
-        "address": batch_start,
-        "count": batch_end - batch_start,
-        "keys": list(batch_keys),
-    })
+    batches.append(
+        {
+            "address": batch_start,
+            "count": batch_end - batch_start,
+            "keys": list(batch_keys),
+        }
+    )
 
     return batches
 
@@ -311,7 +315,10 @@ class SolakonModbusHub:
                 if result.isError():
                     _LOGGER.debug(
                         "Error reading batch at address %d (count=%d, keys=%s): %s",
-                        batch_addr, batch_count, key_names, result,
+                        batch_addr,
+                        batch_count,
+                        key_names,
+                        result,
                     )
                     continue
 
@@ -325,13 +332,19 @@ class SolakonModbusHub:
             except Exception as err:
                 _LOGGER.debug(
                     "Failed to read batch at address %d (count=%d, keys=%s): %s",
-                    batch_addr, batch_count, key_names, err,
+                    batch_addr,
+                    batch_count,
+                    key_names,
+                    err,
                 )
             finally:
                 batch_elapsed = time.monotonic() - batch_start
                 _LOGGER.debug(
                     "Batch at address %d (%d regs, %d keys) took %.3fs",
-                    batch_addr, batch_count, len(batch_keys), batch_elapsed,
+                    batch_addr,
+                    batch_count,
+                    len(batch_keys),
+                    batch_elapsed,
                 )
 
         return data
@@ -350,7 +363,8 @@ class SolakonModbusHub:
         elapsed = time.monotonic() - start
         _LOGGER.debug(
             "Static registers read complete: %d values in %.3fs",
-            len(self._static_data), elapsed,
+            len(self._static_data),
+            elapsed,
         )
 
     async def async_read_registers(self) -> dict[str, Any]:
@@ -376,7 +390,9 @@ class SolakonModbusHub:
             lock_elapsed = time.monotonic() - lock_start
             _LOGGER.debug(
                 "Lock held for %.3fs total. Register read: %d batches and %d values",
-                lock_elapsed, len(self._dynamic_batches), len(data),
+                lock_elapsed,
+                len(self._dynamic_batches),
+                len(data),
             )
 
         # Merge in static data (read once at setup)
