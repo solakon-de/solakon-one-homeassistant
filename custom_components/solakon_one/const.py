@@ -31,11 +31,12 @@ REGISTERS = {
     "mfg_id": {"address": 30032, "count": 16, "type": "string", "static": True},
 
     # Version Information (Table 3-2)
-    "master_version": {"address": 36001, "count": 1, "type": "u16", "static": True},
-    "slave_version": {"address": 36002, "count": 1, "type": "u16", "static": True},
-    "manager_version": {"address": 36003, "count": 1, "type": "u16", "static": True},
+    "inverter_version": {"address": 36001, "count": 1, "type": "u16"}, # master_version
+    "slave_version": {"address": 36002, "count": 1, "type": "u16"},
+    "pv_version": {"address": 36003, "count": 1, "type": "u16"}, # manager_version
 
     # Battery Version Information (Table 3-3)
+    "bms1_version": {"address": 37003, "count": 1, "type": "u16"}, # bms1_master_version
     "bms1_design_energy": {"address": 37635, "count": 1, "type": "i16", "scale": 0.1, "unit": "Wh"},
 
     "bms1_soh": {"address": 37624, "count": 1, "type": "u16", "scale": 1, "unit": "%"},
@@ -109,7 +110,6 @@ REGISTERS = {
 
     # Energy Statistics
     "cumulative_generation": {"address": 39149, "count": 2, "type": "u32", "scale": 100, "unit": "kWh"},
-    "daily_generation": {"address": 39151, "count": 2, "type": "u32", "scale": 100, "unit": "kWh"},
 
     # Battery Information
     "battery1_voltage": {"address": 39227, "count": 1, "type": "i16", "scale": 10, "unit": "V"},

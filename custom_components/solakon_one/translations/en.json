@@ -136,11 +136,11 @@
       "bms1_soh": {
         "name": "Battery state of health"
       },
+      "bms_version": {
+        "name": "BMS version"
+      },
       "cumulative_generation": {
         "name": "Total energy"
-      },
-      "daily_generation": {
-        "name": "Daily energy"
       },
       "eps_current": {
         "name": "EPS current"
@@ -175,6 +175,9 @@
       },
       "inverter_r_frequency": {
         "name": "Inverter frequency"
+      },
+      "inverter_version": {
+        "name": "Inverter version"
       },
       "max_active_power": {
         "name": "Grid maximum export power limit"
@@ -213,6 +216,9 @@
       },
       "pv_total_energy": {
         "name": "PV energy"
+      },
+      "pv_version": {
+        "name": "PV version"
       },
       "reactive_power": {
         "name": "Reactive power"
