@@ -26,17 +26,17 @@ PLATFORMS = [
 # Register definitions
 REGISTERS = {
     # Model Information (Table 3-1)
-    "model_name": {"address": 30000, "count": 16, "type": "string"},
-    "serial_number": {"address": 30016, "count": 16, "type": "string"},
-    "mfg_id": {"address": 30032, "count": 16, "type": "string"},
+    "model_name": {"address": 30000, "count": 16, "type": "string", "static": True},
+    "serial_number": {"address": 30016, "count": 16, "type": "string", "static": True},
+    "mfg_id": {"address": 30032, "count": 16, "type": "string", "static": True},
 
     # Version Information (Table 3-2)
-    "inverter_version": {"address": 36001, "count": 1, "type": "u16"},
+    "inverter_version": {"address": 36001, "count": 1, "type": "u16"}, # master_version
     "slave_version": {"address": 36002, "count": 1, "type": "u16"},
-    "pv_version": {"address": 36003, "count": 1, "type": "u16"},
+    "pv_version": {"address": 36003, "count": 1, "type": "u16"}, # manager_version
 
     # Battery Version Information (Table 3-3)
-    "bms1_version": {"address": 37003, "count": 1, "type": "u16"}, # bms_master_version
+    "bms1_version": {"address": 37003, "count": 1, "type": "u16"}, # bms1_master_version
     "bms1_design_energy": {"address": 37635, "count": 1, "type": "i16", "scale": 0.1, "unit": "Wh"},
 
     "bms1_soh": {"address": 37624, "count": 1, "type": "u16", "scale": 1, "unit": "%"},
@@ -45,7 +45,7 @@ REGISTERS = {
     "bms2_soc": {"address": 38310, "count": 1, "type": "i16", "scale": 1, "unit": "%"},
 
     # Protocol & Device Info (Table 3-5)
-    "protocol_version": {"address": 39000, "count": 2, "type": "u32"},
+    "protocol_version": {"address": 39000, "count": 2, "type": "u32", "static": True},
     "rated_power": {"address": 39053, "count": 2, "type": "i32", "scale": 1, "unit": "W"},
     "max_active_power": {"address": 39055, "count": 2, "type": "i32", "scale": 1, "unit": "W"},
 
