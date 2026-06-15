@@ -136,6 +136,9 @@
       "bms1_soh": {
         "name": "Batterie Gesundheitszustand"
       },
+      "bms1_version": {
+        "name": "BMS Version"
+      },
       "cumulative_generation": {
         "name": "Energie"
       },
@@ -176,6 +179,9 @@
       "inverter_r_frequency": {
         "name": "Wechselrichter Frequenz"
       },
+      "inverter_version": {
+        "name": "Inverter Version"
+      },
       "max_active_power": {
         "name": "Netz maximale Ausgangsleistungsgrenze"
       },
@@ -213,6 +219,9 @@
       },
       "pv_total_energy": {
         "name": "PV Energie"
+      },
+      "pv_version": {
+        "name": "PV Version"
       },
       "reactive_power": {
         "name": "Blindleistung"
