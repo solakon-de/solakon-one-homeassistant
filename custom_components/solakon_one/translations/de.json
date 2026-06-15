@@ -142,9 +142,6 @@
       "cumulative_generation": {
         "name": "Energie"
       },
-      "daily_generation": {
-        "name": "Tägliche Energie"
-      },
       "eps_current": {
         "name": "Steckdose Strom"
       },

@@ -37,7 +37,7 @@ A complete Home Assistant custom integration for Solakon ONE devices using Modbu
 - Real-time monitoring of all inverter parameters
 - PV string monitoring (voltage, current, power)
 - Battery management (SOC, power, voltage, current, temperature)
-- Energy statistics (total and daily generation)
+- Energy statistics (total generation)
 - Temperature monitoring
 - Alarm and status monitoring
 - Power factor and grid frequency monitoring
@@ -75,7 +75,6 @@ A complete Home Assistant custom integration for Solakon ONE devices using Modbu
 
 ### Energy Statistics
 - Total Energy Generated
-- Daily Energy Generation
 
 ### Battery Information
 - Battery Power
