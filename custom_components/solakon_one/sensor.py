@@ -374,7 +374,7 @@ SENSOR_ENTITY_DESCRIPTIONS: tuple[SolakonSensorEntityDescription, ...] = (
         value_fn=lambda val: f"{int(hex(val >> 8), 16)}.{int(hex(val & 0xFF), 16):03}",
     ),
     SolakonSensorEntityDescription(
-        key="bms_version",
+        key="bms1_version",
         entity_category=EntityCategory.DIAGNOSTIC,
         value_fn=lambda val: f"{int(hex(val >> 8), 16)}.{int(hex(val & 0xFF), 16):03}",
     ),
