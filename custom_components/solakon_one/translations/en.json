@@ -142,6 +142,9 @@
       "cumulative_generation": {
         "name": "Total energy"
       },
+      "daily_generation": {
+        "name": "Daily energy"
+      },
       "eps_current": {
         "name": "EPS current"
       },
