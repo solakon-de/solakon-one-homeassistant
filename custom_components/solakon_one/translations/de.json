@@ -180,7 +180,7 @@
         "name": "Wechselrichter Frequenz"
       },
       "inverter_version": {
-        "name": "Inverter Version"
+        "name": "Wechselrichter Version"
       },
       "max_active_power": {
         "name": "Netz maximale Ausgangsleistungsgrenze"
