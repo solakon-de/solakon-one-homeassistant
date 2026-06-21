@@ -139,6 +139,12 @@
       "bms1_version": {
         "name": "BMS version"
       },
+      "bms1_max_cell_voltage": {
+        "name": "Max cell voltage"
+      },
+      "bms1_min_cell_voltage": {
+        "name": "Min cell voltage"
+      },
       "cumulative_generation": {
         "name": "Total energy"
       },
