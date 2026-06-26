@@ -36,6 +36,6 @@ class SolakonEntity(CoordinatorEntity, Entity):
             sw_version=device_info.get("version"),
             serial_number=device_info.get("serial_number"),
             configuration_url=f"https://app.solakon.de/all-in-one-settings/{serial_number}"
-            if (serial_number := device_info.get('serial_number'))
+            if (serial_number := device_info.get("serial_number"))
             else None,
         )
