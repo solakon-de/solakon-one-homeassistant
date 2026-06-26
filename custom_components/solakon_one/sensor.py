@@ -395,14 +395,18 @@ SENSOR_ENTITY_DESCRIPTIONS: tuple[SolakonSensorEntityDescription, ...] = (
         state_class=SensorStateClass.MEASUREMENT,
         device_class=SensorDeviceClass.VOLTAGE,
         entity_registry_enabled_default=False,
-        native_unit_of_measurement=UnitOfElectricPotential.VOLT,
+        native_unit_of_measurement=UnitOfElectricPotential.MILLIVOLT,
+        suggested_unit_of_measurement=UnitOfElectricPotential.VOLT,
+        suggested_display_precision=3,
     ),
     SolakonSensorEntityDescription(
         key="bms1_min_cell_voltage",
         state_class=SensorStateClass.MEASUREMENT,
         device_class=SensorDeviceClass.VOLTAGE,
         entity_registry_enabled_default=False,
-        native_unit_of_measurement=UnitOfElectricPotential.VOLT,
+        native_unit_of_measurement=UnitOfElectricPotential.MILLIVOLT,
+        suggested_unit_of_measurement=UnitOfElectricPotential.VOLT,
+        suggested_display_precision=3,
     ),
 )
 
