@@ -38,10 +38,10 @@ REGISTERS = {
     # Battery Version Information (Table 3-3)
     "bms1_version": {"address": 37003, "count": 1, "type": "u16"}, # bms1_master_version
     "bms1_design_energy": {"address": 37635, "count": 1, "type": "i16", "scale": 0.1, "unit": "Wh"},
-    
+
     "bms1_max_cell_voltage": {"address": 37619, "count": 1, "type": "u16", "scale": 1000, "unit": "V"},
     "bms1_min_cell_voltage": {"address": 37620, "count": 1, "type": "u16", "scale": 1000, "unit": "V"},
-    
+
     "bms1_soh": {"address": 37624, "count": 1, "type": "u16", "scale": 1, "unit": "%"},
     "bms2_soh": {"address": 38322, "count": 1, "type": "u16", "scale": 1, "unit": "%"},
     "bms1_soc": {"address": 37612, "count": 1, "type": "i16", "scale": 1, "unit": "%"},
