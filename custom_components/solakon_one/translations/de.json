@@ -127,8 +127,14 @@
       "bms1_design_energy": {
         "name": "Batteriekapazität"
       },
+      "bms1_max_cell_voltage": {
+        "name": "Max. Zellspannung"
+      },
       "bms1_max_temp": {
         "name": "Batterie max. Temperatur"
+      },
+      "bms1_min_cell_voltage": {
+        "name": "Min. Zellspannung"
       },
       "bms1_min_temp": {
         "name": "Batterie min. Temperatur"
@@ -138,12 +144,6 @@
       },
       "bms1_version": {
         "name": "BMS Version"
-      },
-      "bms1_max_cell_voltage": {
-        "name": "Max. Zellspannung"
-      },
-      "bms1_min_cell_voltage": {
-        "name": "Min. Zellspannung"
       },
       "cumulative_generation": {
         "name": "Energie"
