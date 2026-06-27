@@ -128,13 +128,13 @@
         "name": "Batteriekapazität"
       },
       "bms1_max_cell_voltage": {
-        "name": "Max. Zellspannung"
+        "name": "Batterie max. Zellspannung"
       },
       "bms1_max_temp": {
         "name": "Batterie max. Temperatur"
       },
       "bms1_min_cell_voltage": {
-        "name": "Min. Zellspannung"
+        "name": "Batterie min. Zellspannung"
       },
       "bms1_min_temp": {
         "name": "Batterie min. Temperatur"
