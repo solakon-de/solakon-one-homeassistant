@@ -1,6 +1,6 @@
 [project]
 name = "solakon-one-homeassistant"
-version = "1.6.3"
+version = "1.7.0"
 description = "Home Assistant custom component for Solakon ONE"
 readme = "README.md"
 license = {text = "MIT"}
