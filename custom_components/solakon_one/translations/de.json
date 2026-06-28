@@ -249,6 +249,12 @@
       "remote_timeout_countdown": {
         "name": "Fernsteuerung Zeitüberschreitung"
       },
+      "system_loss_energy": {
+        "name": "Systemverlustenergie"
+      },
+      "system_loss_power": {
+        "name": "Systemverlustleistung"
+      },
       "total_pv_power": {
         "name": "PV Leistung"
       }
