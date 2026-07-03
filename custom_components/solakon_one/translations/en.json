@@ -148,6 +148,9 @@
       "eps_current": {
         "name": "EPS current"
       },
+      "eps_frequency": {
+        "name": "EPS frequency"
+      },
       "eps_power": {
         "name": "EPS power"
       },
