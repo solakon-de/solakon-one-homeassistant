@@ -148,6 +148,9 @@
       "eps_current": {
         "name": "Steckdose Strom"
       },
+      "eps_frequency": {
+        "name": "Steckdose Frequenz"
+      },
       "eps_power": {
         "name": "Steckdose Leistung"
       },
