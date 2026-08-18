@@ -16,6 +16,7 @@ from homeassistant.components.sensor import (
 from homeassistant.const import (
     EntityCategory,
     PERCENTAGE,
+    UnitOfApparentPower,
     UnitOfElectricCurrent,
     UnitOfElectricPotential,
     UnitOfEnergy,
@@ -56,6 +57,137 @@ class SolakonSensorEntityDescription(SensorEntityDescription):
 
     data_key: str | None = None
     value_fn: Callable[[Any], Any | None] | None = None
+
+
+def _meter_sensor_descriptions(
+    meter: int,
+) -> tuple[SolakonSensorEntityDescription, ...]:
+    """Build the sensor descriptions for one meter/CT register block.
+
+    Meter1/CT1 and Meter2/CT2 expose an identical set of registers, so both
+    blocks reuse the same translation keys and differ only in the {n}
+    placeholder. Every sensor built here is disabled by default: the registers
+    only carry meaningful values once a meter or CT is wired up, and most
+    systems run without one. The meter connection state stays enabled as a
+    binary sensor so users can tell whether a meter is present at all.
+    """
+    n = str(meter)
+    descriptions: list[SolakonSensorEntityDescription] = [
+        SolakonSensorEntityDescription(
+            key=f"meter{meter}_active_power",
+            translation_key="meter_active_power",
+            translation_placeholders={"n": n},
+            state_class=SensorStateClass.MEASUREMENT,
+            device_class=SensorDeviceClass.POWER,
+            entity_registry_enabled_default=False,
+            native_unit_of_measurement=UnitOfPower.WATT,
+        ),
+        SolakonSensorEntityDescription(
+            key=f"meter{meter}_reactive_power",
+            translation_key="meter_reactive_power",
+            translation_placeholders={"n": n},
+            state_class=SensorStateClass.MEASUREMENT,
+            device_class=SensorDeviceClass.REACTIVE_POWER,
+            entity_registry_enabled_default=False,
+            native_unit_of_measurement=UnitOfReactivePower.VOLT_AMPERE_REACTIVE,
+        ),
+        SolakonSensorEntityDescription(
+            key=f"meter{meter}_apparent_power",
+            translation_key="meter_apparent_power",
+            translation_placeholders={"n": n},
+            state_class=SensorStateClass.MEASUREMENT,
+            device_class=SensorDeviceClass.APPARENT_POWER,
+            entity_registry_enabled_default=False,
+            native_unit_of_measurement=UnitOfApparentPower.VOLT_AMPERE,
+        ),
+        SolakonSensorEntityDescription(
+            key=f"meter{meter}_power_factor",
+            translation_key="meter_power_factor",
+            translation_placeholders={"n": n},
+            state_class=SensorStateClass.MEASUREMENT,
+            device_class=SensorDeviceClass.POWER_FACTOR,
+            entity_registry_enabled_default=False,
+        ),
+        SolakonSensorEntityDescription(
+            key=f"meter{meter}_frequency",
+            translation_key="meter_frequency",
+            translation_placeholders={"n": n},
+            state_class=SensorStateClass.MEASUREMENT,
+            device_class=SensorDeviceClass.FREQUENCY,
+            entity_registry_enabled_default=False,
+            native_unit_of_measurement=UnitOfFrequency.HERTZ,
+        ),
+    ]
+
+    # Per-phase readings are diagnostics: useful on a three-phase meter, noise
+    # on a single-phase one, so they stay behind the diagnostic category.
+    for phase in ("r", "s", "t"):
+        placeholders = {"n": n, "phase": phase.upper()}
+        descriptions.extend(
+            (
+                SolakonSensorEntityDescription(
+                    key=f"meter{meter}_{phase}_voltage",
+                    translation_key="meter_phase_voltage",
+                    translation_placeholders=placeholders,
+                    state_class=SensorStateClass.MEASUREMENT,
+                    device_class=SensorDeviceClass.VOLTAGE,
+                    entity_category=EntityCategory.DIAGNOSTIC,
+                    entity_registry_enabled_default=False,
+                    native_unit_of_measurement=UnitOfElectricPotential.VOLT,
+                ),
+                SolakonSensorEntityDescription(
+                    key=f"meter{meter}_{phase}_current",
+                    translation_key="meter_phase_current",
+                    translation_placeholders=placeholders,
+                    state_class=SensorStateClass.MEASUREMENT,
+                    device_class=SensorDeviceClass.CURRENT,
+                    entity_category=EntityCategory.DIAGNOSTIC,
+                    entity_registry_enabled_default=False,
+                    native_unit_of_measurement=UnitOfElectricCurrent.AMPERE,
+                ),
+                SolakonSensorEntityDescription(
+                    key=f"meter{meter}_{phase}_active_power",
+                    translation_key="meter_phase_active_power",
+                    translation_placeholders=placeholders,
+                    state_class=SensorStateClass.MEASUREMENT,
+                    device_class=SensorDeviceClass.POWER,
+                    entity_category=EntityCategory.DIAGNOSTIC,
+                    entity_registry_enabled_default=False,
+                    native_unit_of_measurement=UnitOfPower.WATT,
+                ),
+                SolakonSensorEntityDescription(
+                    key=f"meter{meter}_{phase}_reactive_power",
+                    translation_key="meter_phase_reactive_power",
+                    translation_placeholders=placeholders,
+                    state_class=SensorStateClass.MEASUREMENT,
+                    device_class=SensorDeviceClass.REACTIVE_POWER,
+                    entity_category=EntityCategory.DIAGNOSTIC,
+                    entity_registry_enabled_default=False,
+                    native_unit_of_measurement=UnitOfReactivePower.VOLT_AMPERE_REACTIVE,
+                ),
+                SolakonSensorEntityDescription(
+                    key=f"meter{meter}_{phase}_apparent_power",
+                    translation_key="meter_phase_apparent_power",
+                    translation_placeholders=placeholders,
+                    state_class=SensorStateClass.MEASUREMENT,
+                    device_class=SensorDeviceClass.APPARENT_POWER,
+                    entity_category=EntityCategory.DIAGNOSTIC,
+                    entity_registry_enabled_default=False,
+                    native_unit_of_measurement=UnitOfApparentPower.VOLT_AMPERE,
+                ),
+                SolakonSensorEntityDescription(
+                    key=f"meter{meter}_{phase}_power_factor",
+                    translation_key="meter_phase_power_factor",
+                    translation_placeholders=placeholders,
+                    state_class=SensorStateClass.MEASUREMENT,
+                    device_class=SensorDeviceClass.POWER_FACTOR,
+                    entity_category=EntityCategory.DIAGNOSTIC,
+                    entity_registry_enabled_default=False,
+                ),
+            )
+        )
+
+    return tuple(descriptions)
 
 
 # Sensor entity descriptions for Home Assistant
@@ -408,6 +540,15 @@ SENSOR_ENTITY_DESCRIPTIONS: tuple[SolakonSensorEntityDescription, ...] = (
         suggested_unit_of_measurement=UnitOfElectricPotential.VOLT,
         suggested_display_precision=3,
     ),
+    SolakonSensorEntityDescription(
+        key="meter_collection_active_power",
+        state_class=SensorStateClass.MEASUREMENT,
+        device_class=SensorDeviceClass.POWER,
+        entity_registry_enabled_default=False,
+        native_unit_of_measurement=UnitOfPower.WATT,
+    ),
+    *_meter_sensor_descriptions(1),
+    *_meter_sensor_descriptions(2),
 )
 
 

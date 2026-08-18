@@ -30,6 +30,12 @@
     "binary_sensor": {
       "grid_status": {
         "name": "Grid"
+      },
+      "meter1_connect_state": {
+        "name": "Meter 1"
+      },
+      "meter2_connect_state": {
+        "name": "Meter 2"
       }
     },
     "number": {
@@ -190,6 +196,42 @@
       },
       "max_active_power": {
         "name": "Grid maximum export power limit"
+      },
+      "meter_active_power": {
+        "name": "Meter {n} power"
+      },
+      "meter_apparent_power": {
+        "name": "Meter {n} apparent power"
+      },
+      "meter_collection_active_power": {
+        "name": "Grid meter power"
+      },
+      "meter_frequency": {
+        "name": "Meter {n} frequency"
+      },
+      "meter_phase_active_power": {
+        "name": "Meter {n} {phase} power"
+      },
+      "meter_phase_apparent_power": {
+        "name": "Meter {n} {phase} apparent power"
+      },
+      "meter_phase_current": {
+        "name": "Meter {n} {phase} current"
+      },
+      "meter_phase_power_factor": {
+        "name": "Meter {n} {phase} power factor"
+      },
+      "meter_phase_reactive_power": {
+        "name": "Meter {n} {phase} reactive power"
+      },
+      "meter_phase_voltage": {
+        "name": "Meter {n} {phase} voltage"
+      },
+      "meter_power_factor": {
+        "name": "Meter {n} power factor"
+      },
+      "meter_reactive_power": {
+        "name": "Meter {n} reactive power"
       },
       "network_status": {
         "name": "Network",
