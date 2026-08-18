@@ -1,13 +1,28 @@
 {
   "config": {
     "abort": {
-      "already_configured": "Gerät ist schon konfiguriert"
+      "already_configured": "Gerät ist schon konfiguriert",
+      "reconfigure_successful": "Neukonfiguration war erfolgreich"
     },
     "error": {
       "cannot_connect": "Verbindung zum Gerät fehlgeschlagen",
       "unknown": "Unerwarteter Fehler ist aufgetreten"
     },
     "step": {
+      "reconfigure": {
+        "data": {
+          "host": "Gerät",
+          "port": "Port",
+          "slave_id": "Modbus Geräte ID"
+        },
+        "data_description": {
+          "host": "IP Adresse des Gerätes",
+          "port": "Modbus TCP Port (normalerweise 502)",
+          "slave_id": "Modbus Geräte Adresse (1-247)"
+        },
+        "description": "Aktualisiere, wie Home Assistant sich mit deinem Solakon ONE Gerät verbindet, zum Beispiel nachdem sich dessen IP Adresse geändert hat. Bestehende Entitäten und deren Verlauf bleiben erhalten.",
+        "title": "Solakon ONE neu konfigurieren"
+      },
       "user": {
         "data": {
           "host": "Gerät",

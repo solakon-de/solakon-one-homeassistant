@@ -140,6 +140,18 @@ These sensors display the current values of controllable parameters:
    - **Modbus Device ID**: Usually 1 (range: 1-247)
    - **Update Interval**: How often to poll (1-300 seconds)
 
+### Changing the IP Address or Port
+
+If your Solakon ONE gets a new IP address, you do not need to delete and re-add
+the integration:
+
+1. Go to Settings → Devices & Services
+2. Find the **Solakon ONE** entry, click the three dots menu → **"Reconfigure"**
+3. Enter the new **Host**, **Port**, or **Modbus Device ID**
+4. Submit — Home Assistant verifies the device is reachable and reloads the integration
+
+All entities keep their entity IDs, custom names, and recorded history.
+
 ### Network Requirements
 
 - Ensure your Solakon ONE device is connected to your network
@@ -208,7 +220,7 @@ The integration provides control entities to manage your Solakon ONE device dire
 
 ### Common Issues
 
-- **Cannot connect**: Verify IP address and port are correct
+- **Cannot connect**: Verify IP address and port are correct — if the device's IP changed, use *Reconfigure* (see [Changing the IP Address or Port](#changing-the-ip-address-or-port))
 - **No data**: Check Modbus device ID (usually 1)
 - **Intermittent data**: Increase update interval if network is slow
 - **Missing sensors**: Some sensors only appear if hardware is present (e.g., battery sensors)
