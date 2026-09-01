@@ -25,7 +25,7 @@ jobs:
       - name: 🏗 Install ruff
         run: uv sync --locked
       - name: 🚀 Run ruff
-        run: uv tool run ruff format .
+        run: uv run ruff format .
       - name: 🔍 Verify
         run: git diff --exit-code
   sort:
