@@ -10,6 +10,7 @@ from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
 from .const import REGISTERS
 from .entity import SolakonEntity
+from .power_limit import async_cap_remote_power, is_discharge_mode
 from .remote_control import (
     mode_to_register_value,
     register_value_to_mode,
@@ -268,6 +269,12 @@ class RemoteControlModeSelect(SolakonEntity, SelectEntity):
         # Convert mode to register value
         register_value = mode_to_register_value(mode)
 
+        # The power setpoints may hold more than the discharge limit from charging
+        if is_discharge_mode(register_value):
+            await async_cap_remote_power(
+                self._config_entry.runtime_data.hub, self.coordinator.data
+            )
+
         # Get the register address for remote_control
         address = self._register_config["address"]
 
@@ -363,6 +370,12 @@ class ForceModeSelect(SolakonEntity, SelectEntity):
 
         # Get the mode value (0, 1, or 3)
         mode_value = int(option)
+
+        # The power setpoints may hold more than the discharge limit from charging
+        if is_discharge_mode(mode_value):
+            await async_cap_remote_power(
+                self._config_entry.runtime_data.hub, self.coordinator.data
+            )
 
         # Get the register address for remote_control
         address = self._register_config["address"]
