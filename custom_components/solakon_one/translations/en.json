@@ -254,6 +254,17 @@
       }
     }
   },
+  "exceptions": {
+    "discharge_power_limit_exceeded": {
+      "message": "{value} W was not set because it is outside the allowed range of {min} W to {max} W. The discharge power of the device is limited to {max} W."
+    },
+    "discharge_setpoint_unknown": {
+      "message": "Discharge was not enabled because the current value of {key} could not be read from the device, so the discharge power limit could not be checked. Check the connection to the device and try again."
+    },
+    "discharge_setpoint_write_failed": {
+      "message": "Discharge was not enabled because {key} could not be lowered to the discharge power limit of {max} W. Check the connection to the device and try again."
+    }
+  },
   "options": {
     "step": {
       "init": {
