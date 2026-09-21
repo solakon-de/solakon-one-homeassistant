@@ -179,15 +179,15 @@ The integration provides control entities to manage your Solakon ONE device dire
 - `Minimum SoC OnGrid Control`: Set minimum SoC when grid-connected (0-100%)
 
 **Remote Power Control**
-- `Remote Active Power Control`: Set active power command (-100kW to +800W)
+- `Remote Active Power Control`: Set active power command (-100000W to +800W)
   - Negative values = charging/import
   - Positive values = discharging/export
+- `Remote Reactive Power Control`: Set reactive power command (-100kVAR to +100kVAR, -800 to +800 while a discharge mode is active)
+- `Remote Timeout Control`: Set timeout for remote control commands (0-3600 seconds)
 - `Force mode power`: Power for force charge (up to 1200W) or force discharge (up to 800W)
 - `Grid export power limit`: Maximum power that is exported to the grid (0-800W)
 
-> ⚠️ **Discharge limit**: The integration never commands more than 800W of output power. Values above 800W are rejected for the grid export power limit, for force mode power while discharging and for the remote active power while a discharge mode is active. When a discharge mode is selected, power setpoints above 800W that are left over from charging are lowered to 800W before the mode is enabled. Charging up to 1200W is not affected.
-- `Remote Reactive Power Control`: Set reactive power command (-100kVAR to +100kVAR)
-- `Remote Timeout Control`: Set timeout for remote control commands (0-3600 seconds)
+> ⚠️ **Discharge limit**: The integration does not accept discharge settings above 800W. Values above 800W are rejected for the grid export power limit, for force mode power while discharging and for the remote power setpoints while a discharge mode is active. When a discharge mode is selected, the device is read first and remote power setpoints above 800W that are left over from charging are lowered to 800W before the mode is enabled. Charging up to 1200W is not affected. Values that are already stored on the device, or that are changed outside of Home Assistant (e.g. in the Solakon app), are not corrected.
 
 > ⚠️ **Warning**: Modifying these settings can affect your system's operation. Make sure you understand what each setting does before changing it. Some settings may require the device to be in specific modes to take effect.
 

@@ -47,8 +47,13 @@ def test_generation_direction_without_enable_bit_is_not_discharge() -> None:
 
 
 @pytest.mark.parametrize("value", [None, "1", object()])
-def test_unknown_mode_is_not_discharge(value: object) -> None:
-    assert not is_discharge_mode(value)
+def test_unknown_mode_counts_as_discharge(value: object) -> None:
+    assert is_discharge_mode(value)
+    assert max_force_power(value) == MAX_DISCHARGE_POWER
+    with pytest.raises(ServiceValidationError):
+        validate_power("force_power", 810, value)
+    with pytest.raises(ServiceValidationError):
+        validate_power("remote_active_power", -810, value)
 
 
 @pytest.mark.parametrize("mode", list(RemoteControlMode))

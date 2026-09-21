@@ -10,7 +10,12 @@ from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
 from .const import REGISTERS
 from .entity import SolakonEntity
-from .power_limit import async_cap_remote_power, is_discharge_mode
+from .power_limit import (
+    async_cap_remote_power,
+    async_fresh_data,
+    discharge_lock,
+    is_discharge_mode,
+)
 from .remote_control import (
     mode_to_register_value,
     register_value_to_mode,
@@ -256,6 +261,11 @@ class RemoteControlModeSelect(SolakonEntity, SelectEntity):
 
     async def async_select_option(self, option: str) -> None:
         """Change the selected option."""
+        async with discharge_lock(self.coordinator):
+            await self._async_write_option(option)
+
+    async def _async_write_option(self, option: str) -> None:
+        """Write the option to the device, limited to the discharge power limit."""
         if option not in self.entity_description.options:
             _LOGGER.error(
                 f"Invalid option '{option}' for remote_control_mode. Valid options: {self.entity_description.options}"
@@ -272,7 +282,8 @@ class RemoteControlModeSelect(SolakonEntity, SelectEntity):
         # The power setpoints may hold more than the discharge limit from charging
         if is_discharge_mode(register_value):
             await async_cap_remote_power(
-                self._config_entry.runtime_data.hub, self.coordinator.data
+                self._config_entry.runtime_data.hub,
+                await async_fresh_data(self.coordinator),
             )
 
         # Get the register address for remote_control
@@ -362,6 +373,11 @@ class ForceModeSelect(SolakonEntity, SelectEntity):
 
     async def async_select_option(self, option: str) -> None:
         """Change the selected option."""
+        async with discharge_lock(self.coordinator):
+            await self._async_write_option(option)
+
+    async def _async_write_option(self, option: str) -> None:
+        """Write the option to the device, limited to the discharge power limit."""
         if option not in self.entity_description.options:
             _LOGGER.error(
                 f"Invalid option '{option}' for force_mode. Valid options: {self.entity_description.options}"
@@ -374,7 +390,8 @@ class ForceModeSelect(SolakonEntity, SelectEntity):
         # The power setpoints may hold more than the discharge limit from charging
         if is_discharge_mode(mode_value):
             await async_cap_remote_power(
-                self._config_entry.runtime_data.hub, self.coordinator.data
+                self._config_entry.runtime_data.hub,
+                await async_fresh_data(self.coordinator),
             )
 
         # Get the register address for remote_control

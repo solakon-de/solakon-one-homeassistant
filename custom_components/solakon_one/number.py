@@ -27,9 +27,10 @@ from .entity import SolakonEntity
 from .power_limit import (
     MAX_CHARGE_POWER,
     MAX_DISCHARGE_POWER,
+    async_validate_power,
+    discharge_lock,
     i32_to_words,
     max_force_power,
-    validate_power,
 )
 from .types import SolakonConfigEntry
 
@@ -254,11 +255,12 @@ class SolakonNumber(SolakonEntity, NumberEntity):
 
     async def async_set_native_value(self, value: float) -> None:
         """Update the current value."""
-        validate_power(
-            self.entity_description.key,
-            value,
-            (self.coordinator.data or {}).get("remote_control"),
-        )
+        async with discharge_lock(self.coordinator):
+            await self._async_write_native_value(value)
+
+    async def _async_write_native_value(self, value: float) -> None:
+        """Write the value to the device if the discharge limit allows it."""
+        await async_validate_power(self.coordinator, self.entity_description.key, value)
 
         # Convert to int for Modbus register writing
         int_value = int(value)
@@ -469,11 +471,16 @@ class ForcePowerNumber(SolakonEntity, NumberEntity):
 
     async def async_set_native_value(self, value: float) -> None:
         """Update the current value."""
+        async with discharge_lock(self.coordinator):
+            await self._async_write_native_value(value)
+
+    async def _async_write_native_value(self, value: float) -> None:
+        """Write the value to the device if the discharge limit allows it."""
         # Always use positive value
         int_value = abs(int(value))
 
-        validate_power(
-            self.entity_description.key, int_value, self._remote_control_value
+        await async_validate_power(
+            self.coordinator, self.entity_description.key, int_value
         )
 
         address_46003 = REGISTERS["remote_active_power"]["address"]
