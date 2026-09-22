@@ -29,6 +29,7 @@ from homeassistant.core import HomeAssistant, callback
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
 from .entity import SolakonEntity
+from .remote_control import register_value_to_mode
 from .types import SolakonConfigEntry
 
 _LOGGER = logging.getLogger(__name__)
@@ -359,6 +360,7 @@ SENSOR_ENTITY_DESCRIPTIONS: tuple[SolakonSensorEntityDescription, ...] = (
         device_class=SensorDeviceClass.ENUM,
         entity_category=EntityCategory.DIAGNOSTIC,
         entity_registry_enabled_default=False,
+        value_fn=register_value_to_mode,
     ),
     SolakonSensorEntityDescription(
         key="remote_timeout_countdown",
