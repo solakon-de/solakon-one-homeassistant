@@ -30,6 +30,12 @@
     "binary_sensor": {
       "grid_status": {
         "name": "Netz"
+      },
+      "meter1_connect_state": {
+        "name": "Zähler 1"
+      },
+      "meter2_connect_state": {
+        "name": "Zähler 2"
       }
     },
     "number": {
@@ -190,6 +196,42 @@
       },
       "max_active_power": {
         "name": "Netz maximale Ausgangsleistungsgrenze"
+      },
+      "meter_active_power": {
+        "name": "Zähler {n} Leistung"
+      },
+      "meter_apparent_power": {
+        "name": "Zähler {n} Scheinleistung"
+      },
+      "meter_collection_active_power": {
+        "name": "Zähler Netzleistung"
+      },
+      "meter_frequency": {
+        "name": "Zähler {n} Frequenz"
+      },
+      "meter_phase_active_power": {
+        "name": "Zähler {n} Leistung {phase}"
+      },
+      "meter_phase_apparent_power": {
+        "name": "Zähler {n} Scheinleistung {phase}"
+      },
+      "meter_phase_current": {
+        "name": "Zähler {n} Strom {phase}"
+      },
+      "meter_phase_power_factor": {
+        "name": "Zähler {n} Leistungsfaktor {phase}"
+      },
+      "meter_phase_reactive_power": {
+        "name": "Zähler {n} Blindleistung {phase}"
+      },
+      "meter_phase_voltage": {
+        "name": "Zähler {n} Spannung {phase}"
+      },
+      "meter_power_factor": {
+        "name": "Zähler {n} Leistungsfaktor"
+      },
+      "meter_reactive_power": {
+        "name": "Zähler {n} Blindleistung"
       },
       "network_status": {
         "name": "Netzwerk",

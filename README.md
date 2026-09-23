@@ -21,11 +21,14 @@ A complete Home Assistant custom integration for Solakon ONE devices using Modbu
   - Battery SoC limit settings
   - Remote control status and commands
   - Network status
+- ⚡ **Meter/CT Sensors**: Full Meter1/CT1 and Meter2/CT2 register blocks plus the
+  aggregated grid reading, so systems with an external meter or CT can see what the
+  meter measures (disabled by default, see [Meter / CT Sensors](#meter--ct-sensors))
 - 🔧 **Improved Energy Dashboard Integration**: Comprehensive documentation for battery integration workaround
 - 📖 **Documentation Updates**: Accurate Energy Dashboard integration guide with step-by-step battery setup
 
 **Bug Fixes:**
-- Fixed misleading documentation about Grid Import/Export sensors (not currently supported)
+- Fixed misleading documentation about Grid Import/Export sensors (they need a meter or CT — see [Grid Import/Export](#grid-importexport-requires-a-meter-or-ct))
 - Corrected Energy Dashboard integration instructions
 
 ### Previous Versions
@@ -41,6 +44,7 @@ A complete Home Assistant custom integration for Solakon ONE devices using Modbu
 - Temperature monitoring
 - Alarm and status monitoring
 - Power factor and grid frequency monitoring
+- Grid metering via an external meter or CT (Meter1/CT1 and Meter2/CT2)
 
 ### Device Control
 - **EPS Output Control**: Switch between Disable, EPS Mode, and UPS Mode
@@ -88,6 +92,22 @@ A complete Home Assistant custom integration for Solakon ONE devices using Modbu
 - Power Factor
 - Grid Frequency
 - Network Status
+
+### Meter / CT Sensors
+
+These read the Meter1/CT1 (`38801`–`38846`) and Meter2/CT2 (`38901`–`38946`) register
+blocks and the aggregated `[Meter collection] Active power` register (`39168`). They
+only carry data when an external meter or CT is connected, so **the measurement sensors
+are disabled by default** — see [Grid Import/Export](#grid-importexport-requires-a-meter-or-ct)
+for how to enable them. The two connection-state entities stay enabled so you can tell
+whether a meter is present at all.
+
+- Meter Connection State (Meter 1 / Meter 2) — enabled by default, reports whether the
+  inverter sees a meter
+- Grid Meter Power (aggregated across meters; positive = export, negative = import)
+- Per meter: Power, Reactive Power, Apparent Power, Power Factor, Frequency
+- Per meter and phase (R/S/T), as diagnostics: Voltage, Current, Power, Reactive
+  Power, Apparent Power, Power Factor
 
 ### Control Status Sensors
 These sensors display the current values of controllable parameters:
@@ -262,9 +282,54 @@ Optionally, you can also assign the power sensors created above for real time in
    - **Power going in to the battery**: Select the `Battery Charge Power` template sensor.
    - **Power going out of the battery**: Select the `Battery Discharge Power` template sensor.
 
-### Grid Import/Export (Not Currently Supported)
+### Grid Import/Export (Requires a Meter or CT)
 
-Grid import and export sensors are not currently available in this integration. These values would need to be derived from the available power sensors or added in a future update if the Modbus registers support them.
+The Modbus protocol does expose grid-side metering, but only through an external meter
+or CT: the Meter1/CT1 block (`38801`–`38846`), the Meter2/CT2 block (`38901`–`38946`),
+and the aggregated `[Meter collection] Active power` register (`39168`). The
+integration reads all of them, but the meter sensors are **disabled by default**
+because the registers stay at zero on systems without a meter.
+
+#### Enable the Meter Sensors
+
+1. Check the `Meter 1` (or `Meter 2`) diagnostic entity on the device page. It reports
+   the meter's connection state — if it stays `Disconnected`, the inverter does not see
+   a meter and the remaining sensors will not produce useful values.
+2. On the device page, open **+N entities not shown** and enable the meter sensors you
+   want. `Grid meter power` is the aggregated reading:
+   **positive = exporting to the grid, negative = importing from the grid**.
+
+#### Add Grid Import/Export to the Energy Dashboard
+
+The Energy Dashboard needs energy (kWh), while the meter registers report power (W), so
+the signed power sensor has to be split and integrated. This mirrors the battery
+workaround above.
+
+Go to Settings → Devices & Services → Helpers → Create Helper → Template → Template a sensor
+and create:
+
+**Grid Import Power:**
+- Name: `Grid Import Power`
+- State template: `{{ max(0, 0 - states('sensor.solakon_one_grid_meter_power') | float(default=0)) }}`
+- Unit of measurement: `W`
+- Device class: `Power`
+- State class: `Measurement`
+
+**Grid Export Power:**
+- Name: `Grid Export Power`
+- State template: `{{ max(0, states('sensor.solakon_one_grid_meter_power') | float(default=0)) }}`
+- Unit of measurement: `W`
+- Device class: `Power`
+- State class: `Measurement`
+
+Then create an **Integral sensor** helper for each of the two (Create Helper → Integral
+sensor), with metric prefix `k` and time unit `h` to get kWh. Finally, in
+Settings → Dashboards → Energy, use the resulting kWh sensors under **Grid consumption**
+(import) and **Return to grid** (export).
+
+> **Note**: These sensors have not been verified against hardware with a meter attached.
+> If the sign convention or scaling looks wrong on your system, please
+> [open an issue](https://github.com/solakon-de/solakon-one-homeassistant/issues).
 
 ### Solakon PowerTracker IR Integration
 
