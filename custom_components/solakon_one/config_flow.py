@@ -3,14 +3,15 @@
 from __future__ import annotations
 
 import logging
+from collections.abc import Mapping
 from typing import Any
 
 import voluptuous as vol
 
 from homeassistant import config_entries
+from homeassistant.config_entries import ConfigFlowResult
 from homeassistant.const import CONF_HOST, CONF_PORT, CONF_SCAN_INTERVAL, UnitOfTime
 from homeassistant.core import HomeAssistant, callback
-from homeassistant.data_entry_flow import FlowResult
 from homeassistant.helpers import config_validation as cv, selector
 
 from .const import (
@@ -37,7 +38,7 @@ SCAN_INTERVAL_NUMBER_SELECTOR = selector.NumberSelector(
     ),
 )
 
-STEP_USER_DATA_SCHEMA = vol.Schema(
+STEP_RECONFIGURE_DATA_SCHEMA = vol.Schema(
     {
         vol.Required(CONF_HOST): str,
         vol.Required(CONF_PORT, default=DEFAULT_PORT): cv.port,
@@ -52,6 +53,11 @@ STEP_USER_DATA_SCHEMA = vol.Schema(
             ),
             vol.Coerce(int),
         ),
+    }
+)
+
+STEP_USER_DATA_SCHEMA = STEP_RECONFIGURE_DATA_SCHEMA.extend(
+    {
         vol.Optional(
             CONF_SCAN_INTERVAL, default=DEFAULT_SCAN_INTERVAL
         ): SCAN_INTERVAL_NUMBER_SELECTOR,
@@ -65,6 +71,14 @@ STEP_OPTIONS_DATA_SCHEMA = vol.Schema(
         ): SCAN_INTERVAL_NUMBER_SELECTOR,
     }
 )
+
+
+def build_unique_id(data: Mapping[str, Any]) -> str:
+    """Build the unique ID identifying a device by its connection settings."""
+    return (
+        f"{data[CONF_HOST]}:{data[CONF_PORT]}:"
+        f"{data.get(CONF_DEVICE_ID, DEFAULT_DEVICE_ID)}"
+    )
 
 
 async def validate_input(hass: HomeAssistant, data: dict[str, Any]) -> dict[str, Any]:
@@ -94,7 +108,7 @@ class ConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):  # type: ignore[call
 
     async def async_step_user(
         self, user_input: dict[str, Any] | None = None
-    ) -> FlowResult:
+    ) -> ConfigFlowResult:
         """Handle the initial step."""
         errors: dict[str, str] = {}
         if user_input is not None:
@@ -106,9 +120,7 @@ class ConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):  # type: ignore[call
                 _LOGGER.exception("Unexpected exception")
                 errors["base"] = "unknown"
             else:
-                await self.async_set_unique_id(
-                    f"{user_input[CONF_HOST]}:{user_input[CONF_PORT]}:{user_input.get(CONF_DEVICE_ID, DEFAULT_DEVICE_ID)}"
-                )
+                await self.async_set_unique_id(build_unique_id(user_input))
                 self._abort_if_unique_id_configured()
                 return self.async_create_entry(title=DEFAULT_NAME, data=user_input)
 
@@ -117,6 +129,49 @@ class ConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):  # type: ignore[call
             errors=errors,
             data_schema=self.add_suggested_values_to_schema(
                 STEP_USER_DATA_SCHEMA, user_input or {}
+            ),
+        )
+
+    async def async_step_reconfigure(
+        self, user_input: dict[str, Any] | None = None
+    ) -> ConfigFlowResult:
+        """Handle reconfiguration of the connection settings."""
+        reconfigure_entry = self._get_reconfigure_entry()
+        errors: dict[str, str] = {}
+
+        if user_input is not None:
+            # Aborts when another entry already uses these settings. The entry
+            # being reconfigured is excluded from the check.
+            self._async_abort_entries_match(
+                {
+                    CONF_HOST: user_input[CONF_HOST],
+                    CONF_PORT: user_input[CONF_PORT],
+                    CONF_DEVICE_ID: user_input.get(CONF_DEVICE_ID, DEFAULT_DEVICE_ID),
+                }
+            )
+
+            try:
+                await validate_input(self.hass, user_input)
+            except CannotConnect:
+                errors["base"] = "cannot_connect"
+            except Exception:
+                _LOGGER.exception("Unexpected exception")
+                errors["base"] = "unknown"
+            else:
+                # The unique ID is derived from the connection settings, so it
+                # has to follow them. Entities and the device keep their
+                # identity because those are keyed on the entry ID.
+                return self.async_update_reload_and_abort(
+                    reconfigure_entry,
+                    unique_id=build_unique_id(user_input),
+                    data_updates=user_input,
+                )
+
+        return self.async_show_form(
+            step_id="reconfigure",
+            errors=errors,
+            data_schema=self.add_suggested_values_to_schema(
+                STEP_RECONFIGURE_DATA_SCHEMA, user_input or reconfigure_entry.data
             ),
         )
 
@@ -140,7 +195,7 @@ class OptionsFlowHandler(config_entries.OptionsFlowWithReload):
 
     async def async_step_init(
         self, user_input: dict[str, Any] | None = None
-    ) -> FlowResult:
+    ) -> ConfigFlowResult:
         """Manage the options."""
         if user_input is not None:
             return self.async_create_entry(data=user_input)
