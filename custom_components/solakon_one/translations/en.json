@@ -249,6 +249,12 @@
       "remote_timeout_countdown": {
         "name": "Remote timeout countdown"
       },
+      "system_loss_energy": {
+        "name": "System loss energy"
+      },
+      "system_loss_power": {
+        "name": "System loss power"
+      },
       "total_pv_power": {
         "name": "PV power"
       }
