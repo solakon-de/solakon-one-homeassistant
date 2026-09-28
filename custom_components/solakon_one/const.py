@@ -81,6 +81,7 @@ REGISTERS = {
     "eps_voltage": {"address": 39201, "count": 1, "type": "i16", "scale": 10, "unit": "V"},
     "eps_current": {"address": 39204, "count": 1, "type": "i16", "scale": 10, "unit": "A"},
     "eps_power": {"address": 39216, "count": 2, "type": "i32", "scale": 1, "unit": "W"},
+    "eps_frequency": {"address": 39218, "count": 1, "type": "i16", "scale": 100, "unit": "Hz"},
 
     # Grid Information
     "grid_r_voltage": {"address": 39123, "count": 1, "type": "i16", "scale": 10, "unit": "V"},
