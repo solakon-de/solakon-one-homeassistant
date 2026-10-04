@@ -57,7 +57,7 @@ REGISTERS = {
     "alarm_1": {"address": 39067, "count": 1, "type": "u16"}, #bitfield16
     "alarm_2": {"address": 39068, "count": 1, "type": "u16"}, #bitfield16
     "alarm_3": {"address": 39069, "count": 1, "type": "u16"}, #bitfield16
-    "grid_standard_code": {"address": 49079, "count": 1, "type": 'u16'},
+    "grid_standard_code": {"address": 49079, "count": 1, "type": 'u16', "static": True},
 
     # PV Input
     "pv1_voltage": {"address": 39070, "count": 1, "type": "i16", "scale": 10, "unit": "V"},
@@ -135,6 +135,6 @@ REGISTERS = {
     "maximum_soc": {"address": 46610, "count": 1, "type": "u16", "scale": 1, "unit": "%", "rw": True},
     "minimum_soc_ongrid": {"address": 46611, "count": 1, "type": "u16", "scale": 1, "unit": "%", "rw": True},
     "operating_mode": {"address": 49203, "count": 1, "type": "u16", "scale": 1, "rw": True}, # work_mode
-    "network_status": {"address": 49240, "count": 1, "type": "u16", "scale": 1},
+    "network_status": {"address": 49240, "count": 1, "type": "u16", "scale": 1, "interval": "slow"},
 }
 # fmt: on
