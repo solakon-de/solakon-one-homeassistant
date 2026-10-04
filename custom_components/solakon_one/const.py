@@ -134,7 +134,7 @@ REGISTERS = {
     "minimum_soc": {"address": 46609, "count": 1, "type": "u16", "scale": 1, "unit": "%", "rw": True},
     "maximum_soc": {"address": 46610, "count": 1, "type": "u16", "scale": 1, "unit": "%", "rw": True},
     "minimum_soc_ongrid": {"address": 46611, "count": 1, "type": "u16", "scale": 1, "unit": "%", "rw": True},
-    "operating_mode": {"address": 49203, "count": 1, "type": "u16", "scale": 1, "rw": True}, # work_mode
+    "operating_mode": {"address": 49203, "count": 1, "type": "u16", "scale": 1, "rw": True, "interval": "slow"}, # work_mode
     "network_status": {"address": 49240, "count": 1, "type": "u16", "scale": 1, "interval": "slow"},
 }
 # fmt: on

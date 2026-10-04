@@ -46,8 +46,9 @@ def test_gaps_are_bridged_only_inside_verified_spans() -> None:
     assert (39053, 100) in _spans(fast)
     assert (39201, 86) in _spans(fast)
     # The device truncates bridged reads in the 49xxx range
-    assert (49203, 1) in _spans(fast)
-    assert (49240, 1) in _spans(compute_register_batches(REGISTERS, slow=True))
+    slow = _spans(compute_register_batches(REGISTERS, slow=True))
+    assert (49203, 1) in slow
+    assert (49240, 1) in slow
     assert (49079, 1) in _spans(compute_register_batches(REGISTERS, static=True))
 
 
