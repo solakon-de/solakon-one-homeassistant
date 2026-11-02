@@ -58,6 +58,7 @@ class SolakonSensorEntityDescription(SensorEntityDescription):
 
     data_key: str | None = None
     value_fn: Callable[[Any], Any | None] | None = None
+    never_decreases: bool = False
 
 
 def _meter_sensor_descriptions(
@@ -270,12 +271,14 @@ SENSOR_ENTITY_DESCRIPTIONS: tuple[SolakonSensorEntityDescription, ...] = (
     ),
     SolakonSensorEntityDescription(
         key="battery_total_charge_energy",
+        never_decreases=True,
         state_class=SensorStateClass.TOTAL_INCREASING,
         device_class=SensorDeviceClass.ENERGY,
         native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
     ),
     SolakonSensorEntityDescription(
         key="battery_total_discharge_energy",
+        never_decreases=True,
         state_class=SensorStateClass.TOTAL_INCREASING,
         device_class=SensorDeviceClass.ENERGY,
         native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
@@ -402,15 +405,66 @@ SENSOR_ENTITY_DESCRIPTIONS: tuple[SolakonSensorEntityDescription, ...] = (
     ),
     SolakonSensorEntityDescription(
         key="pv_total_energy",
+        never_decreases=True,
         state_class=SensorStateClass.TOTAL_INCREASING,
         device_class=SensorDeviceClass.ENERGY,
         native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
     ),
     SolakonSensorEntityDescription(
         key="cumulative_generation",
+        never_decreases=True,
         state_class=SensorStateClass.TOTAL_INCREASING,
         device_class=SensorDeviceClass.ENERGY,
         native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
+    ),
+    SolakonSensorEntityDescription(
+        key="pv_daily_energy",
+        state_class=SensorStateClass.TOTAL_INCREASING,
+        device_class=SensorDeviceClass.ENERGY,
+        entity_registry_enabled_default=False,
+        native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
+    ),
+    SolakonSensorEntityDescription(
+        key="battery_daily_charge_energy",
+        state_class=SensorStateClass.TOTAL_INCREASING,
+        device_class=SensorDeviceClass.ENERGY,
+        entity_registry_enabled_default=False,
+        native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
+    ),
+    SolakonSensorEntityDescription(
+        key="battery_daily_discharge_energy",
+        state_class=SensorStateClass.TOTAL_INCREASING,
+        device_class=SensorDeviceClass.ENERGY,
+        entity_registry_enabled_default=False,
+        native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
+    ),
+    SolakonSensorEntityDescription(
+        key="grid_daily_export_energy",
+        state_class=SensorStateClass.TOTAL_INCREASING,
+        device_class=SensorDeviceClass.ENERGY,
+        entity_registry_enabled_default=False,
+        native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
+    ),
+    SolakonSensorEntityDescription(
+        key="grid_daily_import_energy",
+        state_class=SensorStateClass.TOTAL_INCREASING,
+        device_class=SensorDeviceClass.ENERGY,
+        entity_registry_enabled_default=False,
+        native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
+    ),
+    SolakonSensorEntityDescription(
+        key="available_import_power",
+        state_class=SensorStateClass.MEASUREMENT,
+        device_class=SensorDeviceClass.POWER,
+        entity_category=EntityCategory.DIAGNOSTIC,
+        native_unit_of_measurement=UnitOfPower.WATT,
+    ),
+    SolakonSensorEntityDescription(
+        key="available_export_power",
+        state_class=SensorStateClass.MEASUREMENT,
+        device_class=SensorDeviceClass.POWER,
+        entity_category=EntityCategory.DIAGNOSTIC,
+        native_unit_of_measurement=UnitOfPower.WATT,
     ),
     SolakonSensorEntityDescription(
         key="daily_generation",
@@ -465,12 +519,14 @@ SENSOR_ENTITY_DESCRIPTIONS: tuple[SolakonSensorEntityDescription, ...] = (
     ),
     SolakonSensorEntityDescription(
         key="grid_total_export_energy",
+        never_decreases=True,
         state_class=SensorStateClass.TOTAL_INCREASING,
         device_class=SensorDeviceClass.ENERGY,
         native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
     ),
     SolakonSensorEntityDescription(
         key="grid_total_import_energy",
+        never_decreases=True,
         state_class=SensorStateClass.TOTAL_INCREASING,
         device_class=SensorDeviceClass.ENERGY,
         native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
@@ -595,6 +651,7 @@ class SolakonSensor(SolakonEntity, SensorEntity):
         super().__init__(config_entry, device_info, description.key)
         # Set entity description
         self.entity_description = description
+        self._counter_last: float | None = None
         # Prioritize translation key from entity description
         if self.entity_description.translation_key is not None:
             self._attr_translation_key = self.entity_description.translation_key
@@ -611,13 +668,34 @@ class SolakonSensor(SolakonEntity, SensorEntity):
         if self.coordinator.data and key in self.coordinator.data:
             value = self.coordinator.data[key]
             if self.entity_description.value_fn and value is not None:
-                self._attr_native_value = self.entity_description.value_fn(value)
+                value = self.entity_description.value_fn(value)
+            if self._is_counter_glitch(value):
+                _LOGGER.debug(
+                    "Ignoring %s=%s, lower than the last value %s",
+                    key,
+                    value,
+                    self._counter_last,
+                )
             else:
                 self._attr_native_value = value
         else:
             self._attr_native_value = None
 
         self.async_write_ha_state()
+
+    def _is_counter_glitch(self, value: Any) -> bool:
+        """Return if a lifetime counter reading is lower than the last one."""
+        if not self.entity_description.never_decreases:
+            return False
+        if not isinstance(value, (int, float)):
+            return False
+        if value < 0:
+            return True
+        last = self._counter_last
+        if last is not None and value < last:
+            return True
+        self._counter_last = value
+        return False
 
     @property
     def available(self) -> bool:

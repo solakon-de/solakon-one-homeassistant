@@ -124,11 +124,23 @@
       "active_power": {
         "name": "Active power"
       },
+      "available_export_power": {
+        "name": "Available export power"
+      },
+      "available_import_power": {
+        "name": "Available import power"
+      },
       "battery1_current": {
         "name": "Battery current"
       },
       "battery1_voltage": {
         "name": "Battery voltage"
+      },
+      "battery_daily_charge_energy": {
+        "name": "Battery charge energy today"
+      },
+      "battery_daily_discharge_energy": {
+        "name": "Battery discharge energy today"
       },
       "battery_power": {
         "name": "Battery power"
@@ -183,6 +195,12 @@
       },
       "eps_voltage": {
         "name": "EPS voltage"
+      },
+      "grid_daily_export_energy": {
+        "name": "Grid export energy today"
+      },
+      "grid_daily_import_energy": {
+        "name": "Grid import energy today"
       },
       "grid_frequency": {
         "name": "Grid frequency"
@@ -273,6 +291,9 @@
       },
       "power_factor": {
         "name": "Power factor"
+      },
+      "pv_daily_energy": {
+        "name": "PV energy today"
       },
       "pv_string_current": {
         "name": "String {n} current"
