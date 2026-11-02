@@ -165,3 +165,23 @@ async def async_cap_remote_power(
                     "max": str(MAX_DISCHARGE_POWER),
                 },
             )
+
+
+async def async_reapply_active_power(
+    hub: RegisterWriter, data: Mapping[str, Any] | None, remote_control_value: int
+) -> None:
+    """Write the active power setpoint again after the mode register was written.
+
+    The device resets 46003 when 46001 is written, so a setpoint written before
+    the mode would otherwise be lost. The data has to be read before the mode write.
+    """
+    enabled, _, _ = decode_remote_control(remote_control_value)
+    value = data.get("remote_active_power") if data else None
+    if not enabled or not isinstance(value, (int, float)) or int(value) == 0:
+        return
+    power = int(value)
+    if is_discharge_mode(remote_control_value):
+        power = max(-MAX_DISCHARGE_POWER, min(MAX_DISCHARGE_POWER, power))
+    address = cast(int, REGISTERS["remote_active_power"]["address"])
+    if not await hub.async_write_registers(address, i32_to_words(power)):
+        _LOGGER.error(f"Failed to write remote_active_power {power} after the mode")

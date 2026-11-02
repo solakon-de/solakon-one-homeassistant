@@ -127,10 +127,7 @@ async def test_force_power_rejects_more_than_800_while_discharging() -> None:
     await number.async_set_native_value(800)
     assert [
         c.args for c in entry.runtime_data.hub.async_write_registers.await_args_list
-    ] == [
-        (ACTIVE, [0, 800]),
-        (REACTIVE, [0, 800]),
-    ]
+    ] == [(ACTIVE, [0, 800])]
 
 
 async def test_force_power_allows_1200_while_charging() -> None:
@@ -139,7 +136,9 @@ async def test_force_power_allows_1200_while_charging() -> None:
 
     await number.async_set_native_value(1200)
 
-    assert entry.runtime_data.hub.async_write_registers.await_count == 2
+    entry.runtime_data.hub.async_write_registers.assert_awaited_once_with(
+        ACTIVE, [0, 1200]
+    )
 
 
 async def test_force_power_is_checked_against_the_mode_on_the_device() -> None:
@@ -165,7 +164,7 @@ async def test_force_power_above_800_is_rejected_when_device_cannot_be_read() ->
     entry.runtime_data.hub.async_write_registers.assert_not_awaited()
 
     await number.async_set_native_value(800)
-    assert entry.runtime_data.hub.async_write_registers.await_count == 2
+    assert entry.runtime_data.hub.async_write_registers.await_count == 1
 
 
 async def test_remote_active_power_is_checked_against_the_mode_on_the_device() -> None:
@@ -216,6 +215,7 @@ async def test_switching_to_discharge_caps_the_setpoints_first(
         (ACTIVE, [0, 800]),
         (REACTIVE, [0, 800]),
         (REMOTE_CONTROL, int(option)),
+        (ACTIVE, [0, 800]),
     ]
 
 
@@ -262,6 +262,7 @@ async def test_switching_to_discharge_caps_setpoints_the_cache_does_not_know(
     assert [c.args for c in hub.async_write_registers.await_args_list] == [
         (ACTIVE, [0, 800]),
         (REACTIVE, [0, 800]),
+        (ACTIVE, [0, 800]),
     ]
     hub.async_write_register.assert_awaited_once_with(REMOTE_CONTROL, int(option))
 
@@ -323,11 +324,11 @@ async def test_mode_switch_waits_for_a_running_setpoint_write() -> None:
     assert device == {
         "remote_control": FORCE_DISCHARGE,
         "remote_active_power": 800,
-        "remote_reactive_power": 800,
+        "remote_reactive_power": 300,
     }
 
 
-async def test_switching_to_charge_does_not_touch_the_setpoints() -> None:
+async def test_switching_to_charge_keeps_the_setpoint() -> None:
     entry = make_entry(
         {
             "remote_control": 0,
@@ -340,10 +341,52 @@ async def test_switching_to_charge_does_not_touch_the_setpoints() -> None:
         entry, {}, FORCE_MODE_SELECT_ENTITY_DESCRIPTION
     ).async_select_option("3")
 
-    entry.runtime_data.hub.async_write_registers.assert_not_awaited()
+    entry.runtime_data.hub.async_write_registers.assert_awaited_once_with(
+        ACTIVE, [0, 1200]
+    )
     entry.runtime_data.hub.async_write_register.assert_awaited_once_with(
         REMOTE_CONTROL, FORCE_CHARGE
     )
+
+
+async def test_mode_switch_restores_the_power_the_device_resets() -> None:
+    """Writing 46001 resets 46003 on the device (#271, #309)."""
+    device = {
+        "remote_control": 0,
+        "remote_active_power": 1200,
+        "remote_reactive_power": 0,
+    }
+    entry = make_entry(dict(device), device=device)
+    hub = entry.runtime_data.hub
+
+    async def write_register(address: int, value: int) -> bool:
+        device["remote_control"] = value
+        device["remote_active_power"] = 0
+        return True
+
+    async def write_registers(address: int, values: list[int]) -> bool:
+        device["remote_active_power"] = values[1]
+        return True
+
+    hub.async_write_register.side_effect = write_register
+    hub.async_write_registers.side_effect = write_registers
+
+    await ForceModeSelect(
+        entry, {}, FORCE_MODE_SELECT_ENTITY_DESCRIPTION
+    ).async_select_option("3")
+
+    assert device["remote_control"] == FORCE_CHARGE
+    assert device["remote_active_power"] == 1200
+
+
+async def test_disabling_does_not_write_the_power() -> None:
+    entry = make_entry({"remote_control": FORCE_CHARGE, "remote_active_power": 1200})
+
+    await ForceModeSelect(
+        entry, {}, FORCE_MODE_SELECT_ENTITY_DESCRIPTION
+    ).async_select_option("0")
+
+    entry.runtime_data.hub.async_write_registers.assert_not_awaited()
 
 
 @pytest.mark.parametrize("language", ["en", "de"])
