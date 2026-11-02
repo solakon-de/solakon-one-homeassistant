@@ -1,13 +1,28 @@
 {
   "config": {
     "abort": {
-      "already_configured": "Device is already configured"
+      "already_configured": "Device is already configured",
+      "reconfigure_successful": "Re-configuration was successful"
     },
     "error": {
       "cannot_connect": "Failed to connect to the device",
       "unknown": "Unexpected error occurred"
     },
     "step": {
+      "reconfigure": {
+        "data": {
+          "host": "Host",
+          "port": "Port",
+          "slave_id": "Modbus device ID"
+        },
+        "data_description": {
+          "host": "IP address of your Solakon ONE device",
+          "port": "Modbus TCP port (usually 502)",
+          "slave_id": "Modbus device address (1-247)"
+        },
+        "description": "Update how Home Assistant connects to your Solakon ONE device, for example after its IP address changed. Existing entities and their history are kept.",
+        "title": "Reconfigure Solakon ONE"
+      },
       "user": {
         "data": {
           "host": "Host",

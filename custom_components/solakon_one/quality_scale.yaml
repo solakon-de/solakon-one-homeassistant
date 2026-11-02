@@ -4,3 +4,6 @@ rules:
   # Bronze
   config-flow: done
   runtime-data: done
+
+  # Gold
+  reconfiguration-flow: done
