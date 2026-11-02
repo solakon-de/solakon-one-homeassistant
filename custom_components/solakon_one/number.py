@@ -24,6 +24,14 @@ from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
 from .const import REGISTERS
 from .entity import SolakonEntity
+from .power_limit import (
+    MAX_CHARGE_POWER,
+    MAX_DISCHARGE_POWER,
+    async_validate_power,
+    discharge_lock,
+    i32_to_words,
+    max_force_power,
+)
 from .types import SolakonConfigEntry
 
 _LOGGER = logging.getLogger(__name__)
@@ -107,7 +115,7 @@ NUMBER_ENTITY_DESCRIPTIONS: tuple[NumberEntityDescription, ...] = (
         entity_category=EntityCategory.CONFIG,
         native_unit_of_measurement=UnitOfPower.WATT,
         native_min_value=0,
-        native_max_value=1200,
+        native_max_value=MAX_DISCHARGE_POWER,
         native_step=10,
     ),
     NumberEntityDescription(
@@ -117,7 +125,7 @@ NUMBER_ENTITY_DESCRIPTIONS: tuple[NumberEntityDescription, ...] = (
         entity_category=EntityCategory.CONFIG,
         native_unit_of_measurement=UnitOfPower.WATT,
         native_min_value=-100000,  # -100kW (charging/import)
-        native_max_value=100000,  # +100kW (discharging/export)
+        native_max_value=MAX_DISCHARGE_POWER,  # discharging/export
         native_step=100,
     ),
     NumberEntityDescription(
@@ -160,7 +168,7 @@ FORCE_POWER_NUMBER_ENTITY_DESCRIPTION = NumberEntityDescription(
     entity_category=EntityCategory.CONFIG,
     native_unit_of_measurement=UnitOfPower.WATT,
     native_min_value=0,
-    native_max_value=1200,  # Will be validated based on mode (1200W charge, 800W discharge)
+    native_max_value=MAX_CHARGE_POWER,  # Lowered to 800W while discharging, see ForcePowerNumber
     native_step=10,
 )
 
@@ -247,6 +255,13 @@ class SolakonNumber(SolakonEntity, NumberEntity):
 
     async def async_set_native_value(self, value: float) -> None:
         """Update the current value."""
+        async with discharge_lock(self.coordinator):
+            await self._async_write_native_value(value)
+
+    async def _async_write_native_value(self, value: float) -> None:
+        """Write the value to the device if the discharge limit allows it."""
+        await async_validate_power(self.coordinator, self.entity_description.key, value)
+
         # Convert to int for Modbus register writing
         int_value = int(value)
 
@@ -444,14 +459,29 @@ class ForcePowerNumber(SolakonEntity, NumberEntity):
 
         self.async_write_ha_state()
 
+    @property
+    def native_max_value(self) -> float:
+        """Return the maximum value, which is lower while discharging."""
+        return float(max_force_power(self._remote_control_value))
+
+    @property
+    def _remote_control_value(self) -> object:
+        """Return the last known value of register 46001 (remote_control)."""
+        return (self.coordinator.data or {}).get("remote_control")
+
     async def async_set_native_value(self, value: float) -> None:
         """Update the current value."""
+        async with discharge_lock(self.coordinator):
+            await self._async_write_native_value(value)
+
+    async def _async_write_native_value(self, value: float) -> None:
+        """Write the value to the device if the discharge limit allows it."""
         # Always use positive value
         int_value = abs(int(value))
 
-        # Validate based on current force mode
-        # (You could add validation here to check if force charge is active and limit to 1200W,
-        #  or if force discharge is active and limit to 800W)
+        await async_validate_power(
+            self.coordinator, self.entity_description.key, int_value
+        )
 
         address_46003 = REGISTERS["remote_active_power"]["address"]
         address_46005 = REGISTERS["remote_reactive_power"]["address"]
@@ -461,14 +491,9 @@ class ForcePowerNumber(SolakonEntity, NumberEntity):
         )
 
         # Write to both registers 46003 and 46005 (32-bit values)
-        # Split into high and low words (big-endian: high word first)
-        high_word = (int_value >> 16) & 0xFFFF
-        low_word = int_value & 0xFFFF
-        values = [high_word, low_word]
+        values = i32_to_words(int_value)
 
-        _LOGGER.debug(
-            f"Writing 32-bit value: {int_value:#x} = [{high_word:#x}, {low_word:#x}]"
-        )
+        _LOGGER.debug(f"Writing 32-bit value: {int_value:#x} = {values}")
 
         # Write to both registers
         success_46003 = await self._config_entry.runtime_data.hub.async_write_registers(

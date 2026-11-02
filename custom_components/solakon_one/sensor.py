@@ -30,6 +30,7 @@ from homeassistant.core import HomeAssistant, callback
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
 from .entity import SolakonEntity
+from .remote_control import register_value_to_mode
 from .types import SolakonConfigEntry
 
 _LOGGER = logging.getLogger(__name__)
@@ -394,6 +395,12 @@ SENSOR_ENTITY_DESCRIPTIONS: tuple[SolakonSensorEntityDescription, ...] = (
         native_unit_of_measurement=UnitOfElectricCurrent.AMPERE,
     ),
     SolakonSensorEntityDescription(
+        key="eps_frequency",
+        state_class=SensorStateClass.MEASUREMENT,
+        device_class=SensorDeviceClass.FREQUENCY,
+        native_unit_of_measurement=UnitOfFrequency.HERTZ,
+    ),
+    SolakonSensorEntityDescription(
         key="pv_total_energy",
         state_class=SensorStateClass.TOTAL_INCREASING,
         device_class=SensorDeviceClass.ENERGY,
@@ -491,6 +498,7 @@ SENSOR_ENTITY_DESCRIPTIONS: tuple[SolakonSensorEntityDescription, ...] = (
         device_class=SensorDeviceClass.ENUM,
         entity_category=EntityCategory.DIAGNOSTIC,
         entity_registry_enabled_default=False,
+        value_fn=register_value_to_mode,
     ),
     SolakonSensorEntityDescription(
         key="remote_timeout_countdown",

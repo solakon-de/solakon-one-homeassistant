@@ -60,7 +60,7 @@ A complete Home Assistant custom integration for Solakon ONE devices using Modbu
 - Full UI configuration support
 - Configurable update intervals
 - Energy Dashboard compatible (solar production works out-of-the-box)
-- Battery integration via helper sensors
+- Battery integration works directly with native energy sensors
 
 ## Monitored Sensors
 
@@ -160,6 +160,18 @@ These sensors display the current values of controllable parameters:
    - **Modbus Device ID**: Usually 1 (range: 1-247)
    - **Update Interval**: How often to poll (1-300 seconds)
 
+### Changing the IP Address or Port
+
+If your Solakon ONE gets a new IP address, you do not need to delete and re-add
+the integration:
+
+1. Go to Settings → Devices & Services
+2. Find the **Solakon ONE** entry, click the three dots menu → **"Reconfigure"**
+3. Enter the new **Host**, **Port**, or **Modbus Device ID**
+4. Submit — Home Assistant verifies the device is reachable and reloads the integration
+
+All entities keep their entity IDs, custom names, and recorded history.
+
 ### Network Requirements
 
 - Ensure your Solakon ONE device is connected to your network
@@ -199,11 +211,15 @@ The integration provides control entities to manage your Solakon ONE device dire
 - `Minimum SoC OnGrid Control`: Set minimum SoC when grid-connected (0-100%)
 
 **Remote Power Control**
-- `Remote Active Power Control`: Set active power command (-100kW to +100kW)
+- `Remote Active Power Control`: Set active power command (-100000W to +800W)
   - Negative values = charging/import
   - Positive values = discharging/export
-- `Remote Reactive Power Control`: Set reactive power command (-100kVAR to +100kVAR)
+- `Remote Reactive Power Control`: Set reactive power command (-100kVAR to +100kVAR, -800 to +800 while a discharge mode is active)
 - `Remote Timeout Control`: Set timeout for remote control commands (0-3600 seconds)
+- `Force mode power`: Power for force charge (up to 1200W) or force discharge (up to 800W)
+- `Grid export power limit`: Maximum power that is exported to the grid (0-800W)
+
+> ⚠️ **Discharge limit**: The integration does not accept discharge settings above 800W. Values above 800W are rejected for the grid export power limit, for force mode power while discharging and for the remote power setpoints while a discharge mode is active. When a discharge mode is selected, the device is read first and remote power setpoints above 800W that are left over from charging are lowered to 800W before the mode is enabled. Charging up to 1200W is not affected. Values that are already stored on the device, or that are changed outside of Home Assistant (e.g. in the Solakon app), are not corrected.
 
 > ⚠️ **Warning**: Modifying these settings can affect your system's operation. Make sure you understand what each setting does before changing it. Some settings may require the device to be in specific modes to take effect.
 
@@ -228,7 +244,7 @@ The integration provides control entities to manage your Solakon ONE device dire
 
 ### Common Issues
 
-- **Cannot connect**: Verify IP address and port are correct
+- **Cannot connect**: Verify IP address and port are correct — if the device's IP changed, use *Reconfigure* (see [Changing the IP Address or Port](#changing-the-ip-address-or-port))
 - **No data**: Check Modbus device ID (usually 1)
 - **Intermittent data**: Increase update interval if network is slow
 - **Missing sensors**: Some sensors only appear if hardware is present (e.g., battery sensors)
@@ -242,11 +258,19 @@ To add solar production to your Energy Dashboard:
 1. Go to Settings → Dashboards → Energy
 2. Under **Solar production**, select "PV Energy" and "PV Power"
 
-### Battery Integration (Requires Setup)
+### Battery Integration (Works Directly)
 
-The battery sensors need to be configured as helpers before they can be used in the Energy Dashboard. Follow these steps:
+The integration provides native `Battery charge energy` and `Battery discharge energy` sensors, so no helpers are needed for the Energy Dashboard:
 
-#### Create Template Sensors for Battery Power Split
+1. Go to Settings → Dashboards → Energy
+2. Under **Battery systems**, click "Add battery system".
+3. Configure:
+   - **Energy going in to the battery**: Select the `Battery charge energy` sensor.
+   - **Energy going out of the battery**: Select the `Battery discharge energy` sensor.
+
+#### Optional: Real Time Power Display
+
+If you also want live power values on the battery card, create two template power sensors first.
 
 Go to Settings → Devices & Services → Helpers → Create Helper → Template → Template a sensor
 
@@ -266,15 +290,9 @@ Create two template sensors with the following settings:
 - Device class: `Power`
 - State class: `Measurement`
 
-#### Add to Energy Dashboard
+#### Assign the Power Sensors
 
-1. Go to Settings → Dashboards → Energy
-2. Under **Battery systems**, click "Add battery system".
-3. Configure:
-   - **Energy going in to the battery**: Select the `Battery charge energy` sensor.
-   - **Energy going out of the battery**: Select the `Battery discharge energy` sensor.
-
-Optionally, you can also assign the power sensors created above for real time information:
+Back on the battery system card, you can assign the template sensors created above for real time information:
    - **Power going in to the battery**: Select the `Battery Charge Power` template sensor.
    - **Power going out of the battery**: Select the `Battery Discharge Power` template sensor.
 

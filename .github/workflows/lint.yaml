@@ -25,4 +25,4 @@ jobs:
       - name: 🏗 Install ruff
         run: uv sync --locked
       - name: 🔎 Analyse with ruff
-        run: uv tool run ruff check .
+        run: uv run ruff check .
