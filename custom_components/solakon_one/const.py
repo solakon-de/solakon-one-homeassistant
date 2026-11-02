@@ -31,21 +31,19 @@ REGISTERS = {
     "mfg_id": {"address": 30032, "count": 16, "type": "string", "static": True},
 
     # Version Information (Table 3-2)
-    "inverter_version": {"address": 36001, "count": 1, "type": "u16"}, # master_version
-    "slave_version": {"address": 36002, "count": 1, "type": "u16"},
-    "pv_version": {"address": 36003, "count": 1, "type": "u16"}, # manager_version
+    "inverter_version": {"address": 36001, "count": 1, "type": "u16", "static": True}, # master_version
+    "slave_version": {"address": 36002, "count": 1, "type": "u16", "static": True},
+    "pv_version": {"address": 36003, "count": 1, "type": "u16", "static": True}, # manager_version
 
     # Battery Version Information (Table 3-3)
-    "bms1_version": {"address": 37003, "count": 1, "type": "u16"}, # bms1_master_version
-    "bms1_design_energy": {"address": 37635, "count": 1, "type": "i16", "scale": 0.1, "unit": "Wh"},
+    "bms1_version": {"address": 37003, "count": 1, "type": "u16", "static": True}, # bms1_master_version
+    "bms1_design_energy": {"address": 37635, "count": 1, "type": "i16", "scale": 0.1, "unit": "Wh", "interval": "slow"},
 
-    "bms1_max_cell_voltage": {"address": 37619, "count": 1, "type": "u16", "scale": 1, "unit": "mV"},
-    "bms1_min_cell_voltage": {"address": 37620, "count": 1, "type": "u16", "scale": 1, "unit": "mV"},
+    "bms1_max_cell_voltage": {"address": 37619, "count": 1, "type": "u16", "scale": 1, "unit": "mV", "interval": "slow"},
+    "bms1_min_cell_voltage": {"address": 37620, "count": 1, "type": "u16", "scale": 1, "unit": "mV", "interval": "slow"},
 
-    "bms1_soh": {"address": 37624, "count": 1, "type": "u16", "scale": 1, "unit": "%"},
-    "bms2_soh": {"address": 38322, "count": 1, "type": "u16", "scale": 1, "unit": "%"},
-    "bms1_soc": {"address": 37612, "count": 1, "type": "i16", "scale": 1, "unit": "%"},
-    "bms2_soc": {"address": 38310, "count": 1, "type": "i16", "scale": 1, "unit": "%"},
+    "bms1_soh": {"address": 37624, "count": 1, "type": "u16", "scale": 1, "unit": "%", "interval": "slow"},
+    "bms1_soc": {"address": 37612, "count": 1, "type": "i16", "scale": 1, "unit": "%", "interval": "slow"},
 
     # Protocol & Device Info (Table 3-5)
     "protocol_version": {"address": 39000, "count": 2, "type": "u32", "static": True},
@@ -59,7 +57,7 @@ REGISTERS = {
     "alarm_1": {"address": 39067, "count": 1, "type": "u16"}, #bitfield16
     "alarm_2": {"address": 39068, "count": 1, "type": "u16"}, #bitfield16
     "alarm_3": {"address": 39069, "count": 1, "type": "u16"}, #bitfield16
-    "grid_standard_code": {"address": 49079, "count": 1, "type": 'u16'},
+    "grid_standard_code": {"address": 49079, "count": 1, "type": 'u16', "static": True},
 
     # PV Input
     "pv1_voltage": {"address": 39070, "count": 1, "type": "i16", "scale": 10, "unit": "V"},
@@ -75,7 +73,7 @@ REGISTERS = {
     "pv4_current": {"address": 39077, "count": 1, "type": "i16", "scale": 100, "unit": "A"},
     "pv4_power": {"address": 39285, "count": 2, "type": "i32", "scale": 1, "unit": "W"},
     "total_pv_power": {"address": 39118, "count": 2, "type": "i32", "scale": 1, "unit": "W"},
-    "pv_total_energy": {"address": 39601, "count": 2, "type": "u32", "scale": 100, "unit": "kWh"},
+    "pv_total_energy": {"address": 39601, "count": 2, "type": "u32", "scale": 100, "unit": "kWh", "interval": "slow"},
 
     # EPS Information
     "eps_voltage": {"address": 39201, "count": 1, "type": "i16", "scale": 10, "unit": "V"},
@@ -90,8 +88,8 @@ REGISTERS = {
     "active_power": {"address": 39134, "count": 2, "type": "i32", "scale": 1, "unit": "W"},
     "reactive_power": {"address": 39136, "count": 2, "type": "i32", "scale": 1000, "unit": "kvar"},
     "power_factor": {"address": 39138, "count": 1, "type": "i16", "scale": 1000},
-    "grid_total_export_energy": {"address": 39621, "count": 2, "type": "u32", "scale": 100, "unit": "kWh"},
-    "grid_total_import_energy": {"address": 39625, "count": 2, "type": "u32", "scale": 100, "unit": "kWh"},
+    "grid_total_export_energy": {"address": 39621, "count": 2, "type": "u32", "scale": 100, "unit": "kWh", "interval": "slow"},
+    "grid_total_import_energy": {"address": 39625, "count": 2, "type": "u32", "scale": 100, "unit": "kWh", "interval": "slow"},
     "grid_export_power_limit": {"address": 46616, "count": 2, "type": "i32", "scale": 1, "unit": "W", "rw": True},
 
     # Inverter Information
@@ -104,12 +102,9 @@ REGISTERS = {
 
     # Temperature
     "internal_temp": {"address": 39141, "count": 1, "type": "i16", "scale": 10, "unit": "°C"},
-    "bms1_ambient_temp": {"address": 37611, "count": 1, "type": "i16", "scale": 10, "unit": "°C"},
-    "bms1_max_temp": {"address": 37617, "count": 1, "type": "i16", "scale": 10, "unit": "°C"},
-    "bms1_min_temp": {"address": 37618, "count": 1, "type": "i16", "scale": 10, "unit": "°C"},
-    "bms2_ambient_temp": {"address": 38309, "count": 1, "type": "i16", "scale": 10, "unit": "°C"},
-    "bms2_max_temp": {"address": 38315, "count": 1, "type": "i16", "scale": 10, "unit": "°C"},
-    "bms2_min_temp": {"address": 38316, "count": 1, "type": "i16", "scale": 10, "unit": "°C"},
+    "bms1_ambient_temp": {"address": 37611, "count": 1, "type": "i16", "scale": 10, "unit": "°C", "interval": "slow"},
+    "bms1_max_temp": {"address": 37617, "count": 1, "type": "i16", "scale": 10, "unit": "°C", "interval": "slow"},
+    "bms1_min_temp": {"address": 37618, "count": 1, "type": "i16", "scale": 10, "unit": "°C", "interval": "slow"},
 
     # Energy Statistics
     "cumulative_generation": {"address": 39149, "count": 2, "type": "u32", "scale": 100, "unit": "kWh"},
@@ -122,8 +117,8 @@ REGISTERS = {
     "battery_soc": {"address": 39424, "count": 1, "type": "i16", "scale": 1, "unit": "%"},
     "battery_max_charge_current": {"address": 46607, "count": 1, "type": 'i16', "scale": 10, "unit": 'A', "rw": True},
     "battery_max_discharge_current": {"address": 46608, "count": 1, "type": 'i16', "scale": 10, "unit": 'A', "rw": True},
-    "battery_total_charge_energy": {"address": 39605, "count": 2, "type": "u32", "scale": 100, "unit": "kWh"},
-    "battery_total_discharge_energy": {"address": 39609, "count": 2, "type": "u32", "scale": 100, "unit": "kWh"},
+    "battery_total_charge_energy": {"address": 39605, "count": 2, "type": "u32", "scale": 100, "unit": "kWh", "interval": "slow"},
+    "battery_total_discharge_energy": {"address": 39609, "count": 2, "type": "u32", "scale": 100, "unit": "kWh", "interval": "slow"},
 
     # Remote Control Registers (Read/Write)
     "remote_control": {"address": 46001, "count": 1, "type": "u16", "scale": 1, "rw": True},
@@ -139,7 +134,7 @@ REGISTERS = {
     "minimum_soc": {"address": 46609, "count": 1, "type": "u16", "scale": 1, "unit": "%", "rw": True},
     "maximum_soc": {"address": 46610, "count": 1, "type": "u16", "scale": 1, "unit": "%", "rw": True},
     "minimum_soc_ongrid": {"address": 46611, "count": 1, "type": "u16", "scale": 1, "unit": "%", "rw": True},
-    "operating_mode": {"address": 49203, "count": 1, "type": "u16", "scale": 1, "rw": True}, # work_mode
-    "network_status": {"address": 49240, "count": 1, "type": "u16", "scale": 1},
+    "operating_mode": {"address": 49203, "count": 1, "type": "u16", "scale": 1, "rw": True, "interval": "slow"}, # work_mode
+    "network_status": {"address": 49240, "count": 1, "type": "u16", "scale": 1, "interval": "slow"},
 }
 # fmt: on

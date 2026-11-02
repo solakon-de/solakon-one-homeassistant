@@ -30,11 +30,24 @@ _LOGGER = logging.getLogger(__name__)
 _MAX_BATCH_SIZE = 125
 # Maximum gap between registers before starting a new batch
 _BATCH_GAP_THRESHOLD = 10
+# Address spans (start, end exclusive) that the device reads in one request
+# including the undocumented registers in between. Verified on a Solakon ONE;
+# in the 49xxx range the device truncates such responses.
+_CONTIGUOUS_SPANS: tuple[tuple[int, int], ...] = ((39053, 39153), (39201, 39287))
+# Registers marked "interval": "slow" are read at most once per this many seconds
+SLOW_INTERVAL = 60.0
+
+
+def _same_span(start: int, end: int) -> bool:
+    """Check if the address range lies inside one verified contiguous span."""
+    return any(lo <= start and end <= hi for lo, hi in _CONTIGUOUS_SPANS)
 
 
 def compute_register_batches(
     registers: dict[str, dict[str, Any]],
     static: bool = False,
+    slow: bool | None = None,
+    keys: set[str] | None = None,
 ) -> list[dict[str, Any]]:
     """Compute optimized batches of contiguous register reads.
 
@@ -45,6 +58,9 @@ def compute_register_batches(
         registers: The REGISTERS dict from const.py.
         static: If True, only include registers with "static": True.
                 If False, only include registers without "static": True.
+        slow: If True, only include registers with "interval": "slow"; if False,
+              only those without. None includes both.
+        keys: If given, only include these register keys.
 
     Returns a list of batch descriptors:
         [
@@ -60,8 +76,14 @@ def compute_register_batches(
     entries: list[tuple[str, dict[str, Any]]] = []
     for key, config in registers.items():
         is_static = config.get("static", False)
-        if is_static == static:
-            entries.append((key, config))
+        is_slow = config.get("interval") == "slow"
+        if is_static != static:
+            continue
+        if slow is not None and is_slow != slow:
+            continue
+        if keys is not None and key not in keys:
+            continue
+        entries.append((key, config))
 
     if not entries:
         return []
@@ -85,7 +107,8 @@ def compute_register_batches(
         gap = addr - batch_end
         new_total = entry_end - batch_start
 
-        if gap <= _BATCH_GAP_THRESHOLD and new_total <= _MAX_BATCH_SIZE:
+        fits = gap <= _BATCH_GAP_THRESHOLD or _same_span(batch_start, entry_end)
+        if fits and new_total <= _MAX_BATCH_SIZE:
             # Extend the batch
             offset = addr - batch_start
             batch_keys.append((key, offset, count, config))
@@ -149,15 +172,27 @@ class SolakonModbusHub:
             timeout=5,  # Same timeout as working script
         )
         # Pre-compute batched register groups for efficient reading
-        self._dynamic_batches = compute_register_batches(REGISTERS, static=False)
         self._static_batches = compute_register_batches(REGISTERS, static=True)
         self._static_data: dict[str, Any] = {}
+        self._slow_data: dict[str, Any] = {}
+        self._slow_read_at: float | None = None
+        self.set_polled_keys(None)
 
+    def set_polled_keys(self, keys: set[str] | None) -> None:
+        """Limit the dynamic reads to these register keys (None reads all)."""
+        self._dynamic_batches = compute_register_batches(
+            REGISTERS, static=False, slow=False, keys=keys
+        )
+        self._slow_batches = compute_register_batches(
+            REGISTERS, static=False, slow=True, keys=keys
+        )
+        self._slow_data = {}
+        self._slow_read_at = None
         _LOGGER.debug(
-            "Computed %d dynamic batches and %d static batches from %d registers",
+            "Computed %d dynamic, %d slow and %d static batches",
             len(self._dynamic_batches),
+            len(self._slow_batches),
             len(self._static_batches),
-            len(REGISTERS),
         )
 
     @property
@@ -387,15 +422,26 @@ class SolakonModbusHub:
         async with self._lock:
             lock_start = time.monotonic()
             data = await self._async_read_batches(self._dynamic_batches)
+            batch_count = len(self._dynamic_batches)
+            if self._slow_batches and (
+                self._slow_read_at is None
+                or lock_start - self._slow_read_at >= SLOW_INTERVAL
+            ):
+                slow_data = await self._async_read_batches(self._slow_batches)
+                if slow_data:
+                    self._slow_data = slow_data
+                    self._slow_read_at = lock_start
+                batch_count += len(self._slow_batches)
             lock_elapsed = time.monotonic() - lock_start
             _LOGGER.debug(
                 "Lock held for %.3fs total. Register read: %d batches and %d values",
                 lock_elapsed,
-                len(self._dynamic_batches),
+                batch_count,
                 len(data),
             )
 
-        # Merge in static data (read once at setup)
+        # Merge in slow data (read once per SLOW_INTERVAL) and static data
+        data.update(self._slow_data)
         if self._static_data:
             data.update(self._static_data)
 

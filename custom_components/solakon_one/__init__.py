@@ -10,6 +10,7 @@ from homeassistant.exceptions import ConfigEntryNotReady
 from .const import PLATFORMS
 from .coordinator import SolakonDataCoordinator
 from .modbus import get_modbus_hub
+from .polling import polled_keys
 from .types import SolakonConfigEntry, SolakonData
 
 _LOGGER = logging.getLogger(__name__)
@@ -18,6 +19,7 @@ _LOGGER = logging.getLogger(__name__)
 async def async_setup_entry(hass: HomeAssistant, entry: SolakonConfigEntry) -> bool:
     """Set up Solakon ONE from a config entry."""
     hub = get_modbus_hub(hass, entry.data | entry.options)  # let options override data
+    hub.set_polled_keys(polled_keys(hass, entry))
 
     try:
         await hub.async_setup()
