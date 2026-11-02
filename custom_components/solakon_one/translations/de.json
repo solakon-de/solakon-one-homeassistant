@@ -155,7 +155,7 @@
         "name": "Batterie Entladeenergie"
       },
       "bms1_ambient_temp": {
-        "name": "Umgebungstemperatur"
+        "name": "BMS-Temperatur"
       },
       "bms1_design_energy": {
         "name": "Batteriekapazität"
@@ -197,10 +197,10 @@
         "name": "Steckdose Spannung"
       },
       "grid_daily_export_energy": {
-        "name": "Netz Exportenergie heute"
+        "name": "AC-Ausgangsenergie heute"
       },
       "grid_daily_import_energy": {
-        "name": "Netz Importenergie heute"
+        "name": "AC-Eingangsenergie heute"
       },
       "grid_frequency": {
         "name": "Netzfrequenz"
@@ -216,10 +216,10 @@
         }
       },
       "grid_total_export_energy": {
-        "name": "Netz Exportenergie"
+        "name": "AC-Ausgangsenergie"
       },
       "grid_total_import_energy": {
-        "name": "Netz Importenergie"
+        "name": "AC-Eingangsenergie"
       },
       "internal_temp": {
         "name": "Wechselrichter Temperatur"
@@ -328,7 +328,7 @@
         }
       },
       "remote_timeout_countdown": {
-        "name": "Fernsteuerung Zeitüberschreitung"
+        "name": "Fernsteuerung Restzeit"
       },
       "total_pv_power": {
         "name": "PV Leistung"
