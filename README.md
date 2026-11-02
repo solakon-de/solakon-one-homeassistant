@@ -56,7 +56,7 @@ A complete Home Assistant custom integration for Solakon ONE devices using Modbu
 - Full UI configuration support
 - Configurable update intervals
 - Energy Dashboard compatible (solar production works out-of-the-box)
-- Battery integration via helper sensors
+- Battery integration works directly with native energy sensors
 
 ## Monitored Sensors
 
@@ -226,11 +226,19 @@ To add solar production to your Energy Dashboard:
 1. Go to Settings → Dashboards → Energy
 2. Under **Solar production**, select "PV Energy" and "PV Power"
 
-### Battery Integration (Requires Setup)
+### Battery Integration (Works Directly)
 
-The battery sensors need to be configured as helpers before they can be used in the Energy Dashboard. Follow these steps:
+The integration provides native `Battery charge energy` and `Battery discharge energy` sensors, so no helpers are needed for the Energy Dashboard:
 
-#### Create Template Sensors for Battery Power Split
+1. Go to Settings → Dashboards → Energy
+2. Under **Battery systems**, click "Add battery system".
+3. Configure:
+   - **Energy going in to the battery**: Select the `Battery charge energy` sensor.
+   - **Energy going out of the battery**: Select the `Battery discharge energy` sensor.
+
+#### Optional: Real Time Power Display
+
+If you also want live power values on the battery card, create two template power sensors first.
 
 Go to Settings → Devices & Services → Helpers → Create Helper → Template → Template a sensor
 
@@ -250,15 +258,9 @@ Create two template sensors with the following settings:
 - Device class: `Power`
 - State class: `Measurement`
 
-#### Add to Energy Dashboard
+#### Assign the Power Sensors
 
-1. Go to Settings → Dashboards → Energy
-2. Under **Battery systems**, click "Add battery system".
-3. Configure:
-   - **Energy going in to the battery**: Select the `Battery charge energy` sensor.
-   - **Energy going out of the battery**: Select the `Battery discharge energy` sensor.
-
-Optionally, you can also assign the power sensors created above for real time information:
+Back on the battery system card, you can assign the template sensors created above for real time information:
    - **Power going in to the battery**: Select the `Battery Charge Power` template sensor.
    - **Power going out of the battery**: Select the `Battery Discharge Power` template sensor.
 
