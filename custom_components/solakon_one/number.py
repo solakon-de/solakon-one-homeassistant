@@ -422,9 +422,8 @@ class ForceDurationNumber(SolakonEntity, NumberEntity):
 class ForcePowerNumber(SolakonEntity, NumberEntity):
     """Number entity for Force Mode Power.
 
-    This entity controls both registers 46003 (remote_active_power) and
-    46005 (remote_reactive_power), ensuring they always have the same
-    positive value as required by the force charge/discharge operation.
+    This entity controls register 46003 (remote_active_power) with a
+    positive value; the direction comes from the force mode.
     """
 
     def __init__(
@@ -484,26 +483,18 @@ class ForcePowerNumber(SolakonEntity, NumberEntity):
         )
 
         address_46003 = REGISTERS["remote_active_power"]["address"]
-        address_46005 = REGISTERS["remote_reactive_power"]["address"]
 
-        _LOGGER.info(
-            f"Setting force_power to {int_value}W (writing to both 46003 and 46005)"
-        )
+        _LOGGER.info(f"Setting force_power to {int_value}W")
 
-        # Write to both registers 46003 and 46005 (32-bit values)
         values = i32_to_words(int_value)
 
         _LOGGER.debug(f"Writing 32-bit value: {int_value:#x} = {values}")
 
-        # Write to both registers
         success_46003 = await self._config_entry.runtime_data.hub.async_write_registers(
             address_46003, values
         )
-        success_46005 = await self._config_entry.runtime_data.hub.async_write_registers(
-            address_46005, values
-        )
 
-        if success_46003 and success_46005:
+        if success_46003:
             _LOGGER.info(f"Successfully set force_power to {int_value}W")
             # Update the state immediately (optimistic update)
             self._attr_native_value = float(int_value)
@@ -511,9 +502,7 @@ class ForcePowerNumber(SolakonEntity, NumberEntity):
             # Request coordinator to refresh data to confirm the change
             await self.coordinator.async_request_refresh()
         else:
-            _LOGGER.error(
-                f"Failed to set force_power to {int_value}W (46003: {success_46003}, 46005: {success_46005})"
-            )
+            _LOGGER.error(f"Failed to set force_power to {int_value}W")
 
     @property
     def available(self) -> bool:
