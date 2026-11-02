@@ -15,9 +15,18 @@ dependencies = [
 dev = [
     "homeassistant-stubs==2025.7.0",
     "mypy>=1.19.1",
+    "pycares<5",
+    "pytest>=9.1.1",
+    "pytest-asyncio>=1.4.0",
     "ruff>=0.14.11",
 ]
 
 [tool.mypy]
 # Ignore missing imports (disable "import not found" errors)
 ignore_missing_imports = true
+# The tests import the integration as custom_components.solakon_one
+explicit_package_bases = true
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests"]
