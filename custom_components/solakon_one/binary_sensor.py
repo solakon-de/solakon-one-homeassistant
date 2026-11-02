@@ -5,6 +5,7 @@ from __future__ import annotations
 from collections.abc import Callable
 from dataclasses import dataclass
 import logging
+from typing import Any
 
 from homeassistant.components.binary_sensor import (
     BinarySensorDeviceClass,
@@ -26,7 +27,7 @@ class SolakonBinarySensorEntityDescription(BinarySensorEntityDescription):
     """Solakon binary sensor entity description."""
 
     data_key: str | None = None
-    value_fn: Callable[[bool], bool | None] | None = None
+    value_fn: Callable[[Any], bool | None] | None = None
 
 
 # Binary sensor entity descriptions for Home Assistant
@@ -43,6 +44,18 @@ BINARY_SENSOR_ENTITY_DESCRIPTIONS: tuple[SolakonBinarySensorEntityDescription, .
         entity_registry_enabled_default=False,
         data_key="battery_power",
         value_fn=lambda val: val > 0,
+    ),
+    SolakonBinarySensorEntityDescription(
+        key="meter1_connect_state",
+        device_class=BinarySensorDeviceClass.CONNECTIVITY,
+        entity_category=EntityCategory.DIAGNOSTIC,
+        value_fn=bool,
+    ),
+    SolakonBinarySensorEntityDescription(
+        key="meter2_connect_state",
+        device_class=BinarySensorDeviceClass.CONNECTIVITY,
+        entity_category=EntityCategory.DIAGNOSTIC,
+        value_fn=bool,
     ),
 )
 

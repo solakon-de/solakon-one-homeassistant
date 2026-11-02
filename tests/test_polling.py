@@ -25,7 +25,7 @@ def _default_keys():
     }
 
 
-def test_default_entities_read_five_fast_and_two_slow_batches() -> None:
+def test_default_entities_read_five_fast_and_four_slow_batches() -> None:
     keys = _default_keys()
     fast = compute_register_batches(REGISTERS, slow=False, keys=keys)
     slow = compute_register_batches(REGISTERS, slow=True, keys=keys)
@@ -37,7 +37,7 @@ def test_default_entities_read_five_fast_and_two_slow_batches() -> None:
         (46001, 7),
         (46607, 11),
     ]
-    assert _spans(slow) == [(37611, 25), (39601, 26)]
+    assert _spans(slow) == [(37611, 25), (38801, 1), (38901, 1), (39601, 26)]
 
 
 def test_gaps_are_bridged_only_inside_verified_spans() -> None:

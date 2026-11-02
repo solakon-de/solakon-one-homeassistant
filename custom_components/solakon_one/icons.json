@@ -6,6 +6,18 @@
         "state": {
           "on": "mdi:transmission-tower"
         }
+      },
+      "meter1_connect_state": {
+        "default": "mdi:meter-electric-outline",
+        "state": {
+          "on": "mdi:meter-electric"
+        }
+      },
+      "meter2_connect_state": {
+        "default": "mdi:meter-electric-outline",
+        "state": {
+          "on": "mdi:meter-electric"
+        }
       }
     },
     "number": {
@@ -72,6 +84,33 @@
       },
       "max_active_power": {
         "default": "mdi:transmission-tower-import"
+      },
+      "meter_active_power": {
+        "default": "mdi:meter-electric-outline"
+      },
+      "meter_apparent_power": {
+        "default": "mdi:flash-outline"
+      },
+      "meter_collection_active_power": {
+        "default": "mdi:transmission-tower"
+      },
+      "meter_frequency": {
+        "default": "mdi:sine-wave"
+      },
+      "meter_phase_active_power": {
+        "default": "mdi:meter-electric-outline"
+      },
+      "meter_phase_apparent_power": {
+        "default": "mdi:flash-outline"
+      },
+      "meter_phase_current": {
+        "default": "mdi:current-ac"
+      },
+      "meter_phase_reactive_power": {
+        "default": "mdi:flash-outline"
+      },
+      "meter_reactive_power": {
+        "default": "mdi:flash-outline"
       },
       "network_status": {
         "default": "mdi:network",
