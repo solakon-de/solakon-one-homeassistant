@@ -84,8 +84,8 @@ All counters are seen from the Solakon ONE, not from your house:
 - **PV energy**: energy produced by the solar modules connected to the ONE
 - **Battery charge energy**: energy that went into the battery (from PV or from the AC side)
 - **Battery discharge energy**: energy that came out of the battery
-- **Grid export energy**: energy the ONE delivered on its AC side (into the house, and from there possibly into the grid)
-- **Grid import energy**: energy the ONE drew from its AC side, e.g. to charge the battery from the grid
+- **AC output energy**: energy the ONE delivered on its AC side (into the house, and from there possibly into the grid)
+- **AC input energy**: energy the ONE drew from its AC side, e.g. to charge the battery from the grid
 - **Total energy generated** / **Daily energy**: inverter generation counters
 
 These are not your household's grid import and export. For those you need a meter, see
@@ -95,7 +95,7 @@ The lifetime counters never decrease: a single reading lower than the previous o
 after a Modbus timeout or a firmware update) is ignored, so it can't cause spikes in the
 Energy Dashboard.
 
-Daily counters (PV, battery charge/discharge, grid export/import today) are disabled by
+Daily counters (PV, battery charge/discharge, AC output/input today) are disabled by
 default. The device resets them at its own day boundary, which may not match your Home
 Assistant time zone. If you need daily values in your time zone, use a
 [Utility Meter](https://www.home-assistant.io/integrations/utility_meter/) on the
