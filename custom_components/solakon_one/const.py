@@ -92,7 +92,7 @@ REGISTERS = {
     "grid_export_power_limit": {"address": 46616, "count": 2, "type": "i32", "scale": 1, "unit": "W", "rw": True},
 
     # Meter1/CT1 (Table 2-4)
-    "meter1_connect_state": {"address": 38801, "count": 1, "type": "u16"},
+    "meter1_connect_state": {"address": 38801, "count": 1, "type": "u16", "interval": "slow"},
     "meter1_r_voltage": {"address": 38802, "count": 2, "type": "i32", "scale": 10, "unit": "V"},
     "meter1_s_voltage": {"address": 38804, "count": 2, "type": "i32", "scale": 10, "unit": "V"},
     "meter1_t_voltage": {"address": 38806, "count": 2, "type": "i32", "scale": 10, "unit": "V"},
@@ -118,7 +118,7 @@ REGISTERS = {
     "meter1_frequency": {"address": 38846, "count": 2, "type": "i32", "scale": 100, "unit": "Hz"},
 
     # Meter2/CT2 (Table 2-4)
-    "meter2_connect_state": {"address": 38901, "count": 1, "type": "u16"},
+    "meter2_connect_state": {"address": 38901, "count": 1, "type": "u16", "interval": "slow"},
     "meter2_r_voltage": {"address": 38902, "count": 2, "type": "i32", "scale": 10, "unit": "V"},
     "meter2_s_voltage": {"address": 38904, "count": 2, "type": "i32", "scale": 10, "unit": "V"},
     "meter2_t_voltage": {"address": 38906, "count": 2, "type": "i32", "scale": 10, "unit": "V"},
