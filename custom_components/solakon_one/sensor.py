@@ -52,6 +52,15 @@ _LOGGER = logging.getLogger(__name__)
 # },
 
 
+OPERATING_MODES = ["0", "1", "2", "3", "4", "6", "7"]
+
+
+def operating_mode(value: Any) -> str | None:
+    """Map the work mode register to an option; unknown values become unknown."""
+    mode = str(value)
+    return mode if mode in OPERATING_MODES else None
+
+
 @dataclass(frozen=True, kw_only=True)
 class SolakonSensorEntityDescription(SensorEntityDescription):
     """Solakon sensor entity description."""
@@ -569,7 +578,8 @@ SENSOR_ENTITY_DESCRIPTIONS: tuple[SolakonSensorEntityDescription, ...] = (
         device_class=SensorDeviceClass.ENUM,
         entity_category=EntityCategory.DIAGNOSTIC,
         entity_registry_enabled_default=False,
-        options=[0, 1, 2, 3, 4, 6, 7],
+        options=OPERATING_MODES,
+        value_fn=operating_mode,
     ),
     SolakonSensorEntityDescription(
         key="pv_version",
@@ -640,6 +650,8 @@ async def async_setup_entry(
 
 class SolakonSensor(SolakonEntity, SensorEntity):
     """Representation of a Solakon ONE sensor."""
+
+    entity_description: SolakonSensorEntityDescription
 
     def __init__(
         self,

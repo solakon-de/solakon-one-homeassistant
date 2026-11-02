@@ -1,6 +1,7 @@
 """Tests for lifetime energy counters that must never decrease."""
 
 from types import SimpleNamespace
+from typing import Any, cast
 
 import pytest
 
@@ -20,7 +21,7 @@ def _sensor(key: str, data: dict) -> SolakonSensor:
     sensor.coordinator = SimpleNamespace(data=data, last_update_success=True)
     sensor._attr_native_value = None
     sensor._counter_last = None
-    sensor.async_write_ha_state = lambda: None
+    cast(Any, sensor).async_write_ha_state = lambda: None
     return sensor
 
 

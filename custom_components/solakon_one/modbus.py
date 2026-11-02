@@ -5,12 +5,12 @@ from __future__ import annotations
 import asyncio
 import logging
 import time
+from collections.abc import Mapping
 from typing import Any
 
 from bitflags import BitFlags
 from pymodbus.client import AsyncModbusTcpClient
 
-from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import CONF_HOST, CONF_PORT, CONF_SCAN_INTERVAL
 from homeassistant.core import HomeAssistant
 
@@ -534,7 +534,7 @@ class SolakonModbusHub:
                 return False
 
 
-def get_modbus_hub(hass: HomeAssistant, data: ConfigEntry) -> SolakonModbusHub:
+def get_modbus_hub(hass: HomeAssistant, data: Mapping[str, Any]) -> SolakonModbusHub:
     """Creates the hub to interact with the modbus."""
     return SolakonModbusHub(
         hass,

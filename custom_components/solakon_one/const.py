@@ -1,6 +1,6 @@
 """Constants for the Solakon ONE integration."""
 
-from typing import Final
+from typing import Any, Final
 
 from homeassistant.const import Platform
 
@@ -24,7 +24,7 @@ PLATFORMS = [
 
 # fmt: off
 # Register definitions
-REGISTERS = {
+REGISTERS: dict[str, dict[str, Any]] = {
     # Model Information (Table 3-1)
     "model_name": {"address": 30000, "count": 16, "type": "string", "static": True},
     "serial_number": {"address": 30016, "count": 16, "type": "string", "static": True},

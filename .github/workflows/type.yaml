@@ -24,4 +24,4 @@ jobs:
       - name: 🏗 Install mypy
         run: uv sync --locked
       - name: 🚀 Run mypy
-        run: uv tool run mypy .
+        run: uv run mypy .
