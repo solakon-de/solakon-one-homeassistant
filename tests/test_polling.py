@@ -32,7 +32,7 @@ def test_default_entities_read_five_fast_and_four_slow_batches() -> None:
 
     assert _spans(fast) == [
         (39065, 86),
-        (39201, 72),
+        (39201, 78),
         (39424, 1),
         (46001, 7),
         (46607, 11),

@@ -124,11 +124,23 @@
       "active_power": {
         "name": "Leistung"
       },
+      "available_export_power": {
+        "name": "Verfügbare Exportleistung"
+      },
+      "available_import_power": {
+        "name": "Verfügbare Importleistung"
+      },
       "battery1_current": {
         "name": "Batterie Strom"
       },
       "battery1_voltage": {
         "name": "Batterie Spannung"
+      },
+      "battery_daily_charge_energy": {
+        "name": "Batterie Ladeenergie heute"
+      },
+      "battery_daily_discharge_energy": {
+        "name": "Batterie Entladeenergie heute"
       },
       "battery_power": {
         "name": "Batterie Leistung"
@@ -183,6 +195,12 @@
       },
       "eps_voltage": {
         "name": "Steckdose Spannung"
+      },
+      "grid_daily_export_energy": {
+        "name": "Netz Exportenergie heute"
+      },
+      "grid_daily_import_energy": {
+        "name": "Netz Importenergie heute"
       },
       "grid_frequency": {
         "name": "Netzfrequenz"
@@ -273,6 +291,9 @@
       },
       "power_factor": {
         "name": "Leistungsfaktor"
+      },
+      "pv_daily_energy": {
+        "name": "PV Energie heute"
       },
       "pv_string_current": {
         "name": "String {n} Strom"

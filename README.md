@@ -78,20 +78,48 @@ A complete Home Assistant custom integration for Solakon ONE devices using Modbu
 - Load Voltage & Current
 
 ### Energy Statistics
-- Total Energy Generated
-- Daily Energy Generation
+
+All counters are seen from the Solakon ONE, not from your house:
+
+- **PV energy**: energy produced by the solar modules connected to the ONE
+- **Battery charge energy**: energy that went into the battery (from PV or from the AC side)
+- **Battery discharge energy**: energy that came out of the battery
+- **Grid export energy**: energy the ONE delivered on its AC side (into the house, and from there possibly into the grid)
+- **Grid import energy**: energy the ONE drew from its AC side, e.g. to charge the battery from the grid
+- **Total energy generated** / **Daily energy**: inverter generation counters
+
+These are not your household's grid import and export. For those you need a meter, see
+[Grid Import/Export](#grid-importexport-requires-a-meter-or-ct).
+
+The lifetime counters never decrease: a single reading lower than the previous one (e.g.
+after a Modbus timeout or a firmware update) is ignored, so it can't cause spikes in the
+Energy Dashboard.
+
+Daily counters (PV, battery charge/discharge, grid export/import today) are disabled by
+default. The device resets them at its own day boundary, which may not match your Home
+Assistant time zone. If you need daily values in your time zone, use a
+[Utility Meter](https://www.home-assistant.io/integrations/utility_meter/) on the
+lifetime counters instead.
 
 ### Battery Information
 - Battery Power
 - Battery Voltage
 - Battery Current
 - Battery State of Charge (SOC)
+- Battery State of Health (SOH)
+- BMS min/max temperature and min/max cell voltage: the current lowest and highest value
+  across all cells, not extremes over a time window
+
+The Solakon ONE has one BMS that covers all connected battery modules, so SoC and SoH
+always describe the whole battery.
 
 ### System Information
 - Internal Temperature
 - Power Factor
 - Grid Frequency
 - Network Status
+- Available Import/Export Power: the power the device can currently take in or deliver,
+  after derating (e.g. by battery temperature)
 
 ### Meter / CT Sensors
 
@@ -202,6 +230,39 @@ The integration provides control entities to manage your Solakon ONE device dire
   - `Grid Charge`: Grid-powered charge
   - `INV Discharge (AC First)`: Inverter discharge with AC priority
   - `INV Charge (AC First)`: Inverter charge with AC priority
+
+#### How remote control works
+
+Each mode is one value of register `46001`, built from three parts:
+
+| Part | Values |
+|---|---|
+| Enable | off / on |
+| Direction | *Discharge* (generation: power flows out of the device) / *Charge* (consumption: power flows into the device) |
+| Target, the point the power setpoint applies to | *INV … (PV Priority)*: the inverter's AC port, PV is used first · *Battery …*: the battery port · *Grid …*: the grid meter, needs a connected meter · *INV … (AC First)*: the AC port, with power from the AC side used first |
+
+The power setpoint is **Remote active power** (`46003`, in W, always positive; the direction
+comes from the mode). **Remote reactive power** (`46005`) is a reactive power command in var
+and is not needed for charging or discharging.
+
+**Remote timeout** (`46002`, seconds) is a safety net: the device counts it down
+(**Remote timeout countdown**, `46007`) and switches remote control off when it reaches 0.
+Whoever controls the device has to write the setpoint again before it runs out.
+
+Field reports ([#309](https://github.com/solakon-de/solakon-one-homeassistant/issues/309), [#41](https://github.com/solakon-de/solakon-one-homeassistant/issues/41)) show that writing the timeout can reset the mode and the power, and
+writing the mode can reset the power. Set them in this order:
+
+1. Remote timeout
+2. Remote control mode
+3. Remote active power
+
+and repeat at least the power (or the timeout) before the countdown ends. On some firmware
+versions the countdown has been reported to stay constant or remote control to switch itself
+off early ([#41](https://github.com/solakon-de/solakon-one-homeassistant/issues/41), [#270](https://github.com/solakon-de/solakon-one-homeassistant/issues/270)); this happens on the device, not in the integration.
+
+Energy plans and modes set in the Solakon app (e.g. *Smart meter mode*, *Überschussladen*)
+are not visible over Modbus. Settings changed here are applied on the device but are not
+shown in the Solakon app or web portal.
 
 ### Number Entities
 
