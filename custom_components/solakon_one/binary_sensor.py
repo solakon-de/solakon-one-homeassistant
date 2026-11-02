@@ -85,6 +85,8 @@ async def async_setup_entry(
 class SolakonBinarySensor(SolakonEntity, BinarySensorEntity):
     """Representation of a Solakon ONE binary sensor."""
 
+    entity_description: SolakonBinarySensorEntityDescription
+
     def __init__(
         self,
         config_entry: SolakonConfigEntry,

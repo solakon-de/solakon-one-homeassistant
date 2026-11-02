@@ -184,7 +184,7 @@ class ConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):  # type: ignore[call
         return OptionsFlowHandler(config_entry)
 
 
-class OptionsFlowHandler(config_entries.OptionsFlowWithReload):
+class OptionsFlowHandler(config_entries.OptionsFlow):
     """Handle options flow for Solakon ONE."""
 
     def __init__(self, config_entry: config_entries.ConfigEntry) -> None:

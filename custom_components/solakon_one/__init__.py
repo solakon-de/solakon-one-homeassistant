@@ -38,6 +38,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: SolakonConfigEntry) -> b
     entry.runtime_data = SolakonData(hub=hub, coordinator=coordinator)
 
     await hass.config_entries.async_forward_entry_setups(entry, PLATFORMS)
+    entry.async_on_unload(entry.add_update_listener(async_reload_entry))
 
     return True
 
@@ -51,6 +52,5 @@ async def async_unload_entry(hass: HomeAssistant, entry: SolakonConfigEntry) -> 
 
 
 async def async_reload_entry(hass: HomeAssistant, entry: SolakonConfigEntry) -> None:
-    """Reload config entry."""
-    await async_unload_entry(hass, entry)
-    await async_setup_entry(hass, entry)
+    """Reload the config entry after its options changed."""
+    await hass.config_entries.async_reload(entry.entry_id)
