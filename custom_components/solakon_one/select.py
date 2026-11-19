@@ -25,19 +25,6 @@ from .types import SolakonConfigEntry
 
 _LOGGER = logging.getLogger(__name__)
 
-# "work_mode": {
-#     "name": "Work Mode Control",
-#     "icon": "mdi:cog",
-#     "options": {
-#         1: "Self Use",
-#         2: "Feedin Priority",
-#         3: "Backup",
-#         4: "Peak Shaving",
-#         6: "Force Charge",
-#         7: "Force Discharge",
-#     },
-# },
-
 # Select entity definitions for Home Assistant
 SELECT_ENTITY_DESCRIPTIONS: tuple[SelectEntityDescription, ...] = (
     SelectEntityDescription(
@@ -59,7 +46,7 @@ FORCE_MODE_SELECT_ENTITY_DESCRIPTION = SelectEntityDescription(
     ],
 )
 
-REMOTE_CONTROLL_MODE_SELECT_ENTITY_DESCRIPTION = SelectEntityDescription(
+REMOTE_CONTROL_MODE_SELECT_ENTITY_DESCRIPTION = SelectEntityDescription(
     key="remote_control_mode",
     options=[
         "0",  # Disabled
@@ -81,8 +68,7 @@ async def async_setup_entry(
     async_add_entities: AddEntitiesCallback,
 ) -> None:
     """Set up Solakon ONE select entities."""
-    # Get device info
-    device_info = await config_entry.runtime_data.hub.async_get_device_info()
+    device_info = config_entry.runtime_data.hub.device_info
 
     entities: list[SolakonSelect] = []
     entities.extend(
@@ -100,7 +86,7 @@ async def async_setup_entry(
         RemoteControlModeSelect(
             config_entry,
             device_info,
-            REMOTE_CONTROLL_MODE_SELECT_ENTITY_DESCRIPTION,
+            REMOTE_CONTROL_MODE_SELECT_ENTITY_DESCRIPTION,
         )
     )
     # Special handling for force_mode (virtual entity)

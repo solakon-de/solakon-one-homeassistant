@@ -30,7 +30,7 @@ class SolakonDataCoordinator(DataUpdateCoordinator):
     async def _async_update_data(self) -> dict[str, Any]:
         """Fetch data from Solakon ONE."""
         try:
-            data = await self.hub.async_read_all_data()
+            data = await self.hub.async_read_registers()
             if not data:
                 raise UpdateFailed("Failed to fetch data from device")
             return data

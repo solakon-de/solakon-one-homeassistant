@@ -165,11 +165,10 @@ class SolakonModbusHub:
         self._device_id = device_id
         self.scan_interval = scan_interval
         self._lock = asyncio.Lock()
-        # Create client exactly like the working script
         self._client = AsyncModbusTcpClient(
             host=self._host,
             port=self._port,
-            timeout=5,  # Same timeout as working script
+            timeout=5,
         )
         # Pre-compute batched register groups for efficient reading
         self._static_batches = compute_register_batches(REGISTERS, static=True)
@@ -196,6 +195,14 @@ class SolakonModbusHub:
         )
 
     @property
+    def device_info(self) -> dict[str, Any]:
+        """Return model and serial number from the static registers."""
+        return {
+            "model": self._static_data.get("model_name"),
+            "serial_number": self._static_data.get("serial_number"),
+        }
+
+    @property
     def connected(self) -> bool:
         """Check if client is connected."""
         return self._client is not None and self._client.connected
@@ -214,12 +221,11 @@ class SolakonModbusHub:
                 _LOGGER.info(f"Successfully connected to {self._host}:{self._port}")
 
                 # Test the connection with a simple read
-                # Using device_id parameter like the working script
                 try:
                     test_result = await self._client.read_holding_registers(
                         address=30000,
                         count=1,
-                        device_id=self._device_id,  # Using device_id like your working script
+                        device_id=self._device_id,
                     )
 
                     if test_result.isError():
@@ -252,14 +258,10 @@ class SolakonModbusHub:
     async def async_test_connection(self) -> bool:
         """Test the Modbus connection."""
         try:
-            if not self._client:
-                await self.async_setup()
-
             if not self.connected:
                 _LOGGER.error("Client not connected for test")
                 return False
 
-            # Test with device_id parameter (like your working script)
             _LOGGER.debug(
                 f"Testing connection to {self._host}:{self._port} with device_id={self._device_id}"
             )
@@ -287,7 +289,7 @@ class SolakonModbusHub:
             if not self.connected:
                 await self.async_setup()
 
-            if not self._client or not self.connected:
+            if not self.connected:
                 return {
                     "manufacturer": DEFAULT_MANUFACTURER,
                     "name": DEFAULT_NAME,
@@ -406,7 +408,7 @@ class SolakonModbusHub:
         """Read all configured registers using batched reads."""
         data: dict[str, Any] = {}
 
-        if not self._client or not self.connected:
+        if not self.connected:
             try:
                 await self.async_setup()
             except Exception:
@@ -447,10 +449,6 @@ class SolakonModbusHub:
 
         return data
 
-    async def async_read_all_data(self) -> dict[str, Any]:
-        """Read all data from the device."""
-        return await self.async_read_registers()
-
     def _process_register_value(
         self, registers: list[int], config: dict[str, Any]
     ) -> Any:
@@ -467,7 +465,7 @@ class SolakonModbusHub:
                 value = registers[0]
             elif data_type in ("int16", "i16"):
                 value = registers[0]
-                if value > 0x7FFF:  # Using same conversion as working script
+                if value > 0x7FFF:
                     value = value - 0x10000
             elif data_type in ("uint32", "u32"):
                 if len(registers) < 2:
@@ -477,11 +475,11 @@ class SolakonModbusHub:
                 if len(registers) < 2:
                     return None
                 value = (registers[0] << 16) | registers[1]
-                if value > 0x7FFFFFFF:  # Using same conversion as working script
+                if value > 0x7FFFFFFF:
                     value = value - 0x100000000
-            elif data_type in ("bitfield16"):
+            elif data_type == "bitfield16":
                 value = convert_bitfield16(registers, config.get("bit", 0))
-            elif data_type in ("bitfield32"):
+            elif data_type == "bitfield32":
                 value = convert_bitfield32(registers, config.get("bit", 0))
             elif data_type == "string":
                 return convert_string(registers)

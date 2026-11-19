@@ -66,8 +66,7 @@ async def async_setup_entry(
     async_add_entities: AddEntitiesCallback,
 ) -> None:
     """Set up Solakon ONE sensor entities."""
-    # Get device info for all binary sensors
-    device_info = await config_entry.runtime_data.hub.async_get_device_info()
+    device_info = config_entry.runtime_data.hub.device_info
 
     entities: list[SolakonBinarySensor] = []
     entities.extend(

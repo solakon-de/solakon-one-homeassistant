@@ -35,21 +35,10 @@ from .types import SolakonConfigEntry
 
 _LOGGER = logging.getLogger(__name__)
 
-# Control Status Sensors (showing current values of controllable parameters)
-# "import_power_limit": {
-#     "name": "Import Power Limit",
-#     "device_class": "power",
-#     "state_class": "measurement",
-#     "unit": "W",
-#     "icon": "mdi:transmission-tower-import",
-# },
-# "export_peak_limit": {
-#     "name": "Export Peak Limit",
-#     "device_class": "power",
-#     "state_class": "measurement",
-#     "unit": "W",
-#     "icon": "mdi:transmission-tower-export",
-# },
+
+def format_version(value: int) -> str:
+    """Format a version register: high byte major, low byte minor (e.g. 2.010)."""
+    return f"{value >> 8}.{value & 0xFF:03}"
 
 
 @dataclass(frozen=True, kw_only=True)
@@ -574,17 +563,17 @@ SENSOR_ENTITY_DESCRIPTIONS: tuple[SolakonSensorEntityDescription, ...] = (
     SolakonSensorEntityDescription(
         key="pv_version",
         entity_category=EntityCategory.DIAGNOSTIC,
-        value_fn=lambda val: f"{int(hex(val >> 8), 16)}.{int(hex(val & 0xFF), 16):03}",
+        value_fn=format_version,
     ),
     SolakonSensorEntityDescription(
         key="bms1_version",
         entity_category=EntityCategory.DIAGNOSTIC,
-        value_fn=lambda val: f"{int(hex(val >> 8), 16)}.{int(hex(val & 0xFF), 16):03}",
+        value_fn=format_version,
     ),
     SolakonSensorEntityDescription(
         key="inverter_version",
         entity_category=EntityCategory.DIAGNOSTIC,
-        value_fn=lambda val: f"{int(hex(val >> 8), 16)}.{int(hex(val & 0xFF), 16):03}",
+        value_fn=format_version,
     ),
     SolakonSensorEntityDescription(
         key="bms1_max_cell_voltage",
@@ -622,8 +611,7 @@ async def async_setup_entry(
     async_add_entities: AddEntitiesCallback,
 ) -> None:
     """Set up Solakon ONE sensor entities."""
-    # Get device info for all sensors
-    device_info = await config_entry.runtime_data.hub.async_get_device_info()
+    device_info = config_entry.runtime_data.hub.device_info
 
     entities: list[SolakonSensor] = []
     entities.extend(

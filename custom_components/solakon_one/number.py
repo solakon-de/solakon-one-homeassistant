@@ -36,27 +36,6 @@ from .types import SolakonConfigEntry
 
 _LOGGER = logging.getLogger(__name__)
 
-# "import_power_limit": {
-#     "name": "Import Power Limit Control",
-#     "icon": "mdi:transmission-tower-import",
-#     "min": 0,
-#     "max": 100000,  # 100kW max
-#     "step": 100,
-#     "unit": "W",
-#     "device_class": "power",
-#     "mode": "box",
-# },
-# "export_peak_limit": {
-#     "name": "Export Peak Limit Control",
-#     "icon": "mdi:transmission-tower-export",
-#     "min": 0,
-#     "max": 100000,  # 100kW max
-#     "step": 100,
-#     "unit": "W",
-#     "device_class": "power",
-#     "mode": "box",
-# },
-
 # Number entity descriptions for Home Assistant
 NUMBER_ENTITY_DESCRIPTIONS: tuple[NumberEntityDescription, ...] = (
     NumberEntityDescription(
@@ -179,8 +158,7 @@ async def async_setup_entry(
     async_add_entities: AddEntitiesCallback,
 ) -> None:
     """Set up Solakon ONE number entities."""
-    # Get device info
-    device_info = await config_entry.runtime_data.hub.async_get_device_info()
+    device_info = config_entry.runtime_data.hub.device_info
 
     entities: list[SolakonNumber] = []
     entities.extend(

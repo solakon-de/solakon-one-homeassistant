@@ -18,7 +18,7 @@ from custom_components.solakon_one.number import (
 )
 from custom_components.solakon_one.select import (
     FORCE_MODE_SELECT_ENTITY_DESCRIPTION,
-    REMOTE_CONTROLL_MODE_SELECT_ENTITY_DESCRIPTION,
+    REMOTE_CONTROL_MODE_SELECT_ENTITY_DESCRIPTION,
     ForceModeSelect,
     RemoteControlModeSelect,
 )
@@ -182,10 +182,10 @@ async def test_remote_active_power_is_checked_against_the_mode_on_the_device() -
 
 SELECTS = [
     (ForceModeSelect, FORCE_MODE_SELECT_ENTITY_DESCRIPTION, "1"),
-    (RemoteControlModeSelect, REMOTE_CONTROLL_MODE_SELECT_ENTITY_DESCRIPTION, "1"),
-    (RemoteControlModeSelect, REMOTE_CONTROLL_MODE_SELECT_ENTITY_DESCRIPTION, "5"),
-    (RemoteControlModeSelect, REMOTE_CONTROLL_MODE_SELECT_ENTITY_DESCRIPTION, "9"),
-    (RemoteControlModeSelect, REMOTE_CONTROLL_MODE_SELECT_ENTITY_DESCRIPTION, "13"),
+    (RemoteControlModeSelect, REMOTE_CONTROL_MODE_SELECT_ENTITY_DESCRIPTION, "1"),
+    (RemoteControlModeSelect, REMOTE_CONTROL_MODE_SELECT_ENTITY_DESCRIPTION, "5"),
+    (RemoteControlModeSelect, REMOTE_CONTROL_MODE_SELECT_ENTITY_DESCRIPTION, "9"),
+    (RemoteControlModeSelect, REMOTE_CONTROL_MODE_SELECT_ENTITY_DESCRIPTION, "13"),
 ]
 
 

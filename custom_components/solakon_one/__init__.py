@@ -27,6 +27,10 @@ async def async_setup_entry(hass: HomeAssistant, entry: SolakonConfigEntry) -> b
         if not await hub.async_test_connection():
             raise ConfigEntryNotReady("Cannot connect to Solakon ONE device")
     except Exception as err:
+        # The client reconnects on its own, so it has to be closed before a retry
+        await hub.async_close()
+        if isinstance(err, ConfigEntryNotReady):
+            raise
         raise ConfigEntryNotReady(err) from err
 
     coordinator = SolakonDataCoordinator(hass, hub)
