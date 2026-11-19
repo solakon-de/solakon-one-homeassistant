@@ -345,14 +345,14 @@
     "discharge_setpoint_write_failed": {
       "message": "Discharge was not enabled because {key} could not be lowered to the discharge power limit of {max} W. Check the connection to the device and try again."
     },
-    "write_failed": {
-      "message": "{key} was not set because the device did not accept the write to register {address}. Check the connection to the device and the log for the Modbus response."
-    },
     "not_connected": {
       "message": "{key} was not set because there is no connection to the device. The integration reconnects automatically; try again shortly."
     },
     "value_out_of_range": {
       "message": "{value} can't be written to {key} because it does not fit the register."
+    },
+    "write_failed": {
+      "message": "{key} was not set because the device did not accept the write to register {address}. Check the connection to the device and the log for the Modbus response."
     }
   },
   "options": {
