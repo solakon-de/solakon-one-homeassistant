@@ -19,7 +19,6 @@ from homeassistant.const import (
     UnitOfTime,
 )
 from homeassistant.core import HomeAssistant, callback
-from typing import cast
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
 from .const import REGISTERS
@@ -29,7 +28,6 @@ from .power_limit import (
     MAX_DISCHARGE_POWER,
     async_validate_power,
     discharge_lock,
-    i32_to_words,
     max_force_power,
 )
 from .types import SolakonConfigEntry
@@ -224,7 +222,6 @@ class SolakonNumber(SolakonEntity, NumberEntity):
     ) -> None:
         """Initialize the number entity."""
         super().__init__(config_entry, device_info, description.key)
-        self._register_config = REGISTERS[description.key]
         # Set entity description
         self.entity_description = description
 
@@ -262,71 +259,16 @@ class SolakonNumber(SolakonEntity, NumberEntity):
         """Write the value to the device if the discharge limit allows it."""
         await async_validate_power(self.coordinator, self.entity_description.key, value)
 
-        # Convert to int for Modbus register writing
-        int_value = int(value)
-
-        # Get register info
-        address = self._register_config["address"]
-        count = self._register_config.get("count", 1)
-        data_type = str(self._register_config.get("type", "u16"))
-        scale = float(cast(float, self._register_config.get("scale", 1)))
-
-        # Apply scaling for write (reverse of read scaling)
-        # If scale=1 (which is the case for all our RW registers), this does nothing
-        if scale != 1:
-            int_value = int(value * scale)
-
-        _LOGGER.info(
-            f"Setting {self.entity_description.key} at address {address} to {value} (raw value: {int_value}, type: {data_type}, count: {count})"
+        _LOGGER.info(f"Setting {self.entity_description.key} to {value}")
+        await self._config_entry.runtime_data.hub.async_write_value(
+            self.entity_description.key, value
         )
 
-        # Write based on register count
-        if count == 1:
-            # Single register write (16-bit)
-            # Ensure value fits in uint16 range
-            if int_value < 0:
-                int_value = 0
-            elif int_value > 0xFFFF:
-                int_value = 0xFFFF
-
-            success = await self._config_entry.runtime_data.hub.async_write_register(
-                address, int_value
-            )
-        else:
-            # Multi-register write (32-bit)
-            # Handle signed/unsigned conversion
-            if "i32" in data_type.lower() and int_value < 0:
-                # Convert negative to two's complement for I32
-                int_value = int_value + 0x100000000
-
-            # Ensure value fits in uint32 range
-            if int_value < 0:
-                int_value = 0
-            elif int_value > 0xFFFFFFFF:
-                int_value = 0xFFFFFFFF
-
-            # Split into high and low words (big-endian: high word first)
-            high_word = (int_value >> 16) & 0xFFFF
-            low_word = int_value & 0xFFFF
-            values = [high_word, low_word]
-
-            _LOGGER.debug(
-                f"Writing 32-bit value: {int_value:#x} = [{high_word:#x}, {low_word:#x}]"
-            )
-
-            success = await self._config_entry.runtime_data.hub.async_write_registers(
-                address, values
-            )
-
-        if success:
-            _LOGGER.info(f"Successfully set {self.entity_description.key} to {value}")
-            # Update the state immediately (optimistic update)
-            self._attr_native_value = float(value)
-            self.async_write_ha_state()
-            # Request coordinator to refresh data to confirm the change
-            await self.coordinator.async_request_refresh()
-        else:
-            _LOGGER.error(f"Failed to set {self.entity_description.key} to {value}")
+        # Update the state immediately (optimistic update)
+        self._attr_native_value = float(value)
+        self.async_write_ha_state()
+        # Request coordinator to refresh data to confirm the change
+        await self.coordinator.async_request_refresh()
 
     @property
     def available(self) -> bool:
@@ -382,36 +324,18 @@ class ForceDurationNumber(SolakonEntity, NumberEntity):
     async def async_set_native_value(self, value: float) -> None:
         """Update the current value."""
         # Convert from minutes to seconds for writing
-        value_seconds = int(value * 60)
+        value_seconds = round(value * 60)
 
-        # Ensure value fits in uint16 range (0-65535)
-        if value_seconds < 0:
-            value_seconds = 0
-        elif value_seconds > 65535:
-            value_seconds = 65535
-
-        address = REGISTERS["remote_timeout_set"]["address"]
-
-        _LOGGER.info(
-            f"Setting force_duration to {value} min (raw value: {value_seconds}s) at address {address}"
+        _LOGGER.info(f"Setting force_duration to {value} min ({value_seconds}s)")
+        await self._config_entry.runtime_data.hub.async_write_value(
+            "remote_timeout_set", value_seconds
         )
 
-        # Write to register 46002
-        success = await self._config_entry.runtime_data.hub.async_write_register(
-            address, value_seconds
-        )
-
-        if success:
-            _LOGGER.info(
-                f"Successfully set force_duration to {value} min ({value_seconds}s)"
-            )
-            # Update the state immediately (optimistic update)
-            self._attr_native_value = float(value)
-            self.async_write_ha_state()
-            # Request coordinator to refresh data to confirm the change
-            await self.coordinator.async_request_refresh()
-        else:
-            _LOGGER.error(f"Failed to set force_duration to {value} min")
+        # Update the state immediately (optimistic update)
+        self._attr_native_value = float(value)
+        self.async_write_ha_state()
+        # Request coordinator to refresh data to confirm the change
+        await self.coordinator.async_request_refresh()
 
     @property
     def available(self) -> bool:
@@ -483,37 +407,20 @@ class ForcePowerNumber(SolakonEntity, NumberEntity):
             self.coordinator, self.entity_description.key, int_value
         )
 
-        address_46003 = REGISTERS["remote_active_power"]["address"]
-        address_46005 = REGISTERS["remote_reactive_power"]["address"]
-
         _LOGGER.info(
             f"Setting force_power to {int_value}W (writing to both 46003 and 46005)"
         )
 
-        # Write to both registers 46003 and 46005 (32-bit values)
-        values = i32_to_words(int_value)
+        # Write to both registers 46003 and 46005
+        hub = self._config_entry.runtime_data.hub
+        await hub.async_write_value("remote_active_power", int_value)
+        await hub.async_write_value("remote_reactive_power", int_value)
 
-        _LOGGER.debug(f"Writing 32-bit value: {int_value:#x} = {values}")
-
-        # Write to both registers
-        success_46003 = await self._config_entry.runtime_data.hub.async_write_registers(
-            address_46003, values
-        )
-        success_46005 = await self._config_entry.runtime_data.hub.async_write_registers(
-            address_46005, values
-        )
-
-        if success_46003 and success_46005:
-            _LOGGER.info(f"Successfully set force_power to {int_value}W")
-            # Update the state immediately (optimistic update)
-            self._attr_native_value = float(int_value)
-            self.async_write_ha_state()
-            # Request coordinator to refresh data to confirm the change
-            await self.coordinator.async_request_refresh()
-        else:
-            _LOGGER.error(
-                f"Failed to set force_power to {int_value}W (46003: {success_46003}, 46005: {success_46005})"
-            )
+        # Update the state immediately (optimistic update)
+        self._attr_native_value = float(int_value)
+        self.async_write_ha_state()
+        # Request coordinator to refresh data to confirm the change
+        await self.coordinator.async_request_refresh()
 
     @property
     def available(self) -> bool:

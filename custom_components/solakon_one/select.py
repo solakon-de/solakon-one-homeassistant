@@ -126,7 +126,6 @@ class SolakonSelect(SolakonEntity, SelectEntity):
     ) -> None:
         """Initialize the select entity."""
         super().__init__(config_entry, device_info, description.key)
-        self._register_config = REGISTERS[description.key]
         # Set entity description
         self.entity_description = description
 
@@ -173,30 +172,16 @@ class SolakonSelect(SolakonEntity, SelectEntity):
             )
             return
 
-        # Get the numeric value to write
-        numeric_value = int(option)
-        address = self._register_config["address"]
-
-        _LOGGER.info(
-            f"Setting {self.entity_description.key} at address {address} to '{option}' (value: {numeric_value})"
+        _LOGGER.info(f"Setting {self.entity_description.key} to '{option}'")
+        await self._config_entry.runtime_data.hub.async_write_value(
+            self.entity_description.key, int(option)
         )
 
-        # Write the value to the register (single register for selects)
-        success = await self._config_entry.runtime_data.hub.async_write_register(
-            address, numeric_value
-        )
-
-        if success:
-            _LOGGER.info(
-                f"Successfully set {self.entity_description.key} to '{option}'"
-            )
-            # Update the state immediately (optimistic update)
-            self._attr_current_option = option
-            self.async_write_ha_state()
-            # Request coordinator to refresh data to confirm the change
-            await self.coordinator.async_request_refresh()
-        else:
-            _LOGGER.error(f"Failed to set {self.entity_description.key} to '{option}'")
+        # Update the state immediately (optimistic update)
+        self._attr_current_option = option
+        self.async_write_ha_state()
+        # Request coordinator to refresh data to confirm the change
+        await self.coordinator.async_request_refresh()
 
     @property
     def available(self) -> bool:
@@ -221,7 +206,6 @@ class RemoteControlModeSelect(SolakonEntity, SelectEntity):
         """Initialize the remote control mode select entity."""
         super().__init__(config_entry, device_info, description.key)
         self._register_key = "remote_control"
-        self._register_config = REGISTERS[self._register_key]
         # Set entity description
         self.entity_description = description
 
@@ -286,27 +270,18 @@ class RemoteControlModeSelect(SolakonEntity, SelectEntity):
                 await async_fresh_data(self.coordinator),
             )
 
-        # Get the register address for remote_control
-        address = self._register_config["address"]
-
         _LOGGER.info(
-            f"Setting remote_control_mode to '{option}' (mode={mode.name}, register value={register_value:#06x}) at address {address}"
+            f"Setting remote_control_mode to '{option}' (mode={mode.name}, register value={register_value:#06x})"
+        )
+        await self._config_entry.runtime_data.hub.async_write_value(
+            self._register_key, register_value
         )
 
-        # Write the value to the register
-        success = await self._config_entry.runtime_data.hub.async_write_register(
-            address, register_value
-        )
-
-        if success:
-            _LOGGER.info(f"Successfully set remote_control_mode to '{option}'")
-            # Update the state immediately (optimistic update)
-            self._attr_current_option = option
-            self.async_write_ha_state()
-            # Request coordinator to refresh data to confirm the change
-            await self.coordinator.async_request_refresh()
-        else:
-            _LOGGER.error(f"Failed to set remote_control_mode to '{option}'")
+        # Update the state immediately (optimistic update)
+        self._attr_current_option = option
+        self.async_write_ha_state()
+        # Request coordinator to refresh data to confirm the change
+        await self.coordinator.async_request_refresh()
 
     @property
     def available(self) -> bool:
@@ -330,7 +305,6 @@ class ForceModeSelect(SolakonEntity, SelectEntity):
         """Initialize the force mode select entity."""
         super().__init__(config_entry, device_info, description.key)
         self._register_key = "remote_control"
-        self._register_config = REGISTERS[self._register_key]
         # Set entity description
         self.entity_description = description
 
@@ -394,27 +368,18 @@ class ForceModeSelect(SolakonEntity, SelectEntity):
                 await async_fresh_data(self.coordinator),
             )
 
-        # Get the register address for remote_control
-        address = self._register_config["address"]
-
         _LOGGER.info(
-            f"Setting force_mode to '{option}' (register value={mode_value:#06x}) at address {address}"
+            f"Setting force_mode to '{option}' (register value={mode_value:#06x})"
+        )
+        await self._config_entry.runtime_data.hub.async_write_value(
+            self._register_key, mode_value
         )
 
-        # Write the value to the register
-        success = await self._config_entry.runtime_data.hub.async_write_register(
-            address, mode_value
-        )
-
-        if success:
-            _LOGGER.info(f"Successfully set force_mode to '{option}'")
-            # Update the state immediately (optimistic update)
-            self._attr_current_option = option
-            self.async_write_ha_state()
-            # Request coordinator to refresh data to confirm the change
-            await self.coordinator.async_request_refresh()
-        else:
-            _LOGGER.error(f"Failed to set force_mode to '{option}'")
+        # Update the state immediately (optimistic update)
+        self._attr_current_option = option
+        self.async_write_ha_state()
+        # Request coordinator to refresh data to confirm the change
+        await self.coordinator.async_request_refresh()
 
     @property
     def available(self) -> bool:

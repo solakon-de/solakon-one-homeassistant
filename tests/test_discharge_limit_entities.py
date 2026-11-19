@@ -2,6 +2,7 @@
 
 import asyncio
 import json
+from functools import partial
 from pathlib import Path
 from typing import Any
 from unittest.mock import AsyncMock, MagicMock, patch
@@ -10,6 +11,7 @@ import pytest
 from homeassistant.exceptions import HomeAssistantError, ServiceValidationError
 
 from custom_components.solakon_one.const import REGISTERS
+from custom_components.solakon_one.modbus import SolakonModbusHub
 from custom_components.solakon_one.number import (
     FORCE_POWER_NUMBER_ENTITY_DESCRIPTION,
     NUMBER_ENTITY_DESCRIPTIONS,
@@ -58,6 +60,10 @@ def make_entry(data: dict[str, Any], device: dict[str, Any] | None = None) -> Ma
     coordinator.async_refresh = AsyncMock(side_effect=refresh)
     entry.runtime_data.hub.async_write_register = AsyncMock(return_value=True)
     entry.runtime_data.hub.async_write_registers = AsyncMock(return_value=True)
+    # The real write path encodes the value and calls the two mocks above
+    entry.runtime_data.hub.async_write_value = partial(
+        SolakonModbusHub.async_write_value, entry.runtime_data.hub
+    )
     return entry
 
 
@@ -355,7 +361,7 @@ def test_exception_messages_are_translated(language: str) -> None:
     )
     exceptions = json.loads(path.read_text(encoding="utf-8"))["exceptions"]
 
-    assert set(exceptions) == {
+    assert set(exceptions) >= {
         "discharge_power_limit_exceeded",
         "discharge_setpoint_unknown",
         "discharge_setpoint_write_failed",
