@@ -309,6 +309,7 @@ shown in the Solakon app or web portal.
 - **No data**: Check Modbus device ID (usually 1)
 - **Intermittent data**: Increase update interval if network is slow
 - **Missing sensors**: Some sensors only appear if hardware is present (e.g., battery sensors)
+- **Setting a value fails**: If the device does not accept a write or is not connected, the action (e.g. `number.set_value`, `select.select_option`) fails with an error instead of silently keeping the old value. The log shows the register address and the Modbus response.
 
 ## Energy Dashboard Integration
 

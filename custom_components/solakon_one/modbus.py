@@ -5,7 +5,7 @@ from __future__ import annotations
 import asyncio
 import logging
 import time
-from typing import Any
+from typing import Any, cast
 
 from bitflags import BitFlags
 from pymodbus.client import AsyncModbusTcpClient
@@ -13,6 +13,7 @@ from pymodbus.client import AsyncModbusTcpClient
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import CONF_HOST, CONF_PORT, CONF_SCAN_INTERVAL
 from homeassistant.core import HomeAssistant
+from homeassistant.exceptions import HomeAssistantError, ServiceValidationError
 
 from .const import (
     CONF_DEVICE_ID,
@@ -20,6 +21,7 @@ from .const import (
     DEFAULT_MANUFACTURER,
     DEFAULT_NAME,
     DEFAULT_SCAN_INTERVAL,
+    DOMAIN,
     REGISTERS,
 )
 from .exceptions import CannotConnect
@@ -36,6 +38,41 @@ _BATCH_GAP_THRESHOLD = 10
 _CONTIGUOUS_SPANS: tuple[tuple[int, int], ...] = ((39053, 39153), (39201, 39287))
 # Registers marked "interval": "slow" are read at most once per this many seconds
 SLOW_INTERVAL = 60.0
+
+
+# Writable register types: number of registers and the raw value range
+_WRITE_TYPES: dict[str, tuple[int, int, int]] = {
+    "u16": (1, 0, 0xFFFF),
+    "i16": (1, -0x8000, 0x7FFF),
+    "u32": (2, 0, 0xFFFFFFFF),
+    "i32": (2, -0x80000000, 0x7FFFFFFF),
+}
+_TYPE_ALIASES = {"uint16": "u16", "int16": "i16", "uint32": "u32", "int32": "i32"}
+
+
+def encode_register_value(key: str, value: float) -> list[int]:
+    """Return the register words for a value, the reverse of the register read.
+
+    The value is multiplied by the register scale and rounded. A value that does
+    not fit the register type is rejected instead of being clamped.
+    """
+    config = REGISTERS[key]
+    data_type = str(config.get("type", "u16"))
+    data_type = _TYPE_ALIASES.get(data_type, data_type)
+    if data_type not in _WRITE_TYPES:
+        raise ValueError(f"Register {key} of type {data_type} can't be written")
+    count, low, high = _WRITE_TYPES[data_type]
+    raw = round(value * float(cast(float, config.get("scale", 1))))
+    if not low <= raw <= high:
+        raise ServiceValidationError(
+            translation_domain=DOMAIN,
+            translation_key="value_out_of_range",
+            translation_placeholders={"key": key, "value": f"{value:g}"},
+        )
+    if count == 1:
+        return [raw & 0xFFFF]
+    raw &= 0xFFFFFFFF
+    return [(raw >> 16) & 0xFFFF, raw & 0xFFFF]
 
 
 def _same_span(start: int, end: int) -> bool:
@@ -509,7 +546,10 @@ class SolakonModbusHub:
                     address=address, value=value, device_id=self._device_id
                 )
 
-                return not result.isError()
+                if result.isError():
+                    _LOGGER.error(f"Failed to write register at {address}: {result}")
+                    return False
+                return True
 
             except Exception as err:
                 _LOGGER.error(f"Failed to write register at {address}: {err}")
@@ -527,11 +567,36 @@ class SolakonModbusHub:
                     address=address, values=values, device_id=self._device_id
                 )
 
-                return not result.isError()
+                if result.isError():
+                    _LOGGER.error(f"Failed to write registers at {address}: {result}")
+                    return False
+                return True
 
             except Exception as err:
                 _LOGGER.error(f"Failed to write registers at {address}: {err}")
                 return False
+
+    async def async_write_value(self, key: str, value: float) -> None:
+        """Write a value to the register of key, raise if it was not written."""
+        words = encode_register_value(key, value)
+        address = cast(int, REGISTERS[key]["address"])
+        if not self.connected:
+            raise HomeAssistantError(
+                translation_domain=DOMAIN,
+                translation_key="not_connected",
+                translation_placeholders={"key": key},
+            )
+        _LOGGER.debug(f"Writing {key}={value} to {address}: {words}")
+        if len(words) == 1:
+            written = await self.async_write_register(address, words[0])
+        else:
+            written = await self.async_write_registers(address, words)
+        if not written:
+            raise HomeAssistantError(
+                translation_domain=DOMAIN,
+                translation_key="write_failed",
+                translation_placeholders={"key": key, "address": str(address)},
+            )
 
 
 def get_modbus_hub(hass: HomeAssistant, data: ConfigEntry) -> SolakonModbusHub:
