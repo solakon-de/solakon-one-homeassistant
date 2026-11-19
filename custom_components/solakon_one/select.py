@@ -201,8 +201,7 @@ class SolakonSelect(SolakonEntity, SelectEntity):
     @property
     def available(self) -> bool:
         """Return if entity is available."""
-        # Entity is available if coordinator succeeded and we have a valid value
-        return self.coordinator.last_update_success
+        return self.coordinator.last_update_success and self.current_option is not None
 
 
 class RemoteControlModeSelect(SolakonEntity, SelectEntity):
@@ -311,7 +310,7 @@ class RemoteControlModeSelect(SolakonEntity, SelectEntity):
     @property
     def available(self) -> bool:
         """Return if entity is available."""
-        return self.coordinator.last_update_success
+        return self.coordinator.last_update_success and self.current_option is not None
 
 
 class ForceModeSelect(SolakonEntity, SelectEntity):
@@ -419,4 +418,4 @@ class ForceModeSelect(SolakonEntity, SelectEntity):
     @property
     def available(self) -> bool:
         """Return if entity is available."""
-        return self.coordinator.last_update_success
+        return self.coordinator.last_update_success and self.current_option is not None

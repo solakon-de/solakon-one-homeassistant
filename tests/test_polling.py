@@ -1,6 +1,9 @@
 """Tests for register batching, the slow read interval and the polled keys."""
 
 from types import SimpleNamespace
+from unittest.mock import MagicMock, patch
+
+import pytest
 
 from custom_components.solakon_one import modbus, polling
 from custom_components.solakon_one.binary_sensor import (
@@ -10,6 +13,23 @@ from custom_components.solakon_one.const import REGISTERS
 from custom_components.solakon_one.modbus import (
     SolakonModbusHub,
     compute_register_batches,
+)
+from custom_components.solakon_one.exceptions import ReadFailed
+from custom_components.solakon_one.number import (
+    FORCE_DURATION_NUMBER_ENTITY_DESCRIPTION,
+    FORCE_POWER_NUMBER_ENTITY_DESCRIPTION,
+    NUMBER_ENTITY_DESCRIPTIONS,
+    ForceDurationNumber,
+    ForcePowerNumber,
+    SolakonNumber,
+)
+from custom_components.solakon_one.select import (
+    FORCE_MODE_SELECT_ENTITY_DESCRIPTION,
+    REMOTE_CONTROLL_MODE_SELECT_ENTITY_DESCRIPTION,
+    SELECT_ENTITY_DESCRIPTIONS,
+    ForceModeSelect,
+    RemoteControlModeSelect,
+    SolakonSelect,
 )
 from custom_components.solakon_one.sensor import SENSOR_ENTITY_DESCRIPTIONS
 
@@ -118,3 +138,84 @@ def test_polled_keys_follow_entity_registry(monkeypatch) -> None:
     assert "battery_power" in keys
     # control registers are always read
     assert polling.CONTROL_KEYS <= keys
+
+
+class _FailingClient(_FakeClient):
+    """Fake client whose reads fail for the given start addresses (all if None)."""
+
+    def __init__(self, failing: set[int] | None = None) -> None:
+        super().__init__()
+        self.failing = failing
+
+    async def read_holding_registers(self, address, count, device_id):
+        self.reads.append(address)
+        if self.failing is None or address in self.failing:
+            return SimpleNamespace(isError=lambda: True, registers=[])
+        return SimpleNamespace(isError=lambda: False, registers=[0] * count)
+
+
+async def test_read_fails_when_no_fast_batch_is_read() -> None:
+    hub = SolakonModbusHub(None, "127.0.0.1", 502, 1, 1)
+    hub._client = _FailingClient()
+    hub._static_data = {"model_name": "x"}
+
+    with pytest.raises(ReadFailed):
+        await hub.async_read_registers()
+
+
+async def test_one_failed_batch_keeps_the_other_values() -> None:
+    hub = SolakonModbusHub(None, "127.0.0.1", 502, 1, 1)
+    first_batch = hub._dynamic_batches[0]
+    hub._client = _FailingClient({first_batch["address"]})
+    hub._static_data = {"model_name": "x"}
+
+    data = await hub.async_read_registers()
+
+    assert not {k[0] for k in first_batch["keys"]} & set(data)
+    assert {k[0] for k in hub._dynamic_batches[1]["keys"]} <= set(data)
+
+
+async def test_slow_values_expire_when_their_read_keeps_failing(monkeypatch) -> None:
+    hub = SolakonModbusHub(None, "127.0.0.1", 502, 1, 1)
+    hub._client = _FakeClient()
+    hub._static_data = {"model_name": "x"}
+    now = [1000.0]
+    monkeypatch.setattr(modbus.time, "monotonic", lambda: now[0])
+    assert "pv_total_energy" in await hub.async_read_registers()
+
+    slow = {b["address"] for b in hub._slow_batches}
+    hub._client = _FailingClient(slow)
+    now[0] += 3 * modbus.SLOW_INTERVAL - 1
+    assert "pv_total_energy" in await hub.async_read_registers()
+
+    now[0] += 1
+    assert "pv_total_energy" not in await hub.async_read_registers()
+
+
+def _entry(data: dict) -> MagicMock:
+    entry = MagicMock()
+    entry.entry_id = "entry"
+    entry.runtime_data.coordinator.data = data
+    entry.runtime_data.coordinator.last_update_success = True
+    return entry
+
+
+@pytest.mark.parametrize(
+    "make",
+    [
+        lambda e: SolakonNumber(e, {}, NUMBER_ENTITY_DESCRIPTIONS[0]),
+        lambda e: ForceDurationNumber(e, {}, FORCE_DURATION_NUMBER_ENTITY_DESCRIPTION),
+        lambda e: ForcePowerNumber(e, {}, FORCE_POWER_NUMBER_ENTITY_DESCRIPTION),
+        lambda e: SolakonSelect(e, {}, SELECT_ENTITY_DESCRIPTIONS[0]),
+        lambda e: RemoteControlModeSelect(
+            e, {}, REMOTE_CONTROLL_MODE_SELECT_ENTITY_DESCRIPTION
+        ),
+        lambda e: ForceModeSelect(e, {}, FORCE_MODE_SELECT_ENTITY_DESCRIPTION),
+    ],
+)
+def test_control_entities_without_value_are_unavailable(make) -> None:
+    entity = make(_entry({}))
+    with patch("homeassistant.helpers.entity.Entity.async_write_ha_state"):
+        entity._handle_coordinator_update()
+
+    assert not entity.available
