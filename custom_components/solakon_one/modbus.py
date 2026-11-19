@@ -22,7 +22,7 @@ from .const import (
     DEFAULT_SCAN_INTERVAL,
     REGISTERS,
 )
-from .exceptions import CannotConnect
+from .exceptions import CannotConnect, ReadFailed
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -36,6 +36,8 @@ _BATCH_GAP_THRESHOLD = 10
 _CONTIGUOUS_SPANS: tuple[tuple[int, int], ...] = ((39053, 39153), (39201, 39287))
 # Registers marked "interval": "slow" are read at most once per this many seconds
 SLOW_INTERVAL = 60.0
+# Slow values are dropped when their last successful read is older than this
+SLOW_MAX_AGE = 3 * SLOW_INTERVAL
 
 
 def _same_span(start: int, end: int) -> bool:
@@ -329,9 +331,10 @@ class SolakonModbusHub:
 
     async def _async_read_batches(
         self, batches: list[dict[str, Any]]
-    ) -> dict[str, Any]:
-        """Read a list of register batches and return processed values."""
+    ) -> tuple[dict[str, Any], int]:
+        """Read register batches, return the processed values and the batches read."""
         data: dict[str, Any] = {}
+        read = 0
 
         for batch in batches:
             batch_start = time.monotonic()
@@ -357,6 +360,7 @@ class SolakonModbusHub:
                     )
                     continue
 
+                read += 1
                 # Extract each key's registers from the batch result
                 for key, offset, count, config in batch_keys:
                     key_regs = result.registers[offset : offset + count]
@@ -382,7 +386,7 @@ class SolakonModbusHub:
                     batch_elapsed,
                 )
 
-        return data
+        return data, read
 
     async def _async_read_static_registers(self) -> None:
         """Read static registers (device info, versions) once."""
@@ -393,7 +397,7 @@ class SolakonModbusHub:
         start = time.monotonic()
 
         async with self._lock:
-            self._static_data = await self._async_read_batches(self._static_batches)
+            self._static_data, _ = await self._async_read_batches(self._static_batches)
 
         elapsed = time.monotonic() - start
         _LOGGER.debug(
@@ -421,13 +425,13 @@ class SolakonModbusHub:
 
         async with self._lock:
             lock_start = time.monotonic()
-            data = await self._async_read_batches(self._dynamic_batches)
+            data, fast_read = await self._async_read_batches(self._dynamic_batches)
             batch_count = len(self._dynamic_batches)
             if self._slow_batches and (
                 self._slow_read_at is None
                 or lock_start - self._slow_read_at >= SLOW_INTERVAL
             ):
-                slow_data = await self._async_read_batches(self._slow_batches)
+                slow_data, _ = await self._async_read_batches(self._slow_batches)
                 if slow_data:
                     self._slow_data = slow_data
                     self._slow_read_at = lock_start
@@ -440,7 +444,16 @@ class SolakonModbusHub:
                 len(data),
             )
 
-        # Merge in slow data (read once per SLOW_INTERVAL) and static data
+        if self._dynamic_batches and not fast_read:
+            raise ReadFailed("No register could be read from the device")
+
+        # Merge in slow data (read once per SLOW_INTERVAL) and static data.
+        # Values whose read keeps failing are dropped instead of shown as current.
+        if (
+            self._slow_read_at is not None
+            and time.monotonic() - self._slow_read_at >= SLOW_MAX_AGE
+        ):
+            self._slow_data = {}
         data.update(self._slow_data)
         if self._static_data:
             data.update(self._static_data)
